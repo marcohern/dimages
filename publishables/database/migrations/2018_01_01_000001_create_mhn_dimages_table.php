@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDimagesTable extends Migration
+class CreateMhnDimagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDimagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('mrc_dimages', function (Blueprint $table) {
+        Schema::create('mhn_dimages', function (Blueprint $table) {
             $table->increments('id');
             
             $table->enum('attached',['TRUE','FALSE'])->default('TRUE')->index();
@@ -31,7 +31,7 @@ class CreateDimagesTable extends Migration
 
             $table->timestamps();
         });
-        //DB::statement("ALTER TABLE mrc_dimages ADD bytes LONGBLOB NULL");
+        //DB::statement("ALTER TABLE mhn_dimages ADD bytes LONGBLOB NULL");
     }
 
     /**
@@ -41,6 +41,6 @@ class CreateDimagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mrc_dimages');
+        Schema::dropIfExists('mhn_dimages');
     }
 }

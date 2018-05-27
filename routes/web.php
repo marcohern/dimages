@@ -5,5 +5,6 @@ Route::group([
     'prefix' => 'dimages',
     'middleware' => ['web']
 ], function () {
-    Route::get('/', "DimagesController@index");
+    Route::get('/'      , "DimagesController@index")->name('dimages-index');
+    Route::get('/upload', "DimagesController@upload")->name('dimages-upload');
 });

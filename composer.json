@@ -15,7 +15,10 @@
     "autoload": {
         "psr-4": {
             "Marcohern\\Dimages\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers.php"
+        ]
     },
     "extra": {
         "laravel": {

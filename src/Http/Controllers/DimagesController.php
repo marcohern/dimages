@@ -10,6 +10,10 @@ class DimagesController extends Controller {
         return view('dimages::index');
     }
 
+    public function upload() {
+        return view('dimages::upload');
+    }
+
     public function api() {
         return response()->json([
             'success' => true,
