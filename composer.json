@@ -2,7 +2,7 @@
     "name": "marcohern/dimages",
     "license":"MIT",
     "description": "Upload images and download them in different densities and sizes",
-    "type": "",
+    "type": "composer-plugin",
     "authors": [
         {
             "name": "Marco Hernandez",
@@ -16,7 +16,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Marcohern\\dimages\\DimagesServiceProvider"
+                "Marcohern\\Dimages\\DimagesServiceProvider"
             ]
         }
     }
