@@ -12,5 +12,12 @@
     "minimum-stability": "stable",
     "require": {
         "intervention/image": "^2.4"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Marcohern\\dimages\\DimagesServiceProvider"
+            ]
+        }
     }
 }
