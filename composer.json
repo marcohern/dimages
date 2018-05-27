@@ -2,7 +2,6 @@
     "name": "marcohern/dimages",
     "license":"MIT",
     "description": "Upload images and download them in different densities and sizes",
-    "type": "composer-plugin",
     "authors": [
         {
             "name": "Marco Hernandez",
