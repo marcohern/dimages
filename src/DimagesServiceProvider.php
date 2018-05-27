@@ -10,6 +10,7 @@ class DimagesServiceProvider extends ServiceProvider {
 
     public function boot() {
 
+        //Adding a stupid comment just to change the version
         $basePath = dirname(__DIR__);
 
         //set the default string length for migrations (I guess)
