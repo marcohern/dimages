@@ -2,8 +2,7 @@
 
 Route::group([
     'namespace' => 'Marcohern\Dimages\Http\Controllers',
-    'prefix' => 'dimapi',
-    'middleware' => ['api']
+    'prefix' => 'dim'
 ], function () {
-    Route::get('/', "DimagesController@api");
+    Route::get('/', "DiController@index");
 });

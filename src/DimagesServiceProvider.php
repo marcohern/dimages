@@ -21,8 +21,9 @@ class DimagesServiceProvider extends ServiceProvider {
         //Load the routes for this package
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/image.php');
 
-        //Load the vierws for this package
+        //Load the views for this package
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');
     }
 
@@ -34,6 +35,9 @@ class DimagesServiceProvider extends ServiceProvider {
         $basePath = dirname(__DIR__);
 
         $publishables = [
+            'public' => [
+                "$basePath/publishables/public/marcohern/dimages" => public_path('marcohern/dimages')
+            ],
             'migrations' => [
                 "$basePath/publishables/database/migrations" => database_path('migrations')
             ],

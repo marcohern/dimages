@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 class DimagesController extends Controller {
     
     public function index() {
-        return view('dimages::dimages');
+        return view('dimages::index');
     }
 
     public function api() {

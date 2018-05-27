@@ -1,9 +1,7 @@
 <?php 
 
-$namespace = 'Marcohern\Dimages\Http\Controllers';
-
 Route::group([
-    'namespace' => $namespace,
+    'namespace' => 'Marcohern\Dimages\Http\Controllers',
     'prefix' => 'dimages',
     'middleware' => ['web']
 ], function () {
