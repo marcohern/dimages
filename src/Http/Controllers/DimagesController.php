@@ -28,11 +28,15 @@ class DimagesController extends Controller {
         $dimage->slug = 'test';
         $dimage->profile = 'original';
         $dimage->density = 'original';
-        $dimage->filename = 'foo.jpg';
+        $dimage->filename = $r->dimage->getClientOriginalName();
         $dimage->type = $iimage->mime();
         $dimage->width = $iimage->width();
         $dimage->height = $iimage->height();
         $dimage->parent_id = null;
+
+        $dimage->save();
+
+        $dimage->filename  = str_pad($dimage->id, 6, "0", STR_PAD_LEFT).'.'.$dimage->filename;
 
         $dimage->save();
 
