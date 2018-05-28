@@ -13,34 +13,43 @@ class DimagesController extends Controller {
         return view('dimages::index');
     }
 
-    public function upload() {
-        return view('dimages::upload');
+    public function upload(Request $r) {
+        $domain = $r->session()->get('dimages',function() {
+            return md5(uniqid('sess',true));
+        });
+        $r->session()->put('dimages', $domain);
+
+        $dimages = Dimage::all();
+
+        return view('dimages::upload',['domain' => $domain, 'dimages' => $dimages]);
     }
 
     public function store(Request $r) {
         $filename = $r->dimage->getClientOriginalName();
-        $ext = $r->dimage->getClientOriginalExtension();
-        $fname = basename($filename, ".$ext");
+        
+        $domain = $r->session()->get('dimages');
+
+        $slug = md5($filename.uniqid('mhn',true));
 
         $iimage = IImage::make($r->dimage);
 
         $dimage = new Dimage;
 
         $dimage->attached = 'FALSE';
-        $dimage->domain = 'temp';
-        $dimage->slug = md5(uniqid('', true));
+        $dimage->domain = $domain;
+        $dimage->slug = $slug;
         $dimage->profile = 'original';
         $dimage->density = 'original';
-        $dimage->filename = $r->dimage->getClientOriginalName();
+        $dimage->filename = '';
+        $dimage->index = 0;
         $dimage->type = $iimage->mime();
         $dimage->width = $iimage->width();
         $dimage->height = $iimage->height();
         $dimage->parent_id = null;
 
-
         $dimage->save();
 
-        $dimage->filename  = str_pad($dimage->id, 6, "0", STR_PAD_LEFT).'.'.$dimage->filename;
+        $dimage->filename  = str_pad($dimage->id, 6, "0", STR_PAD_LEFT).'.'.$filename;
 
         $dimage->save();
 
