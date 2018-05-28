@@ -24,7 +24,8 @@ class CreateMhnDimagesTable extends Migration
             $table->string('density',32)->default('original');
             
             $table->string('filename',128);
-            $table->string('type',64); //mime type
+            $table->string('ext',32);
+            $table->string('type',64);
             $table->integer('width');
             $table->integer('height');
             $table->integer('parent_id')->nullable()->index();

@@ -8,5 +8,6 @@ Route::group([
     Route::get ('/index' , "DimagesController@index" )->name('dimages-index' );
     Route::get ('/upload', "DimagesController@upload")->name('dimages-upload');
     Route::post('/store' , "DimagesController@store" )->name('dimages-store' );
+    Route::post('/attach', "DimagesController@attach")->name('dimages-attach');
     Route::get ('/about' , "DimagesController@about" )->name('dimages-about' );
 });

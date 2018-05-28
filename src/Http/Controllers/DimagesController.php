@@ -19,13 +19,15 @@ class DimagesController extends Controller {
         });
         $r->session()->put('dimages', $domain);
 
-        $dimages = Dimage::all();
+        $dimages = Dimage::where('domain',$domain)->get();
+
 
         return view('dimages::upload',['domain' => $domain, 'dimages' => $dimages]);
     }
 
     public function store(Request $r) {
         $filename = $r->dimage->getClientOriginalName();
+        $ext = $r->dimage->getClientOriginalExtension();
         
         $domain = $r->session()->get('dimages');
 
@@ -41,6 +43,7 @@ class DimagesController extends Controller {
         $dimage->profile = 'original';
         $dimage->density = 'original';
         $dimage->filename = '';
+        $dimage->ext = $ext;
         $dimage->index = 0;
         $dimage->type = $iimage->mime();
         $dimage->width = $iimage->width();
@@ -55,6 +58,36 @@ class DimagesController extends Controller {
 
         $r->dimage->storeAs('mhn/dimages',$dimage->filename);
         return redirect()->route('dimages-upload');
+    }
+
+    public function attach(Request $r) {
+
+        $appPath = storage_path('app/mhn/dimages');
+
+        $domain = $r->session()->get('dimages');
+        
+        $i=0;
+        $newDomain = $r->input('domain');
+        $newSlug = $r->input('slug');
+
+        $dimages = Dimage::where('domain',$domain)->get();
+        foreach ($dimages as $dim) {
+            $pi = str_pad($i, 3, "0", STR_PAD_LEFT);
+            $oldFilename = $dim->filename;
+            $newFilename = "$newDomain.$newSlug.$pi.{$dim->ext}";
+
+            $dim->domain = $newDomain;
+            $dim->slug = $newSlug;
+            $dim->attached = 'TRUE';
+            $dim->index = $i;
+            $dim->filename = $newFilename;
+
+            $dim->save();
+            rename("$appPath/$oldFilename","$appPath/$newFilename");
+            $i++;
+        }
+
+        return redirect()->route('dimages-index');
     }
 
     public function about() {
