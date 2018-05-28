@@ -18,14 +18,17 @@ class DimagesController extends Controller {
     }
 
     public function store(Request $r) {
+        $filename = $r->dimage->getClientOriginalName();
+        $ext = $r->dimage->getClientOriginalExtension();
+        $fname = basename($filename, ".$ext");
 
         $iimage = IImage::make($r->dimage);
 
         $dimage = new Dimage;
 
         $dimage->attached = 'FALSE';
-        $dimage->domain = 'global';
-        $dimage->slug = 'test';
+        $dimage->domain = 'temp';
+        $dimage->slug = md5(uniqid('', true));
         $dimage->profile = 'original';
         $dimage->density = 'original';
         $dimage->filename = $r->dimage->getClientOriginalName();
@@ -33,6 +36,7 @@ class DimagesController extends Controller {
         $dimage->width = $iimage->width();
         $dimage->height = $iimage->height();
         $dimage->parent_id = null;
+
 
         $dimage->save();
 
@@ -42,6 +46,10 @@ class DimagesController extends Controller {
 
         $r->dimage->storeAs('mhn/dimages',$dimage->filename);
         return redirect()->route('dimages-upload');
+    }
+
+    public function about() {
+        return view('dimages::about');
     }
 
     public function api() {

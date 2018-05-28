@@ -29,6 +29,9 @@ class CreateMhnDimagesTable extends Migration
             $table->integer('height');
             $table->integer('parent_id')->nullable()->index();
 
+            $table->unique(['profile','density','domain', 'slug', 'index'], 'UN_dimage_complete');
+            $table->index(['domain', 'slug', 'index'], 'IX_dimage_shortcut');
+
             $table->timestamps();
         });
         //DB::statement("ALTER TABLE mhn_dimages ADD bytes LONGBLOB NULL");

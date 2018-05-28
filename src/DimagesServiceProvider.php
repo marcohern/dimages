@@ -19,12 +19,13 @@ class DimagesServiceProvider extends ServiceProvider {
         IImage::configure(['driver' => 'gd']);
 
         //Load the routes for this package
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/image.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         //Load the views for this package
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');
+
     }
 
     public function register() {
@@ -46,8 +47,14 @@ class DimagesServiceProvider extends ServiceProvider {
             ]
         ];
 
+        $views = [
+            "$basePath/resources/views" => resource_path('views/vendor/dimages')
+        ];
+
         foreach($publishables as $group => $paths) {
             $this->publishes($paths, $group);
         }
+
+        $this->publishes($views);
     }
 }
