@@ -29,8 +29,18 @@ class DimController extends Controller
         throw new NotFoundHttpException("'$requestedFile' not found.");
     }
 
-    public function full($density, $profile, $domain, $slug, $index=null) {
+    public function full($profile, $density, $domain, $slug, $index=null) {
         $appPath = storage_path("app/mhn/dimages");
+
+        $profiles = config('dimages.profiles');
+        $densities = config('dimages.densities');
+
+        if (!array_key_exists($profile, $profiles)) throw new NotFoundHttpException("profile '$profile' not found.");
+        if (!array_key_exists($density, $densities)) throw new NotFoundHttpException("density '$density' not found.");
+
+        $dp     = $profiles[$profile];
+        $dp[0] *= $densities[$density];
+        $dp[1] *= $densities[$density];
 
         if (empty($index)) $index = 0;
         
@@ -57,7 +67,7 @@ class DimController extends Controller
             if (!file_exists($sourceFile)) {
                 throw new NotFoundHttpException("'$sourceFile' not found.");
             }
-            $iimage = IImage::make($sourceFile)->fit(64,64);
+            $iimage = IImage::make($sourceFile)->fit($dp[0],$dp[1]);
             $iimage->save($requestedFile);
             return $iimage->response();
         }

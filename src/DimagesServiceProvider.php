@@ -25,7 +25,6 @@ class DimagesServiceProvider extends ServiceProvider {
 
         //Load the views for this package
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');
-
     }
 
     public function register() {
