@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
             <div class="container">
                 <a class="navbar-brand" href="{{route('dimages-index')}}">Dimages</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,7 @@
                     <li class="nav-item {!! mhn_active('mhn/dimages') !!}">
                             <a class="nav-link" href="{{route('dimages-index')}}">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {!! mhn_active('mhn/dimages') !!}">
                             <a class="nav-link" href="#">Images</a>
                         </li>
                         <li class="nav-item {!! mhn_active('mhn/dimages/upload') !!}">
