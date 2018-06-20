@@ -47,8 +47,8 @@ At this point, you must register the package in laravel:
 
 6. Finally, run **composer dump-autoload**.
 
-´´´
+```dos
 >composer dump-autoload
-´´´
+```
 
 At this point, the module should be working.
