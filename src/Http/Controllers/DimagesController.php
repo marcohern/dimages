@@ -4,7 +4,6 @@ namespace Marcohern\Dimages\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Marcohern\Dimages\Models\Dimage;
 use Intervention\Image\ImageManagerStatic as IImage;
 
 class DimagesController extends Controller {
@@ -19,10 +18,8 @@ class DimagesController extends Controller {
         });
         $r->session()->put('dimages', $domain);
 
-        $dimages = Dimage::where('domain',$domain)->get();
 
-
-        return view('dimages::upload',['domain' => $domain, 'dimages' => $dimages]);
+        return view('dimages::upload',['domain' => $domain, 'dimages' => []]);
     }
 
     public function store(Request $r) {
@@ -35,26 +32,7 @@ class DimagesController extends Controller {
 
         $iimage = IImage::make($r->dimage);
 
-        $dimage = new Dimage;
-
-        $dimage->attached = 'FALSE';
-        $dimage->domain = $domain;
-        $dimage->slug = $slug;
-        $dimage->profile = 'original';
-        $dimage->density = 'original';
-        $dimage->filename = '';
-        $dimage->ext = $ext;
-        $dimage->index = 0;
-        $dimage->type = $iimage->mime();
-        $dimage->width = $iimage->width();
-        $dimage->height = $iimage->height();
-        $dimage->parent_id = null;
-
-        $dimage->save();
-
-        $dimage->filename  = str_pad($dimage->id, 6, "0", STR_PAD_LEFT).'.'.$filename;
-
-        $dimage->save();
+        
 
         $r->dimage->storeAs('mhn/dimages',$dimage->filename);
         return redirect()->route('dimages-upload');
@@ -69,7 +47,7 @@ class DimagesController extends Controller {
         $i=0;
         $newDomain = $r->input('domain');
         $newSlug = $r->input('slug');
-
+/*
         $dimages = Dimage::where('domain',$domain)->get();
         foreach ($dimages as $dim) {
             $pi = str_pad($i, 3, "0", STR_PAD_LEFT);
@@ -85,7 +63,7 @@ class DimagesController extends Controller {
             $dim->save();
             rename("$appPath/$oldFilename","$appPath/$newFilename");
             $i++;
-        }
+        }*/
 
         return redirect()->route('dimages-index');
     }
