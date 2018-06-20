@@ -48,7 +48,15 @@ At this point, you must register the package in laravel:
 6. Finally, run **composer dump-autoload**.
 
 ```dos
->composer dump-autoload
+.../laravel_packages>composer dump-autoload
 ```
 
-At this point, the module should be working.
+At this point, the package module should be working. Test it by opening the module's main route.
+
+7. Run **php artisan serve** on the laravel project.
+
+```dos
+.../laravel_packages>php artisan serve
+```
+
+8. Open a browser and access the package module with the following url: http://localhost:8000/mhn/dimages/index. This should open a simpel dashboard page. You are all set!
