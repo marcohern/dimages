@@ -67,7 +67,9 @@ class DimController extends Controller
             if (empty($s)) throw new NotFoundHttpException("profile '$profile' does not exists.");
             $f = config("dimages.densities.$density");
             if (empty($f)) throw new NotFoundHttpException("density '$density' does not exists.");
-            $iimage = IImage::make($file)->fit($s[0]*$f,$s[1]*$f);
+            $w = intval($s[0] * $f);
+            $h = intval($s[1] * $f);
+            $iimage = IImage::make($file)->fit($w,$h);
             $iimage->save("$appPath/$domain.$slug.$i.$profile.$density.0.{$fileData->ext}");
             return $iimage->response();
         }

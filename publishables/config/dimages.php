@@ -9,6 +9,8 @@ return [
         'actionbar-icon'    => [72, 72],
         'small-icon'        => [16, 16],
         'notification-icon' => [22, 22],
+
+        'cover'             => [750,562],
     ], 'densities' => [
         'ldpi'    => 0.75,
         'mdpi'    => 1.00,
