@@ -12,9 +12,17 @@ class DimController extends Controller
 
     private function getFileData($file) {
         $m = null;
-        $r = preg_match("/(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)/", $file, $m);
+        $r = preg_match("/.+\/(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)$/", $file, $m);
         if ($r) {
-            return $m;
+            $record = new \stdClass;
+            $record->id = 0 + $m['id'];
+            $record->domain = $m['domain'];
+            $record->slug   = $m['slug'];
+            $record->index  = 0 + $m['index'];
+            $record->profile = $m['profile'];
+            $record->density = $m['density'];
+            $record->ext = $m['ext'];
+            return $record;
         }
         return false;
     }
@@ -54,11 +62,16 @@ class DimController extends Controller
                 throw new NotFoundHttpException("Searching for '$originalQuery' and '$sourceQuery' yielded no results.");
             }
             $file = $originalFiles[0];
-            $iimage = IImage::make($file)->fit(64,64);
-            $iimage->save("$appPath/$domain.$slug.$i.$profile.$density.0.jpg");
+            $fileData = $this->getFileData($file);
+            $s = config("dimages.profiles.$profile");
+            if (empty($s)) throw new NotFoundHttpException("profile '$profile' does not exists.");
+            $f = config("dimages.densities.$density");
+            if (empty($f)) throw new NotFoundHttpException("density '$density' does not exists.");
+            $iimage = IImage::make($file)->fit($s[0]*$f,$s[1]*$f);
+            $iimage->save("$appPath/$domain.$slug.$i.$profile.$density.0.{$fileData->ext}");
             return $iimage->response();
         }
-        $file = $files[0];
+        $file = $sourceFiles[0];
         return IImage::make($file)->response();
     }
 }
