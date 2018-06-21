@@ -32,15 +32,6 @@ class DimagesController extends Controller {
         return "$domain.$slug.000.org.org.0.$ext";
     }
 
-    private function getFileData($file) {
-        $m = null;
-        $r = preg_match("/(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)/", $file, $m);
-        if ($r) {
-            return $m;
-        }
-        return false;
-    }
-
     public function upload(Request $r) {
         $domain = $r->session()->get('dimages',function() {
             return md5(uniqid('sess',true));
