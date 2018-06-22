@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Http\Controllers;
 
+use Marcohern\Dimages\Lib\DimageId;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as IImage;
@@ -69,8 +70,9 @@ class DimController extends Controller
             if (empty($f)) throw new NotFoundHttpException("density '$density' does not exists.");
             $w = intval($s[0] * $f);
             $h = intval($s[1] * $f);
+            $id = DimageId::get();
             $iimage = IImage::make($file)->fit($w,$h);
-            $iimage->save("$appPath/$domain.$slug.$i.$profile.$density.0.{$fileData->ext}");
+            $iimage->save("$appPath/$domain.$slug.$i.$profile.$density.$id.{$fileData->ext}");
             return $iimage->response();
         }
         $file = $sourceFiles[0];
