@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Http\Controllers;
 
+use Marcohern\Dimages\Lib\DimageId;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as IImage;
@@ -10,6 +11,23 @@ class DimagesController extends Controller {
     
     public function index() {
         return view('dimages::index');
+    }
+
+    private function getFileData($file) {
+        $m = null;
+        $r = preg_match("/(.+\/)?(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)$/", $file, $m);
+        if ($r) {
+            $record = new \stdClass;
+            $record->id = 0 + $m['id'];
+            $record->domain = $m['domain'];
+            $record->slug   = $m['slug'];
+            $record->index  = 0 + $m['index'];
+            $record->profile = $m['profile'];
+            $record->density = $m['density'];
+            $record->ext = $m['ext'];
+            return $record;
+        }
+        return false;
     }
 
     private function getTempFiles(Request $r) {
@@ -26,10 +44,10 @@ class DimagesController extends Controller {
         //barimages.tujaus.000.org.org.12345.jpg
     }
 
-    private function setTempFileName(Request $r, string $slug, string $ext) {
+    private function setTempFileName(Request $r, string $slug, $id, string $ext) {
         
         $domain = $r->session()->get('dimages');
-        return "$domain.$slug.000.org.org.0.$ext";
+        return "$domain.$slug.000.org.org.$id.$ext";
     }
 
     public function upload(Request $r) {
@@ -45,6 +63,7 @@ class DimagesController extends Controller {
     public function store(Request $r) {
         $filename = $r->dimage->getClientOriginalName();
         $ext = $r->dimage->getClientOriginalExtension();
+        $id = DimageId::get();
         
         $domain = $r->session()->get('dimages');
 
@@ -52,7 +71,7 @@ class DimagesController extends Controller {
 
         $iimage = IImage::make($r->dimage);
 
-        $r->dimage->storeAs('mhn/dimages',$this->setTempFileName($r,$slug,$ext));
+        $r->dimage->storeAs('mhn/dimages',$this->setTempFileName($r,$slug,$id,$ext));
         return redirect()->route('dimages-upload');
     }
 
@@ -69,7 +88,11 @@ class DimagesController extends Controller {
         foreach ($files as $file) {
             
             $pi = str_pad($i, 3, "0", STR_PAD_LEFT);
-            $newFilename = "$newDomain.$newSlug.$pi.org.org.0.jpg";
+            $fdata = $this->getFileData($file);
+            //dd($file,$fdata);
+            $id = $fdata->id;
+            $ext = $fdata->ext;
+            $newFilename = "$newDomain.$newSlug.$pi.org.org.$id.$ext";
             rename("$appPath/$file","$appPath/$newFilename");
             $i++;
         }
