@@ -6,7 +6,7 @@
 <h2>Upload an image</h2>
 <ul>
 @foreach ($dimages as $dim)
-    <li>{{ $dim->filename }} </li>
+    <li>{{ $dim }} </li>
 @endforeach
 </ul>
 <form action="{!!route('dimages-store')!!}" method="post" enctype="multipart/form-data">

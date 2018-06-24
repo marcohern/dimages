@@ -2,9 +2,9 @@
 
 namespace Marcohern\Dimages\Http\Controllers;
 
+use Marcohern\Dimages\Lib\DimageId;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Marcohern\Dimages\Models\Dimage;
 use Intervention\Image\ImageManagerStatic as IImage;
 
 class DimagesController extends Controller {
@@ -13,21 +13,57 @@ class DimagesController extends Controller {
         return view('dimages::index');
     }
 
+    private function getFileData($file) {
+        $m = null;
+        $r = preg_match("/(.+\/)?(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)$/", $file, $m);
+        if ($r) {
+            $record = new \stdClass;
+            $record->id = 0 + $m['id'];
+            $record->domain = $m['domain'];
+            $record->slug   = $m['slug'];
+            $record->index  = 0 + $m['index'];
+            $record->profile = $m['profile'];
+            $record->density = $m['density'];
+            $record->ext = $m['ext'];
+            return $record;
+        }
+        return false;
+    }
+
+    private function getTempFiles(Request $r) {
+        $domain = $r->session()->get('dimages');
+        $appPath = storage_path('app/mhn/dimages');
+        $query = "$domain.*.000.*.*.*.*";
+        $files = glob("$appPath/$query");
+        $res = [];
+        foreach ($files as $file) {
+            $res[] = basename($file);
+        }
+        return $res;
+        //domain.slug.index.profile.density.id.ext
+        //barimages.tujaus.000.org.org.12345.jpg
+    }
+
+    private function setTempFileName(Request $r, string $slug, $id, string $ext) {
+        
+        $domain = $r->session()->get('dimages');
+        return "$domain.$slug.000.org.org.$id.$ext";
+    }
+
     public function upload(Request $r) {
         $domain = $r->session()->get('dimages',function() {
             return md5(uniqid('sess',true));
         });
         $r->session()->put('dimages', $domain);
+        $files = $this->getTempFiles($r);
 
-        $dimages = Dimage::where('domain',$domain)->get();
-
-
-        return view('dimages::upload',['domain' => $domain, 'dimages' => $dimages]);
+        return view('dimages::upload',['domain' => $domain, 'dimages' => $files]);
     }
 
     public function store(Request $r) {
         $filename = $r->dimage->getClientOriginalName();
         $ext = $r->dimage->getClientOriginalExtension();
+        $id = DimageId::get();
         
         $domain = $r->session()->get('dimages');
 
@@ -35,28 +71,7 @@ class DimagesController extends Controller {
 
         $iimage = IImage::make($r->dimage);
 
-        $dimage = new Dimage;
-
-        $dimage->attached = 'FALSE';
-        $dimage->domain = $domain;
-        $dimage->slug = $slug;
-        $dimage->profile = 'original';
-        $dimage->density = 'original';
-        $dimage->filename = '';
-        $dimage->ext = $ext;
-        $dimage->index = 0;
-        $dimage->type = $iimage->mime();
-        $dimage->width = $iimage->width();
-        $dimage->height = $iimage->height();
-        $dimage->parent_id = null;
-
-        $dimage->save();
-
-        $dimage->filename  = str_pad($dimage->id, 6, "0", STR_PAD_LEFT).'.'.$filename;
-
-        $dimage->save();
-
-        $r->dimage->storeAs('mhn/dimages',$dimage->filename);
+        $r->dimage->storeAs('mhn/dimages',$this->setTempFileName($r,$slug,$id,$ext));
         return redirect()->route('dimages-upload');
     }
 
@@ -69,21 +84,16 @@ class DimagesController extends Controller {
         $i=0;
         $newDomain = $r->input('domain');
         $newSlug = $r->input('slug');
-
-        $dimages = Dimage::where('domain',$domain)->get();
-        foreach ($dimages as $dim) {
+        $files = $this->getTempFiles($r);
+        foreach ($files as $file) {
+            
             $pi = str_pad($i, 3, "0", STR_PAD_LEFT);
-            $oldFilename = $dim->filename;
-            $newFilename = "$newDomain.$newSlug.$pi.{$dim->ext}";
-
-            $dim->domain = $newDomain;
-            $dim->slug = $newSlug;
-            $dim->attached = 'TRUE';
-            $dim->index = $i;
-            $dim->filename = $newFilename;
-
-            $dim->save();
-            rename("$appPath/$oldFilename","$appPath/$newFilename");
+            $fdata = $this->getFileData($file);
+            //dd($file,$fdata);
+            $id = $fdata->id;
+            $ext = $fdata->ext;
+            $newFilename = "$newDomain.$newSlug.$pi.org.org.$id.$ext";
+            rename("$appPath/$file","$appPath/$newFilename");
             $i++;
         }
 

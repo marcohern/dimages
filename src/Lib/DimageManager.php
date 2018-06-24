@@ -23,20 +23,49 @@ class DimageManager {
         return "$domain.$slug.$index.$profile.$density.*";
     }
 
-    public function fileName(string $ext, string $domain,string $slug, $index = 0, string $profile = 'original', string $density = 'original') {
+    public function getFileExt(string $filename) {
+        $len = strlen($filename);
+        $pos = strrpos($filename,'.') + 1;
+        if ($pos >= $len) return '';
+        return substr($filename, $pos, $len - $pos);
+    }
+
+    public function fileName(string $ext, string $domain,string $slug, $index = 0, string $profile = 'org', string $density = 'org') {
         $idx = $this->idx($index);
         return "$domain.$slug.$idx.$profile.$density.$ext";
     }
 
-    public function filePath(string $ext, string $domain,string $slug, $index = 0, string $profile = 'original', string $density = 'original') {
+    public function tempFileName(string $ext, string $domain) {
+        $idx = $this->idx();
+        $id = md5(uniqid());
+        return "$domain.$id.$idx.tmp.tmp.$ext";
+    }
+
+
+    public function filePath(string $ext, string $domain,string $slug, $index = 0, string $profile = 'org', string $density = 'org') {
         return $this->dir()."/".$this->fileName($ext, $domain, $slug, $index, $profile, $density);
     }
 
     public function dirQuery(string $domain, string $slug, string $index, string $profile, string $density) {
         $dir = opendir($this->dir());
         $query = $this->query($domain, $slug, $index, $profile, $density);
-        $files = glob($query);        
+        $files = glob($query);
         closedir($dir);
         return $files;
+    }
+    public function dirQueryTemp(string $domain) {
+        $dir = opendir($this->dir());
+        $query = $this->query($domain, '*', '000', 'tmp', 'tmp');
+        $files = glob($query);
+        closedir($dir);
+        return $files;
+    }
+
+    public function renameFile(string $filename, string $ext, string $domain, string $slug, $index) {
+        $idx = $this->idx($index);
+        $path = $this->dir();
+        $old = "$path/$filename";
+        $new = "$path/$domain.$slug.$idx.org.org.$ext";
+        rename($old, $new);
     }
 }
