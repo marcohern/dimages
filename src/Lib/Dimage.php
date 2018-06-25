@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
+use Marcohern\Dimages\Exceptions\FileNameInvalidException;
 use stdClass;
 
 class Dimage {
@@ -41,7 +42,7 @@ class Dimage {
             $record->ext = $m['ext'];
             return $record;
         }
-        return false;
+        throw new FileNameInvalidException("Filepath '$filepath' invalid");
     }
 
     public function getFileName() {

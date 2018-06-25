@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Marcohern\Dimages\Lib\Dimage;
+use Marcohern\Dimages\Exceptions\FileNameInvalidException;
 use stdClass;
 
 class DimageTest extends TestCase
@@ -50,7 +51,7 @@ class DimageTest extends TestCase
     }
 
     public function test_fromFileName() {
-        $filename = "bars.tu-jaus-bar.001.cover.hdpi.99.jpeg";
+        $filename = "path/to/valid/filename/bars.tu-jaus-bar.001.cover.hdpi.99.jpeg";
         $dimage = Dimage::fromFileName($filename);
         $this->assertInstanceOf(Dimage::class, $dimage);
         $this->assertEquals($dimage->id, 99);
@@ -60,6 +61,16 @@ class DimageTest extends TestCase
         $this->assertEquals($dimage->profile, 'cover');
         $this->assertEquals($dimage->density, 'hdpi');
         $this->assertEquals($dimage->ext, 'jpeg');
+    }
+
+    public function test_fromFileName_FilenameInvalid() {
+        $filename = "path/to/regular/filename.jpeg";
+        try {
+            $dimage = Dimage::fromFileName($filename);
+            $this->assertFalse(true, "Exception expected");
+        } catch(FileNameInvalidException $ex) {
+            $this->assertTrue(true);
+        }
     }
 
     public function test_getFileName() {
