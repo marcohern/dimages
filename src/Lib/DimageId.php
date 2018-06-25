@@ -7,20 +7,29 @@ class DimageId {
     private static $folder = 'app/mhn/dimages';
     private static $file = 'dimageid.txt';
 
-    private static function getId(string $folder) {
+    private static function readCurrentId(string $folder) {
         $filepath = "$folder/".self::$file;
-        $id=0;
+        $id=null;
         if (file_exists($filepath)) {
             $f = fopen($filepath, "r");
             $id = fgets($f);
             fclose($f);
-            $id++;
         } else {
-            $id = 1;
+            $id = 0;
         }
+        return $id;
+    }
+
+    private static function saveId($id) {
         $f = fopen($filepath, "w");
         fwrite($f,$id);
         fclose($f);
+    }
+
+    private static function getId(string $folder) {
+        $id = self::readCurrentId();
+        $id++;
+        self::saveId($id);
         return $id;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Marcohern\Dimages\Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;

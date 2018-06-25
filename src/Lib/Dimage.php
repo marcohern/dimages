@@ -1,6 +1,6 @@
 <?php
 
-namespace marcohern\Dimages\Lib;
+namespace Marcohern\Dimages\Lib;
 
 use stdClass;
 
@@ -44,13 +44,8 @@ class Dimage {
         return false;
     }
 
-    private function idx() {
-        if (empty($this->index)) return "000";
-        return str_pad($this->index, 3, "0", STR_PAD_LEFT);
-    }
-
     public function getFileName() {
-        $idx = $this->idx();
+        $idx = Utility::idx($this->index);
         return "{$this->domain}.{$this->slug}.$idx.{$this->profile}.{$this->density}.{$this->id}.{$this->ext}";
     }
 }
