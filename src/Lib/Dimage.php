@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
+use Intervention\Image\ImageManagerStatic as IImage;
 use Marcohern\Dimages\Exceptions\FileNameInvalidException;
 use stdClass;
 

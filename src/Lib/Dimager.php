@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
+use Intervention\Image\ImageManagerStatic as IImage;
 use Marcohern\Dimages\Lib\IDimager;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
@@ -36,8 +37,18 @@ class Dimager implements IDimager {
         return $this->first($query);
     }
 
+    public function getDomain($domain) {
+        $query = $this->dir."/$domain.*.*.org.org.*.*";
+        return $this->list($query);
+    }
+
     public function getSources($domain, $slug) {
         $query = $this->dir."/$domain.$slug.*.org.org.*.*";
         return $this->list($query);
+    }
+
+    public function getImage(Dimage $dimage) {
+        $filepath = $this->dir."/".$dimage->getFileName();
+        return IImage::make($filepath);
     }
 }
