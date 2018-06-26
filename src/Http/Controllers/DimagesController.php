@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as IImage;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\Dimager;
+use Marcohern\Dimages\Lib\Utility;
 
 class DimagesController extends Controller {
     
@@ -15,51 +16,17 @@ class DimagesController extends Controller {
         return view('dimages::index');
     }
 
-    private function getFileData($file) {
-        $m = null;
-        $r = preg_match("/(.+\/)?(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)$/", $file, $m);
-        if ($r) {
-            $record = new \stdClass;
-            $record->id = 0 + $m['id'];
-            $record->domain = $m['domain'];
-            $record->slug   = $m['slug'];
-            $record->index  = 0 + $m['index'];
-            $record->profile = $m['profile'];
-            $record->density = $m['density'];
-            $record->ext = $m['ext'];
-            return $record;
-        }
-        return false;
-    }
-
-    private function getTempFiles(Request $r) {
-        $domain = $r->session()->get('dimages');
-        $appPath = storage_path('app/mhn/dimages');
-        $query = "$domain.*.000.*.*.*.*";
-        $files = glob("$appPath/$query");
-        $res = [];
-        foreach ($files as $file) {
-            $res[] = basename($file);
-        }
-        return $res;
-        //domain.slug.index.profile.density.id.ext
-        //barimages.tujaus.000.org.org.12345.jpg
-    }
-
-    private function setTempFileName(Request $r, string $slug, $id, string $ext) {
-        
-        $domain = $r->session()->get('dimages');
-        return "$domain.$slug.000.org.org.$id.$ext";
-    }
-
     public function upload(Request $r) {
-        $domain = $r->session()->get('dimages',function() {
-            return md5(uniqid('sess',true));
+        $appPath = storage_path('app/mhn/dimages');
+        $dimager = new Dimager($appPath);
+        $domain = $r->session()->get('dimages',function () {
+            return Utility::tempDomain();
         });
         $r->session()->put('dimages', $domain);
-        $files = $this->getTempFiles($r);
+        $dimages = $dimager->getDomain($domain);
 
-        return view('dimages::upload',['domain' => $domain, 'dimages' => $files]);
+        //dd($appPath, $dimager,$domain, $dimages);
+        return view('dimages::upload',['domain' => $domain, 'dimages' => $dimages]);
     }
 
     public function store(Request $r) {
@@ -67,7 +34,7 @@ class DimagesController extends Controller {
 
         $dimage = new Dimage(
             $r->session()->get('dimages'),
-            md5($filename.uniqid('mhn',true)),
+            Utility::tempSlug(),
             0, 'org', 'org',
             $r->dimage->getClientOriginalExtension(),
             DimageId::get()
@@ -86,17 +53,17 @@ class DimagesController extends Controller {
         $i=0;
         $newDomain = $r->input('domain');
         $newSlug = $r->input('slug');
-        $files = $this->getTempFiles($r);
         $dimager = new Dimager($appPath);
-        foreach ($files as $file) {
+        $dimages = $dimager->getDomain($domain);
+        foreach ($dimages as $oldDimage) {
             
-            $oldDimage = Dimage::fromFileName($file);
             $newDimage = new Dimage($newDomain, $newSlug, $i, 'org', 'org', $oldDimage->ext,$oldDimage->id);
             
             $dimager->renameImage($oldDimage, $newDimage);
             $i++;
         }
-
+        $dimager->deleteAll($domain);
+        $r->session()->forget('dimages');
         return redirect()->route('dimages-index');
     }
 

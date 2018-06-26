@@ -16,6 +16,7 @@ interface IDimager {
     function renameImage(Dimage $oldDimage, Dimage $newDimage);
     function saveImage(Dimage $dimage, Image $iimage);
     function deleteImage($id);
+    function deleteAll(string $domain);
 
     
 }

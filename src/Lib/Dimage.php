@@ -56,8 +56,21 @@ class Dimage {
         $this->ext     = $ext;
     }
 
+    public function getRoute() {
+        return "/mhn/dim/{$this->domain}/{$this->slug}/launcher-icon/mdpi/{$this->index}";
+    }
+
     public function getFileName() {
+        return $this->getDerivedFileName($this->profile, $this->density);
+    }
+
+    public function getDerivedFileName(string $profile = 'org', string $density = 'org') {
         $idx = Utility::idx($this->index);
-        return "{$this->domain}.{$this->slug}.$idx.{$this->profile}.{$this->density}.{$this->id}.{$this->ext}";
+        return "{$this->domain}.{$this->slug}.$idx.$profile.$density.{$this->id}.{$this->ext}";
+    }
+
+    public function getSourceFileName() {
+        $idx = Utility::idx($this->index);
+        return "{$this->domain}.{$this->slug}.$idx.org.org.{$this->id}.{$this->ext}";
     }
 }

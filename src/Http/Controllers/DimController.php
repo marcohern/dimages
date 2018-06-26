@@ -37,6 +37,7 @@ class DimController extends Controller
         if (!array_key_exists($profile, $profiles)) throw new NotFoundHttpException("profile '$profile' not found.");
         if (!array_key_exists($density, $densities)) throw new NotFoundHttpException("density '$density' not found.");
 
+        //dd($domain, $slug, $index, $profile, $density);
         $size = $profiles[$profile];
         $factor = $densities[$density];
         $w = intval($size[0] * $factor);
@@ -51,7 +52,7 @@ class DimController extends Controller
             
             try {
                 $dimage = $dimager->getSource($domain, $slug, $index);
-                $requestedFile = (new Dimage($domain, $slug, $index, $profile, $density, $dimage->ext, $dimage->id))->getFileName();
+                $requestedFile = "$appPath/".$dimage->getDerivedFileName($profile, $density);
                 $sourceFile = "$appPath/".$dimage->getFileName();
                 
                 $iimage = IImage::make($sourceFile)->fit($w,$h);

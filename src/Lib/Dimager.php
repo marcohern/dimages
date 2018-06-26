@@ -72,6 +72,7 @@ class Dimager implements IDimager {
         $source = $this->dir."/".$oldDimage->getFileName();
         $dest = $this->dir."/".$newDimage->getFileName();
         rename($source, $dest);
+        return $newDimage;
     }
 
     public function updateImage(Dimage $dimage, Image $iimage) {
@@ -92,5 +93,15 @@ class Dimager implements IDimager {
             return unlink($files[0]);
         }
         return false;
+    }
+
+    public function deleteAll(string $domain) {
+        $query = $this->dir."/$domain.*.*.*.*.*.*";
+        $files = glob($query);
+        $cnt = count($files);
+        foreach ($files as $file) {
+            unlink($file);
+        }
+        return $cnt;
     }
 }

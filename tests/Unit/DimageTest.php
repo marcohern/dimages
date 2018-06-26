@@ -87,4 +87,34 @@ class DimageTest extends TestCase
 
         $this->assertEquals($dimage->getFileName(), "bars.tu-jaus-bar.001.cover.hdpi.99.jpeg");
     }
+
+    public function test_getDerivedFileName() {
+        $obj = (object) [
+            'id' => 99,
+            'domain' => 'bars',
+            'slug' => 'tu-jaus-bar',
+            'index' => 1,
+            'profile' => 'cover',
+            'density' => 'hdpi',
+            'ext' => 'jpeg'
+        ];
+        $dimage = Dimage::fromStdClass($obj);
+
+        $this->assertEquals($dimage->getDerivedFileName('icon','mdpi'), "bars.tu-jaus-bar.001.icon.mdpi.99.jpeg");
+    }
+
+    public function test_getSourceFileName() {
+        $obj = (object) [
+            'id' => 99,
+            'domain' => 'bars',
+            'slug' => 'tu-jaus-bar',
+            'index' => 1,
+            'profile' => 'cover',
+            'density' => 'hdpi',
+            'ext' => 'jpeg'
+        ];
+        $dimage = Dimage::fromStdClass($obj);
+
+        $this->assertEquals($dimage->getSourceFileName(), "bars.tu-jaus-bar.001.org.org.99.jpeg");
+    }
 }
