@@ -51,4 +51,32 @@ class Dimager implements IDimager {
         $filepath = $this->dir."/".$dimage->getFileName();
         return IImage::make($filepath);
     }
+
+    public function createImage(Dimage $dimage, IImage $iimage) {
+        $dimage->id = DimageId::get();
+        $filepath = $this->dir."/".$dimage->getFileName();
+        $iimage->save($filepath);
+        return $dimage;
+    }
+
+    public function updateImage(Dimage $dimage, IImage $iimage) {
+        $filepath = $this->dir."/".$dimage->getFileName();
+        $iimage->save($filepath);
+        return $dimage;
+    }
+
+    public function saveImage(Dimage $dimage, IImage $iimage) {
+        if (empty($dimage->id)) return $this->createImage($dimage, $iimage);
+        return $this->updateImage($dimage, $iimage);
+    }
+
+    public function deleteImage($id) {
+        $query = $this->dir."/*.*.*.*.*.$id.*";
+        $files = glob($query);
+        if (array_key_exists($files, 0)) {
+            unlink($files[0]);
+            return true;
+        }
+        return false;
+    }
 }
