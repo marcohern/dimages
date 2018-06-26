@@ -9,14 +9,6 @@ use stdClass;
 class Dimage {
     private static $fileNameExp = "/(.+\/)?(?<domain>[^.]+)\.(?<slug>[^.]+)\.(?<index>[^.]+)\.(?<profile>[^.]+)\.(?<density>[^.]+)\.(?<id>[^.]+)\.(?<ext>[^.]+)$/";
 
-    public $id;
-    public $domain;
-    public $slug;
-    public $index;
-    public $profile;
-    public $density;
-    public $ext;
-
     public static function fromStdClass(stdClass $source) {
         $dimage = new Dimage;
         $dimage->id = $source->id;
@@ -44,6 +36,24 @@ class Dimage {
             return $record;
         }
         throw new FileNameInvalidException("Filepath '$filepath' invalid");
+    }
+
+    public $id;
+    public $domain;
+    public $slug;
+    public $index;
+    public $profile;
+    public $density;
+    public $ext;
+
+    public function __construct(string $domain = null, string $slug = null, $index = null, string $profile=null, string $density=null, string $ext = null, $id = 0) {
+        $this->id      = $id;
+        $this->domain  = $domain;
+        $this->slug    = $slug;
+        $this->index   = $index;
+        $this->profile = $profile;
+        $this->density = $density;
+        $this->ext     = $ext;
     }
 
     public function getFileName() {

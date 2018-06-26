@@ -13,6 +13,7 @@ interface IDimager {
     function getImage(Dimage $dimage);
     function createImage(Dimage $dimage, Image $iimage);
     function updateImage(Dimage $dimage, Image $iimage);
+    function renameImage(Dimage $oldDimage, Dimage $newDimage);
     function saveImage(Dimage $dimage, Image $iimage);
     function deleteImage($id);
 

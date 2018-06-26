@@ -6,6 +6,7 @@ use Intervention\Image\ImageManagerStatic as IImage;
 use Intervention\Image\Image;
 use Marcohern\Dimages\Lib\IDimager;
 use Marcohern\Dimages\Lib\Dimage;
+use Marcohern\Dimages\Lib\Utility;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 
 class Dimager implements IDimager {
@@ -48,6 +49,12 @@ class Dimager implements IDimager {
         return $this->list($query);
     }
 
+    public function getSource($domain, $slug, $index = 0, $profile='org', $density='org') {
+        $idx = Utility::idx($index);
+        $query = $this->dir."/$domain.$slug.$idx.$profile.$density.*.*";
+        return $this->first($query);
+    }
+
     public function getImage(Dimage $dimage) {
         $filepath = $this->dir."/".$dimage->getFileName();
         return IImage::make($filepath);
@@ -58,6 +65,13 @@ class Dimager implements IDimager {
         $filepath = $this->dir."/".$dimage->getFileName();
         $iimage->save($filepath);
         return $dimage;
+    }
+    
+    public function renameImage(Dimage $oldDimage, Dimage $newDimage) {
+        
+        $source = $this->dir."/".$oldDimage->getFileName();
+        $dest = $this->dir."/".$newDimage->getFileName();
+        rename($source, $dest);
     }
 
     public function updateImage(Dimage $dimage, Image $iimage) {

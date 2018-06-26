@@ -6,6 +6,8 @@ use Marcohern\Dimages\Lib\DimageId;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as IImage;
+use Marcohern\Dimages\Lib\Dimage;
+use Marcohern\Dimages\Lib\Dimager;
 
 class DimagesController extends Controller {
     
@@ -62,16 +64,16 @@ class DimagesController extends Controller {
 
     public function store(Request $r) {
         $filename = $r->dimage->getClientOriginalName();
-        $ext = $r->dimage->getClientOriginalExtension();
-        $id = DimageId::get();
-        
-        $domain = $r->session()->get('dimages');
 
-        $slug = md5($filename.uniqid('mhn',true));
+        $dimage = new Dimage(
+            $r->session()->get('dimages'),
+            md5($filename.uniqid('mhn',true)),
+            0, 'org', 'org',
+            $r->dimage->getClientOriginalExtension(),
+            DimageId::get()
+        );
 
-        $iimage = IImage::make($r->dimage);
-
-        $r->dimage->storeAs('mhn/dimages',$this->setTempFileName($r,$slug,$id,$ext));
+        $r->dimage->storeAs('mhn/dimages',$dimage->getFileName());
         return redirect()->route('dimages-upload');
     }
 
@@ -85,15 +87,13 @@ class DimagesController extends Controller {
         $newDomain = $r->input('domain');
         $newSlug = $r->input('slug');
         $files = $this->getTempFiles($r);
+        $dimager = new Dimager($appPath);
         foreach ($files as $file) {
             
-            $pi = str_pad($i, 3, "0", STR_PAD_LEFT);
-            $fdata = $this->getFileData($file);
-            //dd($file,$fdata);
-            $id = $fdata->id;
-            $ext = $fdata->ext;
-            $newFilename = "$newDomain.$newSlug.$pi.org.org.$id.$ext";
-            rename("$appPath/$file","$appPath/$newFilename");
+            $oldDimage = Dimage::fromFileName($file);
+            $newDimage = new Dimage($newDomain, $newSlug, $i, 'org', 'org', $oldDimage->ext,$oldDimage->id);
+            
+            $dimager->renameImage($oldDimage, $newDimage);
             $i++;
         }
 

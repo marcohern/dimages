@@ -20,7 +20,7 @@ class DimageTest extends TestCase
     {
         $dimage = new Dimage;
         $this->assertInstanceOf(Dimage::class, $dimage);
-        $this->assertNull($dimage->id);
+        $this->assertEquals($dimage->id, 0);
         $this->assertNull($dimage->domain);
         $this->assertNull($dimage->slug);
         $this->assertNull($dimage->index);
