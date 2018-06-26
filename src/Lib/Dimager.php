@@ -3,6 +3,7 @@
 namespace Marcohern\Dimages\Lib;
 
 use Intervention\Image\ImageManagerStatic as IImage;
+use Intervention\Image\Image;
 use Marcohern\Dimages\Lib\IDimager;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
@@ -52,20 +53,20 @@ class Dimager implements IDimager {
         return IImage::make($filepath);
     }
 
-    public function createImage(Dimage $dimage, IImage $iimage) {
-        $dimage->id = DimageId::get();
+    public function createImage(Dimage $dimage, Image $iimage) {
+        $dimage->id = DimageId::get($this->dir);
         $filepath = $this->dir."/".$dimage->getFileName();
         $iimage->save($filepath);
         return $dimage;
     }
 
-    public function updateImage(Dimage $dimage, IImage $iimage) {
+    public function updateImage(Dimage $dimage, Image $iimage) {
         $filepath = $this->dir."/".$dimage->getFileName();
         $iimage->save($filepath);
         return $dimage;
     }
 
-    public function saveImage(Dimage $dimage, IImage $iimage) {
+    public function saveImage(Dimage $dimage, Image $iimage) {
         if (empty($dimage->id)) return $this->createImage($dimage, $iimage);
         return $this->updateImage($dimage, $iimage);
     }
@@ -73,9 +74,8 @@ class Dimager implements IDimager {
     public function deleteImage($id) {
         $query = $this->dir."/*.*.*.*.*.$id.*";
         $files = glob($query);
-        if (array_key_exists($files, 0)) {
-            unlink($files[0]);
-            return true;
+        if (array_key_exists(0, $files)) {
+            return unlink($files[0]);
         }
         return false;
     }

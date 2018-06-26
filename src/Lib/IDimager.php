@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
+use Intervention\Image\Image;
 use Marcohern\Dimages\Lib\Dimage;
 
 interface IDimager {
@@ -10,9 +11,9 @@ interface IDimager {
     function getSources($domain, $slug);
 
     function getImage(Dimage $dimage);
-    function createImage(Dimage $dimage, IImage $iimage);
-    function updateImage(Dimage $dimage, IImage $iimage);
-    function saveImage(Dimage $dimage, IImage $iimage);
+    function createImage(Dimage $dimage, Image $iimage);
+    function updateImage(Dimage $dimage, Image $iimage);
+    function saveImage(Dimage $dimage, Image $iimage);
     function deleteImage($id);
 
     
