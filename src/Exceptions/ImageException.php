@@ -2,9 +2,8 @@
 
 namespace Marcohern\Dimages\Exceptions;
 
-use Marcohern\Dimages\Exceptions\DultimateException;
+use Exception;
 
-class ImageException extends DultimateException
+class ImageException extends Exception
 {
-    //
 }

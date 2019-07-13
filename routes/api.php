@@ -7,5 +7,9 @@ Route::group([
 ], function () {
     Route::get('/', "DimagesController@api");
 
+    Route::get('/meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index');
+    Route::get('/meta/{entity}/{identity}/{profile}/{densoty}/{index?}', 'DimageMetaController@view_exact');
+    Route::get('/meta/{entity}/{identity}/{index?}', 'DimageMetaController@view');
+
     Route::post('/meta/{entity}/{identity}', "DimageMetaController@store");
 });

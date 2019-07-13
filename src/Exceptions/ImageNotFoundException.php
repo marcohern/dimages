@@ -7,5 +7,4 @@ use Marcohern\Dimages\Exceptions\ImageException;
 
 class ImageNotFoundException extends ImageException
 {
-  protected $status = 404;
 }

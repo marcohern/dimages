@@ -5,6 +5,7 @@ namespace Marcohern\Dimages;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageManagerStatic as IImage;
+use Marcohern\Dimages\Lib\Dimages\Dimage;
 
 class DimagesServiceProvider extends ServiceProvider {
 
@@ -25,6 +26,8 @@ class DimagesServiceProvider extends ServiceProvider {
 
         //Load the views for this package
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');
+
+        Dimage::boot();
     }
 
     public function register() {
