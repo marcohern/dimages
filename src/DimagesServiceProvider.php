@@ -22,7 +22,7 @@ class DimagesServiceProvider extends ServiceProvider {
         //Load the routes for this package
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/image.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        //$this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         //Load the views for this package
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');

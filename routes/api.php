@@ -5,8 +5,6 @@ Route::group([
     'prefix' => 'mh/dim/api',
     'middleware' => ['api']
 ], function () {
-    Route::get('/', "DimagesController@api");
-
     Route::get ('/meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index'  );
     Route::post('/meta/stage/{session}'                   , 'DimageMetaController@stage'  );
     Route::post('/meta/confirm/{session}'                 , 'DimageMetaController@confirm');
