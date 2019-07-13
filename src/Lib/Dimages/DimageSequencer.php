@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Lib\Dimages;
+namespace Marcohern\Dimages\Lib\Dimages;
 
 use Illuminate\Support\Facades\Storage;
 use Marcohern\Dimages\Lib\Dimages\DimageConstants;
