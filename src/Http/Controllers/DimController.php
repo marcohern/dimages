@@ -11,22 +11,29 @@ use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\Dimager;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 
+use Marcohern\Dimages\Lib\Dimages\DimageManager;
+use Marcohern\Dimages\Lib\Dimages\DimageConstants;
+
 class DimController extends Controller
 {
-    public function original($domain, $slug, $index=null) {
-        
-        $appPath = storage_path("app/mhn/dimages");
-        $dimager = new Dimager($appPath);
-        $dimage = $dimager->getSource($domain, $slug, $index);
+  protected $dimages;
 
-        $requestedFile = "$appPath/".$dimage->getFileName();
-        if (file_exists($requestedFile)) {
-            return IImage::make($requestedFile)->response();
-        }
-        throw new NotFoundHttpException("'$requestedFile' not found.");
-    }
+  public function __construct(DimageManager $dimages) {
+    $this->dimages = $dimages;
+  }
 
-    public function full($domain, $slug, $profile, $density, $index=null) {
+  public function original($entity, $identity, $index=0) {
+    $dimage = $this->dimages->viewMain($entity, $identity, $index);
+    $path = $this->dimages->file($dimage);
+    $image = IImage::make($path);
+    return $image->response($dimage->ext);
+  }
+
+    public function full($entity, $identity, $profile, $density, $index=null) {
+      $dimage = $this->dimages->viewExact($entity, $identity, $profile, $density, $index);
+      
+      dd($dimage->toFileName());
+
         $appPath = storage_path("app/mhn/dimages");
         $dimager = new Dimager($appPath);
 

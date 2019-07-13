@@ -122,4 +122,8 @@ class DimageName {
   public function __toString() {
     return $this->toUrl();
   }
+
+  public function url() {
+    return DimageConstants::IMAGESUBDIR.'/'.$this->toFileName();
+  }
 }

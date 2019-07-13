@@ -3,6 +3,8 @@
 namespace Marcohern\Dimages\Lib\Dimages;
 
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as IImage;
+
 use Marcohern\Dimages\Lib\Dimages\DimageName;
 use Marcohern\Dimages\Lib\Dimages\DimageSequencer;
 use Marcohern\Dimages\Exceptions\ImageException;
@@ -16,6 +18,12 @@ class DimageManager {
 
   public function url($dimage) {
     return DimageConstants::IMAGEROUTE.'/'.$dimage->toUrl();
+  }
+
+  public function file($dimage) {
+    $disk = Storage::disk($this->scope);
+    $storage = storage_path();
+    return $storage.'/'.DimageConstants::FSPATH.'/'.DimageConstants::IMAGESUBDIR.'/'.$dimage->toFileName();
   }
 
   public function store($entity, $identity, $upload) : DimageName {
@@ -41,6 +49,20 @@ class DimageManager {
       if ($dimage->index == $index) { return $dimage; }
     }
     throw new ImageException("Image not found:$entity/$identity/$index", 0xd9745b991e);
+  }
+
+  public function getMain($entity, $identity, $index=0) {
+    $disk = Storage::disk($this->scope);
+    $dir = DimageConstants::IMAGESUBDIR.'/'.DimageFunctions::imgFolder($entity,$identity);
+    $files = $disk->files($dir);
+    foreach ($files as $file) {
+      $dimage = DimageName::fromFilePath($file);
+      if ($dimage->index == $index) { 
+        return $disk->get(DimageConstants::IMAGESUBDIR.'/'.$dimage->toFileName()); 
+      }
+    }
+    
+    throw new ImageException("Image not found:$entity/$identity/$index", 0xd9745b991f);
   }
 
   public function viewExact($entity, $identity, $profile, $density, $index=0) {
@@ -84,6 +106,5 @@ class DimageManager {
 
   public function update_index($entity, $identity, $source, $dest) {
     $disk = Storage::disk($this->scope);
-
   }
 }
