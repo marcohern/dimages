@@ -12,4 +12,7 @@ Route::group([
     Route::get('/meta/{entity}/{identity}/{index?}', 'DimageMetaController@view');
 
     Route::post('/meta/{entity}/{identity}', "DimageMetaController@store");
+
+    Route::get('/meta/{entity}', 'DimageMetaController@identities');
+    Route::get('/meta', 'DimageMetaController@entities');
 });
