@@ -54,4 +54,8 @@ class DimController extends Controller
     }
     throw new ImageException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b9920);
   }
+
+  public function status() {
+    return ['success' => true];
+  }
 }

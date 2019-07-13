@@ -16,6 +16,7 @@ Route::group([
     Route::get('/meta/{entity}'            , 'DimageMetaController@identities');
     Route::get('/meta'                     , 'DimageMetaController@entities');
 
+    Route::get('/status' , 'DimController@status');
     Route::get('{entity}/{identity}/{profile}/{density}/{index?}', "DimController@full");
     Route::get('{entity}/{identity}/{index?}'                    , "DimController@original");
 });

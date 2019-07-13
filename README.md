@@ -59,4 +59,4 @@ At this point, the package module should be working. Test it by opening the modu
 .../laravel_packages>php artisan serve
 ```
 
-8. Open a browser and access the package module with the following url: http://localhost:8000/mhn/dimages/index. This should open a simpel dashboard page. You are all set!
+8. Open a browser and access the package module with the following url: http://localhost:8000/mh/dim/status. This should return a 200 and a json with **success = true**. You are all set!
