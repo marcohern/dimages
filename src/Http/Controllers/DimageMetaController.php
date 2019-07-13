@@ -2,10 +2,12 @@
 
 namespace Marcohern\Dimages\Http\Controllers;
 
-use App\Http\Requests\UploadDimageRequest;
-use Marcohern\Dimages\Lib\Dimages\DimageManager;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
+use Marcohern\Dimages\Http\Requests\UploadDimageRequest;
+use Marcohern\Dimages\Lib\Dimages\DimageManager;
 
 class DimageMetaController extends Controller
 {
@@ -30,7 +32,7 @@ class DimageMetaController extends Controller
     return $identities;
   }
 
-  public function store(Request $request, $entity, $identity) {
+  public function store(UploadDimageRequest $request, $entity, $identity) {
     $dimage = $this->dimages->store($entity, $identity, $request->image);
     return [
       'dimage' => $dimage,
