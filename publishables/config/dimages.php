@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'filesystem' => 'dimages',
-    'storagePath' => 'mhn/dimages',
     'densities' => [
         'ldpi'    => 0.75,
         'mdpi'    => 1.00,

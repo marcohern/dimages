@@ -38,9 +38,6 @@ class DimagesServiceProvider extends ServiceProvider {
         $basePath = dirname(__DIR__);
 
         $publishables = [
-            'migrations' => [
-                "$basePath/publishables/database/migrations" => database_path('migrations')
-            ],
             'config' => [
                 "$basePath/publishables/config/dimages.php" => config_path('dimages.php')
             ]
