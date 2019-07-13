@@ -15,4 +15,7 @@ Route::group([
     Route::post('/meta/{entity}/{identity}', "DimageMetaController@store");
     Route::get('/meta/{entity}'            , 'DimageMetaController@identities');
     Route::get('/meta'                     , 'DimageMetaController@entities');
+
+    Route::get('{entity}/{identity}/{profile}/{density}/{index?}', "DimController@full");
+    Route::get('{entity}/{identity}/{index?}'                    , "DimController@original");
 });
