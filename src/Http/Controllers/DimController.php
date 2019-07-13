@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\Dimager;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
+use Marcohern\Dimages\Exceptions\ImageException;
 
 use Marcohern\Dimages\Lib\Dimages\DimageManager;
 use Marcohern\Dimages\Lib\Dimages\DimageConstants;
@@ -29,46 +30,28 @@ class DimController extends Controller
     return $image->response($dimage->ext);
   }
 
-    public function full($entity, $identity, $profile, $density, $index=null) {
+    public function full($entity, $identity, $profile, $density, $index=0) {
       $dimage = $this->dimages->viewExact($entity, $identity, $profile, $density, $index);
-      
-      dd($dimage->toFileName());
-
-        $appPath = storage_path("app/mhn/dimages");
-        $dimager = new Dimager($appPath);
-
-        $profiles = config('dimages.profiles');
-        $densities = config('dimages.densities');
-        //dd($profiles, $profile,$densities, $density);
-
-        if (!array_key_exists($profile, $profiles)) throw new NotFoundHttpException("profile '$profile' not found.");
-        if (!array_key_exists($density, $densities)) throw new NotFoundHttpException("density '$density' not found.");
-
-        //dd($domain, $slug, $index, $profile, $density);
-        $size = $profiles[$profile];
-        $factor = $densities[$density];
-        $w = intval($size[0] * $factor);
-        $h = intval($size[1] * $factor);
-        $requestedFile = null;
-        
-        try {
-            $dimage = $dimager->getSource($domain, $slug, $index, $profile, $density);
-            $requestedFile = "$appPath/".$dimage->getFileName();
-            return IImage::make($requestedFile)->response();
-        } catch (DimageNotFoundException $ex1) {
-            
-            try {
-                $dimage = $dimager->getSource($domain, $slug, $index);
-                $requestedFile = "$appPath/".$dimage->getDerivedFileName($profile, $density);
-                $sourceFile = "$appPath/".$dimage->getFileName();
-                
-                $iimage = IImage::make($sourceFile)->fit($w,$h);
-                $iimage->save($requestedFile);
-                return $iimage->response();
-            } catch (DimageNotFoundException $ex2) {
-                throw new NotFoundHttpException("'$requestedFile' not found.", $ex2);
-            }
-            throw new NotFoundHttpException("'$requestedFile' not found.", $ex1);
+      if ($this->dimages->exists($dimage)) {
+        $path = $this->dimages->file($dimage);
+        $image = IImage::make($path);
+        return $image->response($dimage->ext);
+      } else {
+        $dsource = $dimage->source();
+        if ($this->dimages->exists($dsource)) {
+          $spath = $this->dimages->file($dsource);
+          $dpath = $this->dimages->file($dimage);
+          $image = IImage::make($spath);
+          $p = config("dimages.profiles.$profile");
+          $d = config("dimages.densities.$density");
+          if (!$p) throw new ImageException("Profile $profile invalid", 0xd9745b9921);
+          if (!$d) throw new ImageException("Density $density invalid", 0xd9745b9922);
+          $w = $p[0]*$d;
+          $h = $p[1]*$d;
+          $image->fit($w, $h)->save($dpath);
+          return $image->response($dimage->ext);
         }
+      }
+      throw new ImageException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b9920);
     }
 }

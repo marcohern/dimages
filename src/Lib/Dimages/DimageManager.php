@@ -82,6 +82,12 @@ class DimageManager {
     throw new ImageException("Image not found:$entity/$identity/$profile/$density/$index");
   }
 
+  public function exists(DimageName $dimage) {
+    $disk = Storage::disk($this->scope);
+    $file = DimageConstants::IMAGESUBDIR.'/'.$dimage->toFileName();
+    return $disk->exists($file);
+  }
+
   public function list($entity, $identity) {
     $disk = Storage::disk($this->scope);
     $dir = DimageConstants::IMAGESUBDIR.'/'.DimageFunctions::imgFolder($entity,$identity);
