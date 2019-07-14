@@ -224,15 +224,6 @@ class DimageName {
   }
 
   /**
-   * returns the URL of the image
-   * 
-   * @return string Image url
-   */
-  public function __toString() {
-    return $this->toUrl();
-  }
-
-  /**
    * Returns the relative path.
    * 
    * @return string image relative path
@@ -260,7 +251,21 @@ class DimageName {
     return DimageConstants::IMAGESUBDIR.'/'.$this->toIdentityPathFileName();
   }
 
+  /**
+   * returns the full image directory from the storage root
+   * 
+   * @return string Image directory from storage root
+   */
   public function toFullPath() {
     return DimageConstants::IMAGESUBDIR.'/'.$this->toIdentityPath();
+  }
+
+  /**
+   * returns the URL of the image
+   * 
+   * @return string Image url
+   */
+  public function __toString() {
+    return $this->toUrl();
   }
 }
