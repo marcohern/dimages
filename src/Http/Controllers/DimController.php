@@ -58,4 +58,11 @@ class DimController extends Controller
   public function status() {
     return ['success' => true];
   }
+
+  public function store(UploadDimageRequest $request, $entity, $identity) {
+    $dimage = $this->dimages->store($entity, $identity, $request->image);
+    return [
+      'index' => $dimage->index
+    ];
+  }
 }
