@@ -197,15 +197,6 @@ class DimageName {
   }
 
   /**
-   * Returns the relative path.
-   * 
-   * @return string image relative path
-   */
-  public function getPath() : string {
-    return $this->replace(DimageConstants::RFILE_PATH);
-  }
-
-  /**
    * Returns the filename of this image.
    * 
    * @return string file name
@@ -242,6 +233,15 @@ class DimageName {
   }
 
   /**
+   * Returns the relative path.
+   * 
+   * @return string image relative path
+   */
+  public function toIdentityPath() : string {
+    return $this->replace(DimageConstants::RFILE_PATH);
+  }
+
+  /**
    * Generates the File Name for this DimageName.
    * 
    * @return string File Name for this image
@@ -261,6 +261,6 @@ class DimageName {
   }
 
   public function toFullPath() {
-    return DimageConstants::IMAGESUBDIR.'/'.$this->getPath();
+    return DimageConstants::IMAGESUBDIR.'/'.$this->toIdentityPath();
   }
 }
