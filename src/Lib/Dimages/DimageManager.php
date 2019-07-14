@@ -36,7 +36,7 @@ class DimageManager {
     $dimage->identity = $identity;
     $dimage->index = $index;
     $dimage->ext = $upload->getClientOriginalExtension();
-    $disk->putFileAs(DimageConstants::IMAGESUBDIR.'/'.$dimage->toIdentityPath(), $upload, $dimage->getName());
+    $disk->putFileAs(DimageConstants::IMAGESUBDIR.'/'.$dimage->toIdentityPath(), $upload, $dimage->toFileName());
     return $dimage;
   }
 

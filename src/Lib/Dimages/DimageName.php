@@ -201,7 +201,7 @@ class DimageName {
    * 
    * @return string file name
    */
-  public function getName() {
+  public function toFileName() {
     if (empty($this->profile) || empty($this->density)) {
       return $this->replace(DimageConstants::RFILE_NAME_N);
     }
