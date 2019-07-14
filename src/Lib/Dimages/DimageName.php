@@ -256,7 +256,7 @@ class DimageName {
    * 
    * @return string Image file path from storage root
    */
-  public function toFullFileNamePath() {
+  public function toFullPathFileName() {
     return DimageConstants::IMAGESUBDIR.'/'.$this->toIdentityPathFileName();
   }
 

@@ -77,8 +77,8 @@ class DimageNameTest extends TestCase
     $this->assertSame($dimage->ext, 'jpeg');
     $this->assertSame($dimage->toIdentityPathFileName(), 'tecno/sucks-to-be-you-by-prozzak/004.cd-cover.hdpi.jpeg');
   }
-  
-  public function test_toUrl_Full_Valid() {
+
+  public function test_toMethods() {
     $dimage = new DimageName;
     $dimage->entity = 'movies';
     $dimage->identity = 'the-grand-budapest-hotel';
@@ -87,103 +87,13 @@ class DimageNameTest extends TestCase
     $dimage->density = 'hdpi';
     $dimage->ext = 'jpg';
 
-    $this->assertEquals($dimage->toUrl(), 'movies/the-grand-budapest-hotel/toolbar/hdpi/5');
-  }
+    $this->assertSame("$dimage",                         'movies/the-grand-budapest-hotel/toolbar/hdpi/5');
+    $this->assertSame($dimage->toUrl(),                  'movies/the-grand-budapest-hotel/toolbar/hdpi/5');
 
-  public function test_toUrl_FullNoIndex_Valid() {
-    $dimage = new DimageName;
-    $dimage->entity = 'movies';
-    $dimage->identity = 'the-grand-budapest-hotel';
-    $dimage->index = 0;
-    $dimage->profile = 'toolbar';
-    $dimage->density = 'hdpi';
-    $dimage->ext = 'jpg';
-
-    $this->assertEquals($dimage->toUrl(), 'movies/the-grand-budapest-hotel/toolbar/hdpi');
-  }
-
-  public function test_toUrl_NoProfileDensity_Valid() {
-    $dimage = new DimageName;
-    $dimage->entity = 'movies';
-    $dimage->identity = 'the-grand-budapest-hotel';
-    $dimage->index = 15;
-    $dimage->ext = 'jpg';
-
-    $this->assertEquals($dimage->toUrl(), 'movies/the-grand-budapest-hotel/15');
-  }
-
-  public function test_toUrl_NoProfileDensityIndex_Valid() {
-    $dimage = new DimageName;
-    $dimage->entity = 'movies';
-    $dimage->identity = 'the-grand-budapest-hotel';
-    $dimage->index = 0;
-    $dimage->ext = 'jpg';
-
-    $this->assertEquals($dimage->toUrl(), 'movies/the-grand-budapest-hotel');
-  }
-
-  public function test_toFileName() {
-    $dimage = new DimageName;
-    $dimage->entity = 'marvel';
-    $dimage->identity = 'wolverine';
-    $dimage->index = 0;
-    $dimage->profile = 'main-cover';
-    $dimage->density = 'xxhdpi';
-    $dimage->ext = 'jpeg';
-
-    $this->assertEquals($dimage->toIdentityPathFileName(), 'marvel/wolverine/000.main-cover.xxhdpi.jpeg');
-  }
-
-  public function test_toString() {
-    $dimage = new DimageName;
-    $dimage->entity = 'marvel';
-    $dimage->identity = 'wolverine';
-    $dimage->index = 3;
-    $dimage->profile = 'main-cover';
-    $dimage->density = 'xxhdpi';
-    $dimage->ext = 'jpeg';
-
-    $this->assertEquals($dimage, 'marvel/wolverine/main-cover/xxhdpi/3');
-  }
-
-  public function test_toFullFileNamePath() {
-    $dimage = new DimageName;
-    $dimage->entity = 'marvel';
-    $dimage->identity = 'wolverine';
-    $dimage->index = 3;
-    $dimage->profile = 'main-cover';
-    $dimage->density = 'xxhdpi';
-    $dimage->ext = 'jpeg';
-
-    $this->assertEquals($dimage->toFullFileNamePath(), 'img/marvel/wolverine/003.main-cover.xxhdpi.jpeg');
-  }
-
-  public function test_toFullPath() {
-    $dimage = new DimageName;
-    $dimage->entity = 'marvel';
-    $dimage->identity = 'wolverine';
-    $dimage->index = 3;
-    $dimage->profile = 'main-cover';
-    $dimage->density = 'xxhdpi';
-    $dimage->ext = 'jpeg';
-
-    $this->assertEquals($dimage->toFullPath(), 'img/marvel/wolverine');
-  }
-  
-  public function test_multitest() {
-    $dimage1 = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
-    $dimage2 = DimageName::fromFilePath('music/deuce-by-kiss/000.large-icon.ldpi.png');
-    $dimage3 = DimageName::fromFilePath('music/god-gave-rock-and-roll-to-you-by-kiss/003.png');
-    $dimage4 = DimageName::fromFilePath('music/detroit-rock-city-by-kiss/000.jpg');
-
-    $this->assertEquals($dimage1->toUrl(), 'music/sure-know-something-by-kiss/cover/mdpi/2');
-    $this->assertEquals($dimage2->toUrl(), 'music/deuce-by-kiss/large-icon/ldpi');
-    $this->assertEquals($dimage3->toUrl(), 'music/god-gave-rock-and-roll-to-you-by-kiss/3');
-    $this->assertEquals($dimage4->toUrl(), 'music/detroit-rock-city-by-kiss');
-
-    $this->assertEquals($dimage1->toIdentityPathFileName(), 'music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
-    $this->assertEquals($dimage2->toIdentityPathFileName(), 'music/deuce-by-kiss/000.large-icon.ldpi.png');
-    $this->assertEquals($dimage3->toIdentityPathFileName(), 'music/god-gave-rock-and-roll-to-you-by-kiss/003.png');
-    $this->assertEquals($dimage4->toIdentityPathFileName(), 'music/detroit-rock-city-by-kiss/000.jpg');
+    $this->assertSame($dimage->toFullPathFileName(),     'img/movies/the-grand-budapest-hotel/005.toolbar.hdpi.jpg');
+    $this->assertSame($dimage->toFullPath(),             'img/movies/the-grand-budapest-hotel');
+    $this->assertSame($dimage->toIdentityPath(),         'movies/the-grand-budapest-hotel');
+    $this->assertSame($dimage->toIdentityPathFileName(), 'movies/the-grand-budapest-hotel/005.toolbar.hdpi.jpg');
+    $this->assertSame($dimage->toFileName(),             '005.toolbar.hdpi.jpg');
   }
 }
