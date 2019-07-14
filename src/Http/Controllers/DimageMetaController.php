@@ -57,6 +57,6 @@ class DimageMetaController extends Controller
   }
 
   public function destroy($entity, $identity) {
-    $this->dimages->destroy($entity, $identity);
+    return $this->dimages->destroy($entity, $identity);
   }
 }

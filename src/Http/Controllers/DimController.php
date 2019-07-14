@@ -67,6 +67,6 @@ class DimController extends Controller
   }
 
   public function destroy($entity, $identity) {
-    return $this->dimages->destroy($entity, $identity);
+    $this->dimages->destroy($entity, $identity);
   }
 }
