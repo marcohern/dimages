@@ -197,16 +197,6 @@ class DimageName {
   }
 
   /**
-   * Generates the File Name for this DimageName.
-   * 
-   * @return string File Name for this image
-   */
-  public function toFileName() : string {
-    $rfile = $this->fileTemplate();
-    return $this->replace($rfile);
-  }
-
-  /**
    * Returns the relative path.
    * 
    * @return string image relative path
@@ -244,12 +234,33 @@ class DimageName {
 
   /**
    * returns the URL of the image
+   * 
+   * @return string Image url
    */
   public function __toString() {
     return $this->toUrl();
   }
 
-  public function url() {
-    return DimageConstants::IMAGESUBDIR.'/'.$this->toFileName();
+  /**
+   * Generates the File Name for this DimageName.
+   * 
+   * @return string File Name for this image
+   */
+  public function toEntityPathFileName() : string {
+    $rfile = $this->fileTemplate();
+    return $this->replace($rfile);
+  }
+
+  /**
+   * returns the full file path from the storage root
+   * 
+   * @return string Image file path from storage root
+   */
+  public function toFullFileNamePath() {
+    return DimageConstants::IMAGESUBDIR.'/'.$this->toEntityPathFileName();
+  }
+
+  public function toFullPath() {
+    return DimageConstants::IMAGESUBDIR.'/'.$this->getPath();
   }
 }

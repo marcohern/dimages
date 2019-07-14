@@ -64,7 +64,7 @@ class DimageNameTest extends TestCase
   public function test_source() {
     $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
     $source = $dimage->source();
-    $this->assertEquals($source->toFileName(), 'music/sure-know-something-by-kiss/002.jpg');
+    $this->assertEquals($source->toEntityPathFileName(), 'music/sure-know-something-by-kiss/002.jpg');
   }
 
   public function test_fromUrl() {
@@ -75,7 +75,7 @@ class DimageNameTest extends TestCase
     $this->assertSame($dimage->profile, 'cd-cover');
     $this->assertSame($dimage->density, 'hdpi');
     $this->assertSame($dimage->ext, 'jpeg');
-    $this->assertSame($dimage->toFileName(), 'tecno/sucks-to-be-you-by-prozzak/004.cd-cover.hdpi.jpeg');
+    $this->assertSame($dimage->toEntityPathFileName(), 'tecno/sucks-to-be-you-by-prozzak/004.cd-cover.hdpi.jpeg');
   }
   
   public function test_toUrl_Full_Valid() {
@@ -131,7 +131,7 @@ class DimageNameTest extends TestCase
     $dimage->density = 'xxhdpi';
     $dimage->ext = 'jpeg';
 
-    $this->assertEquals($dimage->toFileName(), 'marvel/wolverine/000.main-cover.xxhdpi.jpeg');
+    $this->assertEquals($dimage->toEntityPathFileName(), 'marvel/wolverine/000.main-cover.xxhdpi.jpeg');
   }
 
   public function test_toString() {
@@ -145,6 +145,30 @@ class DimageNameTest extends TestCase
 
     $this->assertEquals($dimage, 'marvel/wolverine/main-cover/xxhdpi/3');
   }
+
+  public function test_toFullFileNamePath() {
+    $dimage = new DimageName;
+    $dimage->entity = 'marvel';
+    $dimage->identity = 'wolverine';
+    $dimage->index = 3;
+    $dimage->profile = 'main-cover';
+    $dimage->density = 'xxhdpi';
+    $dimage->ext = 'jpeg';
+
+    $this->assertEquals($dimage->toFullFileNamePath(), 'img/marvel/wolverine/003.main-cover.xxhdpi.jpeg');
+  }
+
+  public function test_toFullPath() {
+    $dimage = new DimageName;
+    $dimage->entity = 'marvel';
+    $dimage->identity = 'wolverine';
+    $dimage->index = 3;
+    $dimage->profile = 'main-cover';
+    $dimage->density = 'xxhdpi';
+    $dimage->ext = 'jpeg';
+
+    $this->assertEquals($dimage->toFullPath(), 'img/marvel/wolverine');
+  }
   
   public function test_multitest() {
     $dimage1 = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
@@ -157,9 +181,9 @@ class DimageNameTest extends TestCase
     $this->assertEquals($dimage3->toUrl(), 'music/god-gave-rock-and-roll-to-you-by-kiss/3');
     $this->assertEquals($dimage4->toUrl(), 'music/detroit-rock-city-by-kiss');
 
-    $this->assertEquals($dimage1->toFileName(), 'music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
-    $this->assertEquals($dimage2->toFileName(), 'music/deuce-by-kiss/000.large-icon.ldpi.png');
-    $this->assertEquals($dimage3->toFileName(), 'music/god-gave-rock-and-roll-to-you-by-kiss/003.png');
-    $this->assertEquals($dimage4->toFileName(), 'music/detroit-rock-city-by-kiss/000.jpg');
+    $this->assertEquals($dimage1->toEntityPathFileName(), 'music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
+    $this->assertEquals($dimage2->toEntityPathFileName(), 'music/deuce-by-kiss/000.large-icon.ldpi.png');
+    $this->assertEquals($dimage3->toEntityPathFileName(), 'music/god-gave-rock-and-roll-to-you-by-kiss/003.png');
+    $this->assertEquals($dimage4->toEntityPathFileName(), 'music/detroit-rock-city-by-kiss/000.jpg');
   }
 }

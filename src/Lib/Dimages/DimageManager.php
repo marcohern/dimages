@@ -23,7 +23,7 @@ class DimageManager {
   public function file($dimage) {
     $disk = Storage::disk($this->scope);
     $storage = storage_path();
-    return $storage.'/'.DimageConstants::FSPATH.'/'.DimageConstants::IMAGESUBDIR.'/'.$dimage->toFileName();
+    return $storage.'/'.DimageConstants::FSPATH.'/'.DimageConstants::IMAGESUBDIR.'/'.$dimage->toEntityPathFileName();
   }
 
   public function store($entity, $identity, $upload) : DimageName {
@@ -70,7 +70,7 @@ class DimageManager {
 
   public function exists(DimageName $dimage) {
     $disk = Storage::disk($this->scope);
-    $file = DimageConstants::IMAGESUBDIR.'/'.$dimage->toFileName();
+    $file = DimageConstants::IMAGESUBDIR.'/'.$dimage->toEntityPathFileName();
     return $disk->exists($file);
   }
 
