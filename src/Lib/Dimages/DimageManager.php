@@ -111,4 +111,15 @@ class DimageManager {
       throw new ImageException("Dir not found: $dir");
     }
   }
+
+  public function getSourceAndDerivedFiles($entity, $identity, $index) {
+    $disk = Storage::disk($this->scope);
+    $dir = DimageConstants::IMAGESUBDIR.'/'.DimageFunctions::imgFolder($entity,$identity);
+    
+  }
+
+  public function destroySingle($entity, $identity, $index) {
+    $disk = Storage::disk($this->scope);
+    $dir = DimageConstants::IMAGESUBDIR.'/'.DimageFunctions::imgFolder($entity,$identity);
+  }
 }

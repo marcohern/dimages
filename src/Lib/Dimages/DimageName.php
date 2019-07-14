@@ -227,6 +227,12 @@ class DimageName {
     return $this->replace(DimageConstants::RFILE_NAME_PDN);
   }
 
+  /**
+   * Returns the name of the source of this
+   * DimageName.
+   * 
+   * @return DimageName Source
+   */
   public function source() : DimageName {
     $source = new DimageName;
     $source->entity = $this->entity;
@@ -236,6 +242,9 @@ class DimageName {
     return $source;
   }
 
+  /**
+   * returns the URL of the image
+   */
   public function __toString() {
     return $this->toUrl();
   }
