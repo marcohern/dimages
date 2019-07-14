@@ -26,7 +26,7 @@ At this point, you must register the package in laravel:
   ]    
 ```
 
-5. Include the package source files in the *composer.json* file *autoload* section. Include the dimages namespace/source folder in the *psr-4* list, and the *Helper.php* in the *files* list.
+5. Include the package source files in the **composer.json** file *autoload* section. Include the dimages namespace/source folder in the *psr-4* list, and the *Helper.php* in the *files* list.
 
 ```json
 {
