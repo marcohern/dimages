@@ -64,7 +64,7 @@ class DimageNameTest extends TestCase
   public function test_source() {
     $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
     $source = $dimage->source();
-    $this->assertEquals($source->toEntityPathFileName(), 'music/sure-know-something-by-kiss/002.jpg');
+    $this->assertEquals($source->toIdentityPathFileName(), 'music/sure-know-something-by-kiss/002.jpg');
   }
 
   public function test_fromUrl() {
@@ -75,7 +75,7 @@ class DimageNameTest extends TestCase
     $this->assertSame($dimage->profile, 'cd-cover');
     $this->assertSame($dimage->density, 'hdpi');
     $this->assertSame($dimage->ext, 'jpeg');
-    $this->assertSame($dimage->toEntityPathFileName(), 'tecno/sucks-to-be-you-by-prozzak/004.cd-cover.hdpi.jpeg');
+    $this->assertSame($dimage->toIdentityPathFileName(), 'tecno/sucks-to-be-you-by-prozzak/004.cd-cover.hdpi.jpeg');
   }
   
   public function test_toUrl_Full_Valid() {
@@ -131,7 +131,7 @@ class DimageNameTest extends TestCase
     $dimage->density = 'xxhdpi';
     $dimage->ext = 'jpeg';
 
-    $this->assertEquals($dimage->toEntityPathFileName(), 'marvel/wolverine/000.main-cover.xxhdpi.jpeg');
+    $this->assertEquals($dimage->toIdentityPathFileName(), 'marvel/wolverine/000.main-cover.xxhdpi.jpeg');
   }
 
   public function test_toString() {
@@ -181,9 +181,9 @@ class DimageNameTest extends TestCase
     $this->assertEquals($dimage3->toUrl(), 'music/god-gave-rock-and-roll-to-you-by-kiss/3');
     $this->assertEquals($dimage4->toUrl(), 'music/detroit-rock-city-by-kiss');
 
-    $this->assertEquals($dimage1->toEntityPathFileName(), 'music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
-    $this->assertEquals($dimage2->toEntityPathFileName(), 'music/deuce-by-kiss/000.large-icon.ldpi.png');
-    $this->assertEquals($dimage3->toEntityPathFileName(), 'music/god-gave-rock-and-roll-to-you-by-kiss/003.png');
-    $this->assertEquals($dimage4->toEntityPathFileName(), 'music/detroit-rock-city-by-kiss/000.jpg');
+    $this->assertEquals($dimage1->toIdentityPathFileName(), 'music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
+    $this->assertEquals($dimage2->toIdentityPathFileName(), 'music/deuce-by-kiss/000.large-icon.ldpi.png');
+    $this->assertEquals($dimage3->toIdentityPathFileName(), 'music/god-gave-rock-and-roll-to-you-by-kiss/003.png');
+    $this->assertEquals($dimage4->toIdentityPathFileName(), 'music/detroit-rock-city-by-kiss/000.jpg');
   }
 }

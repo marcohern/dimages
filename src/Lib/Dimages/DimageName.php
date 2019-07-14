@@ -246,7 +246,7 @@ class DimageName {
    * 
    * @return string File Name for this image
    */
-  public function toEntityPathFileName() : string {
+  public function toIdentityPathFileName() : string {
     $rfile = $this->fileTemplate();
     return $this->replace($rfile);
   }
@@ -257,7 +257,7 @@ class DimageName {
    * @return string Image file path from storage root
    */
   public function toFullFileNamePath() {
-    return DimageConstants::IMAGESUBDIR.'/'.$this->toEntityPathFileName();
+    return DimageConstants::IMAGESUBDIR.'/'.$this->toIdentityPathFileName();
   }
 
   public function toFullPath() {
