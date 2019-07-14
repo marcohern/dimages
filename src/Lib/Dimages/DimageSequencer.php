@@ -23,4 +23,12 @@ class DimageSequencer {
     $disk->put($path, $next+1);
     return $next;
   }
+
+  public function dropFrom($filename) {
+    $path = DimageConstants::SEQDIR."/$filename";
+    $disk = Storage::disk($this->scope);
+    if ($disk->exists($path)) {
+      $next = $disk->delete($path);
+    }
+  }
 }

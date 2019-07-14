@@ -55,4 +55,8 @@ class DimageMetaController extends Controller
       'url' => url($this->dimages->url($dimage))
     ];
   }
+
+  public function destroy($entity, $identity) {
+    $this->dimages->destroy($entity, $identity);
+  }
 }

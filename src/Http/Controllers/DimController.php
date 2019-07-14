@@ -65,4 +65,8 @@ class DimController extends Controller
       'index' => $dimage->index
     ];
   }
+
+  public function destroy($entity, $identity) {
+    return $this->dimages->destroy($entity, $identity);
+  }
 }
