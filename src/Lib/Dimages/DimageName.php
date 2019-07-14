@@ -4,7 +4,7 @@ namespace Marcohern\Dimages\Lib\Dimages;
 
 use Marcohern\Dimages\Lib\Dimages\Dimage;
 use Marcohern\Dimages\Lib\Dimages\DimageConstants;
-use Marcohern\Dimages\Exceptions\ImageException;
+use Marcohern\Dimages\Exceptions\DimagesException;
 
 /**
  * Filename components of a Dimage. It follows an specific format,
@@ -100,7 +100,7 @@ class DimageName {
     $m = null;
     $r = preg_match($needle, $haystack, $m);
     if (!$r) {
-      throw new ImageException("source invalid: $haystack.", 0xa996a53d53);
+      throw new DimagesException("source invalid: $haystack.", 0xa996a53d53);
     }
     $inf = new DimageName;
     $inf->entity   =   $m['entity'];
@@ -181,7 +181,7 @@ class DimageName {
       }
     }
     if (is_null($rurl)) {
-      throw new ImageException("Unable to detect url template", 0xbd478efaaf);
+      throw new DimagesException("Unable to detect url template", 0xbd478efaaf);
     }
     return $rurl;
   }

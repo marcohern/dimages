@@ -7,7 +7,7 @@ use Intervention\Image\ImageManagerStatic as IImage;
 
 use Marcohern\Dimages\Lib\Dimages\DimageName;
 use Marcohern\Dimages\Lib\Dimages\DimageSequencer;
-use Marcohern\Dimages\Exceptions\ImageException;
+use Marcohern\Dimages\Exceptions\DimagesException;
 
 class DimageManager {
 
@@ -48,7 +48,7 @@ class DimageManager {
       $dimage = DimageName::fromFilePath($file);
       if ($dimage->index == $index) { return $dimage; }
     }
-    throw new ImageException("Image not found:$entity/$identity/$index", 0xd9745b991e);
+    throw new DimagesException("Image not found:$entity/$identity/$index", 0xd9745b991e);
   }
 
   public function viewExact($entity, $identity, $profile, $density, $index=0) {
@@ -65,7 +65,7 @@ class DimageManager {
         return $dimage;
       }
     }
-    throw new ImageException("Image not found:$entity/$identity/$profile/$density/$index");
+    throw new DimagesException("Image not found:$entity/$identity/$profile/$density/$index");
   }
 
   public function exists(DimageName $dimage) {
@@ -108,7 +108,7 @@ class DimageManager {
       $sequencer->dropFrom("$entity.$identity.id");
       $disk->deleteDirectory($dir);
     } else {
-      throw new ImageException("Dir not found: $dir");
+      throw new DimagesException("Dir not found: $dir");
     }
   }
 

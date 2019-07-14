@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use Marcohern\Dimages\Exceptions\ImageException;
+use Marcohern\Dimages\Exceptions\DimagesException;
 use Marcohern\Dimages\Lib\Dimages\Dimage;
 use Marcohern\Dimages\Lib\Dimages\DimageName;
 
@@ -56,7 +56,7 @@ class DimageNameTest extends TestCase
   }
 
   public function test_fromFilePath_InvalidFileName_Exception() {
-    $this->expectException(ImageException::class);
+    $this->expectException(DimagesException::class);
 
     $dimage = DimageName::fromFilePath('path/to/invalid_file_name.jpeg');
   }

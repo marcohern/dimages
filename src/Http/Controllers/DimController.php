@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\Dimager;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
-use Marcohern\Dimages\Exceptions\ImageException;
+use Marcohern\Dimages\Exceptions\DimagesException;
 
 use Marcohern\Dimages\Lib\Dimages\DimageManager;
 use Marcohern\Dimages\Lib\Dimages\DimageConstants;
@@ -44,15 +44,15 @@ class DimController extends Controller
         $image = IImage::make($spath);
         $p = config("dimages.profiles.$profile");
         $d = config("dimages.densities.$density");
-        if (!$p) throw new ImageException("Profile $profile invalid", 0xd9745b9921);
-        if (!$d) throw new ImageException("Density $density invalid", 0xd9745b9922);
+        if (!$p) throw new DimagesException("Profile $profile invalid", 0xd9745b9921);
+        if (!$d) throw new DimagesException("Density $density invalid", 0xd9745b9922);
         $w = $p[0]*$d;
         $h = $p[1]*$d;
         $image->fit($w, $h)->save($dpath);
         return $image->response($dimage->ext);
       }
     }
-    throw new ImageException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b9920);
+    throw new DimagesException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b9920);
   }
 
   public function status() {
