@@ -113,6 +113,21 @@ class DimageName {
   }
 
   /**
+   * Returns the name of the source of this
+   * DimageName.
+   * 
+   * @return DimageName Source
+   */
+  public function source() : DimageName {
+    $source = new DimageName;
+    $source->entity = $this->entity;
+    $source->identity = $this->identity;
+    $source->index = $this->index;
+    $source->ext = $this->ext;
+    return $source;
+  }
+
+  /**
    * Determines if this DimageName is a source image, rather than
    * a derived image. Source images are the ones uploaded by users.
    * Derived images are images generated and resized from the source.
@@ -206,21 +221,6 @@ class DimageName {
       return $this->replace(DimageConstants::RFILE_NAME_N);
     }
     return $this->replace(DimageConstants::RFILE_NAME_PDN);
-  }
-
-  /**
-   * Returns the name of the source of this
-   * DimageName.
-   * 
-   * @return DimageName Source
-   */
-  public function source() : DimageName {
-    $source = new DimageName;
-    $source->entity = $this->entity;
-    $source->identity = $this->identity;
-    $source->index = $this->index;
-    $source->ext = $this->ext;
-    return $source;
   }
 
   /**
