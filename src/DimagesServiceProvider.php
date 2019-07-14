@@ -25,7 +25,7 @@ class DimagesServiceProvider extends ServiceProvider {
         //$this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         //Load the views for this package
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');
+        //$this->loadViewsFrom(__DIR__.'/../resources/views', 'dimages');
 
         Dimage::boot();
     }
