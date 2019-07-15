@@ -51,4 +51,18 @@ class DimControllerTest extends TestCase
       ->assertExists('img/test/image/001.jpeg')
       ->assertExists('img/test/image/002.png');
   }
+
+  public function test_upload_NoImage_UnprocesableEntity() {
+    $this
+      ->json('POST',"mh/dim/api/_upload/test/image")
+      ->assertStatus(422)
+      ->assertExactJson([
+        'message' => 'The given data was invalid.',
+        'errors' => [
+          'image' => [
+            'The image field is required.'
+          ]
+        ]
+      ]);
+  }
 }
