@@ -53,6 +53,6 @@ class DimagesServiceProvider extends ServiceProvider {
             $this->publishes($paths, $group);
         }
 
-        $this->publishes($views);
+        //$this->publishes($views);
     }
 }
