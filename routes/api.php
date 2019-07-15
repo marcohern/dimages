@@ -1,8 +1,9 @@
 <?php 
+use Marcohern\Dimages\Lib\Dimages\DimageConstants;
 
 Route::group([
     'namespace' => 'Marcohern\Dimages\Http\Controllers',
-    'prefix' => 'mh/dim/api',
+    'prefix' => DimageConstants::DIMROUTE,
     'middleware' => ['api']
 ], function () {
     Route::get ('/meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index'  );

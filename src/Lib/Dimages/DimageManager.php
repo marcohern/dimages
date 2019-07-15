@@ -17,7 +17,7 @@ class DimageManager {
   }
 
   public function url($dimage) {
-    return DimageConstants::IMAGEROUTE.'/'.$dimage->toUrl();
+    return DimageConstants::DIMROUTE.'/'.$dimage->toUrl();
   }
 
   public function file($dimage) {

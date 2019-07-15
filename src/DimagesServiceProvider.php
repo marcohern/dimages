@@ -5,7 +5,9 @@ namespace Marcohern\Dimages;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageManagerStatic as IImage;
+
 use Marcohern\Dimages\Lib\Dimages\Dimage;
+
 
 class DimagesServiceProvider extends ServiceProvider {
 
