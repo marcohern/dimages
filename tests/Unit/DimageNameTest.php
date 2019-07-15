@@ -81,19 +81,23 @@ class DimageNameTest extends TestCase
   public function test_toMethods() {
     $dimage = new DimageName;
     $dimage->entity = 'movies';
-    $dimage->identity = 'the-grand-budapest-hotel';
+    $dimage->identity = 'terminator';
     $dimage->index = 5;
     $dimage->profile = 'toolbar';
     $dimage->density = 'hdpi';
     $dimage->ext = 'jpg';
 
-    $this->assertSame("$dimage",                         'movies/the-grand-budapest-hotel/toolbar/hdpi/5');
-    $this->assertSame($dimage->toUrl(),                  'movies/the-grand-budapest-hotel/toolbar/hdpi/5');
+    //URL
+    $this->assertEquals($dimage,        'movies/terminator/toolbar/hdpi/5');//toString
+    $this->assertSame($dimage->toUrl(), 'movies/terminator/toolbar/hdpi/5');
 
-    $this->assertSame($dimage->toFullPathFileName(),     'img/movies/the-grand-budapest-hotel/005.toolbar.hdpi.jpg');
-    $this->assertSame($dimage->toFullPath(),             'img/movies/the-grand-budapest-hotel');
-    $this->assertSame($dimage->toIdentityPath(),         'movies/the-grand-budapest-hotel');
-    $this->assertSame($dimage->toIdentityPathFileName(), 'movies/the-grand-budapest-hotel/005.toolbar.hdpi.jpg');
-    $this->assertSame($dimage->toFileName(),             '005.toolbar.hdpi.jpg');
+    //Path
+    $this->assertSame($dimage->toFullPath(), 'img/movies/terminator');
+    $this->assertSame($dimage->toIdentityPath(), 'movies/terminator');
+
+    //File
+    $this->assertSame($dimage->toFullPathFileName(), 'img/movies/terminator/005.toolbar.hdpi.jpg');
+    $this->assertSame($dimage->toIdentityPathFileName(), 'movies/terminator/005.toolbar.hdpi.jpg');
+    $this->assertSame($dimage->toFileName(),                               '005.toolbar.hdpi.jpg');
   }
 }
