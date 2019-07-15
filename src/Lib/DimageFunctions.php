@@ -90,7 +90,17 @@ class DimageFunctions {
     return self::pad($index, DimageConstants::PADINDEX);
   }
 
-  public static function imgFolder($entity, $identity) {
+  public static function imagesFolder() {
+    return DimageConstants::IMAGESUBDIR;
+  }
+
+  public static function entityFolder($entity) {
+    $folder = DimageConstants::RFILE_SUPERPATH;
+    $folder = str_replace('%entity'  , $entity  , $folder);
+    return DimageConstants::IMAGESUBDIR.'/'.$folder;
+  }
+
+  public static function identityFolder($entity, $identity) {
     $folder = DimageConstants::RFILE_PATH;
     $folder = str_replace('%entity'  , $entity  , $folder);
     $folder = str_replace('%identity', $identity, $folder);

@@ -28,11 +28,12 @@ class DimageConstants {
 
   public const DEFAULT_ENTITY = '_global';
 
-  public const RFILE_EIPDN    = '%entity/%identity/%pindex.%profile.%density.%ext';
-  public const RFILE_EIN      = '%entity/%identity/%pindex.%ext';
-  public const RFILE_PATH     = '%entity/%identity';
-  public const RFILE_NAME_PDN = '%pindex.%profile.%density.%ext';
-  public const RFILE_NAME_N   = '%pindex.%ext';
+  public const RFILE_EIPDN     = '%entity/%identity/%pindex.%profile.%density.%ext';
+  public const RFILE_EIN       = '%entity/%identity/%pindex.%ext';
+  public const RFILE_PATH      = '%entity/%identity';
+  public const RFILE_SUPERPATH = '%entity';
+  public const RFILE_NAME_PDN  = '%pindex.%profile.%density.%ext';
+  public const RFILE_NAME_N    = '%pindex.%ext';
 
   public const RURL_EIPDN  = '%entity/%identity/%profile/%density/%index';
   public const RURL_EIPD   = '%entity/%identity/%profile/%density';

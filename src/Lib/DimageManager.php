@@ -44,7 +44,7 @@ class DimageManager {
 
   public function viewMain($entity, $identity, $index=0) : DimageName {
     $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::imgFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
     $files = $disk->files($dir);
     foreach ($files as $file) {
       $dimage = DimageName::fromFilePath($file);
@@ -55,7 +55,7 @@ class DimageManager {
 
   public function viewExact($entity, $identity, $profile, $density, $index=0) {
     $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::imgFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
     $files = $disk->files($dir);
     foreach ($files as $file) {
       $dimage = DimageName::fromFilePath($file);
@@ -72,13 +72,13 @@ class DimageManager {
 
   public function exists(DimageName $dimage) {
     $disk = Storage::disk($this->scope);
-    $file = DimageConstants::IMAGESUBDIR.'/'.$dimage->toIdentityPathFileName();
+    $file = $dimage->toFullPathFileName();
     return $disk->exists($file);
   }
 
   public function list($entity, $identity) {
     $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::imgFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
     $files = $disk->files($dir);
     $dimages = [];
     foreach ($files as $file) {
@@ -90,7 +90,7 @@ class DimageManager {
 
   public function entities() {
     $disk = Storage::disk($this->scope);
-    $prefix = DimageConstants::IMAGESUBDIR;
+    $prefix = DimageFunctions::imagesFolder();
     $plen = strlen($prefix) + 1;
     $dirs = $disk->directories($prefix);
     foreach ($dirs as $k => $dir) {
@@ -104,7 +104,7 @@ class DimageManager {
 
   public function identities($entity) {
     $disk = Storage::disk($this->scope);
-    $prefix = DimageConstants::IMAGESUBDIR."/$entity";
+    $prefix = DimageFunctions::entityFolder($entity);
     $plen = strlen($prefix) + 1;
     $dirs = $disk->directories($prefix);
     foreach ($dirs as $k => $dir) {
@@ -123,7 +123,7 @@ class DimageManager {
   public function destroy($entity, $identity) {
     $disk = Storage::disk($this->scope);
     $sequencer = new DimageSequencer($this->scope);
-    $dir = DimageFunctions::imgFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
     if ($disk->exists($dir)) {
       $sequencer->dropFrom("$entity.$identity.id");
       $disk->deleteDirectory($dir);
@@ -134,12 +134,12 @@ class DimageManager {
 
   public function getSourceAndDerivedFiles($entity, $identity, $index) {
     $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::imgFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
     
   }
 
   public function destroySingle($entity, $identity, $index) {
     $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::imgFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
   }
 }
