@@ -94,6 +94,6 @@ class DimageFunctions {
     $folder = DimageConstants::RFILE_PATH;
     $folder = str_replace('%entity'  , $entity  , $folder);
     $folder = str_replace('%identity', $identity, $folder);
-    return $folder;
+    return DimageConstants::IMAGESUBDIR.'/'.$folder;
   }
 }
