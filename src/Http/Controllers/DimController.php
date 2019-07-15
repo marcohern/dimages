@@ -23,7 +23,7 @@ class DimController extends Controller
   }
 
   public function original($entity, $identity, $index=0) {
-    $dimage = $this->dimages->viewMain($entity, $identity, $index);
+    $dimage = $this->dimages->getSourceName($entity, $identity, $index);
     $path = $this->dimages->file($dimage);
     $image = IImage::make($path);
     return $image->response($dimage->ext);

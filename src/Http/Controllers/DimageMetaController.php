@@ -41,7 +41,7 @@ class DimageMetaController extends Controller
   }
 
   public function view(Request $request, $entity, $identity, $index=0) {
-    $dimage = $this->dimages->viewMain($entity, $identity, $index);
+    $dimage = $this->dimages->getSourceName($entity, $identity, $index);
     return [
       'dimage' => $dimage,
       'url' => url($this->dimages->url($dimage))

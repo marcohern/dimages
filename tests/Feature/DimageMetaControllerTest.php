@@ -20,4 +20,8 @@ class DimageMetaControllerTest extends TestCase
   protected function tearDown() : void {
     parent::tearDown();
   }
+
+  public function testExample() {
+    $this->assertTrue(true);
+  }
 }

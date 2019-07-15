@@ -42,7 +42,7 @@ class DimageManager {
     return $dimage;
   }
 
-  public function viewMain($entity, $identity, $index=0) : DimageName {
+  public function getSourceName($entity, $identity, $index=0) : DimageName {
     $disk = Storage::disk($this->scope);
     $dir = DimageFunctions::identityFolder($entity,$identity);
     $files = $disk->files($dir);

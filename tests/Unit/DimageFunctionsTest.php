@@ -25,8 +25,14 @@ class DimageFunctionsTest extends TestCase
     $this->assertRegExp($regex, 'tecno/sucks-to-be-you-by-prozzak');
   }
 
-  public function test_imgFolder() {
-    $folder = DimageFunctions::imgFolder('movies','terminator');
+  public function test_entityFolder() {
+    $folder = DimageFunctions::entityFolder('movies');
+    
+    $this->assertSame($folder, 'img/movies');
+  }
+
+  public function test_identityFolder() {
+    $folder = DimageFunctions::identityFolder('movies','terminator');
     
     $this->assertSame($folder, 'img/movies/terminator');
   }
