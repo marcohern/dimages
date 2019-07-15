@@ -1,12 +1,12 @@
 <?php
 
-namespace Marcohern\Dimages\Lib\Dimages;
+namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as IImage;
 
-use Marcohern\Dimages\Lib\Dimages\DimageName;
-use Marcohern\Dimages\Lib\Dimages\DimageSequencer;
+use Marcohern\Dimages\Lib\DimageName;
+use Marcohern\Dimages\Lib\DimageSequencer;
 use Marcohern\Dimages\Exceptions\DimagesException;
 
 class DimageManager {

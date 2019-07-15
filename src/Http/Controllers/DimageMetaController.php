@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use Marcohern\Dimages\Http\Requests\UploadDimageRequest;
-use Marcohern\Dimages\Lib\Dimages\DimageManager;
+use Marcohern\Dimages\Lib\DimageManager;
 
 class DimageMetaController extends Controller
 {

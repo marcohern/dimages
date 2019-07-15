@@ -1,5 +1,5 @@
 <?php 
-use Marcohern\Dimages\Lib\Dimages\DimageConstants;
+use Marcohern\Dimages\Lib\DimageConstants;
 
 Route::group([
     'namespace' => 'Marcohern\Dimages\Http\Controllers',

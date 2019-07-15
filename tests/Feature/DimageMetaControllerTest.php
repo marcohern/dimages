@@ -5,24 +5,23 @@ namespace Marcohern\Dimages\Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\Dimages\DimageConstants;
+use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimageMetaControllerTest extends TestCase
 {
   protected $route;
-  protected $disk;
 
   protected function setUp() : void {
     $this->route = DimageConstants::DIMROUTE;
-    $this->disk = Storage::fake('dimages');
+    //Storage::fake('dimages');
     parent::setUp();
   }
 
   protected function tearDown() : void {
     parent::tearDown();
     unset($this->route);
-    unset($this->disk);
   }
     /**
      * Test dimage status

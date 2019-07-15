@@ -1,9 +1,9 @@
 <?php
 
-namespace Marcohern\Dimages\Lib\Dimages;
+namespace Marcohern\Dimages\Lib;
 
-use Marcohern\Dimages\Lib\Dimages\DimageConstants;
-use Marcohern\Dimages\Lib\Dimages\DimageFunctions;
+use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\DimageFunctions;
 
 class Dimage {
   private static $xFileName = null;

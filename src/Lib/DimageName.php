@@ -1,9 +1,9 @@
 <?php
 
-namespace Marcohern\Dimages\Lib\Dimages;
+namespace Marcohern\Dimages\Lib;
 
-use Marcohern\Dimages\Lib\Dimages\Dimage;
-use Marcohern\Dimages\Lib\Dimages\DimageConstants;
+use Marcohern\Dimages\Lib\Dimage;
+use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Exceptions\DimagesException;
 
 /**

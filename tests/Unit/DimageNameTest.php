@@ -7,8 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use Marcohern\Dimages\Exceptions\DimagesException;
-use Marcohern\Dimages\Lib\Dimages\Dimage;
-use Marcohern\Dimages\Lib\Dimages\DimageName;
+use Marcohern\Dimages\Lib\Dimage;
+use Marcohern\Dimages\Lib\DimageName;
 
 class DimageNameTest extends TestCase
 {

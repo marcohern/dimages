@@ -1,6 +1,6 @@
 <?php
 
-namespace Marcohern\Dimages\Lib\Dimages;
+namespace Marcohern\Dimages\Lib;
 
 class DimageConstants {
 

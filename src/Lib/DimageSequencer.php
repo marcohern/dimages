@@ -1,9 +1,9 @@
 <?php
 
-namespace Marcohern\Dimages\Lib\Dimages;
+namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\Storage;
-use Marcohern\Dimages\Lib\Dimages\DimageConstants;
+use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimageSequencer {
 

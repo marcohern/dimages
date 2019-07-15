@@ -7,13 +7,11 @@ use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as IImage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use Marcohern\Dimages\Lib\Dimage;
-use Marcohern\Dimages\Lib\Dimager;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimagesException;
 
-use Marcohern\Dimages\Lib\Dimages\DimageManager;
-use Marcohern\Dimages\Lib\Dimages\DimageConstants;
+use Marcohern\Dimages\Lib\DimageManager;
+use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimController extends Controller
 {

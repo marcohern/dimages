@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-use Marcohern\Dimages\Lib\Dimages\Dimage;
+use Marcohern\Dimages\Lib\Dimage;
 
 class DimageTest extends TestCase
 {
