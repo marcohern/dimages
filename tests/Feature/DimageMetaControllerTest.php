@@ -11,11 +11,7 @@ use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimageMetaControllerTest extends TestCase
 {
-  protected $route;
-
   protected function setUp() : void {
-    $this->route = DimageConstants::DIMROUTE;
-    //Storage::fake('dimages');
     parent::setUp();
   }
 
@@ -30,10 +26,11 @@ class DimageMetaControllerTest extends TestCase
      */
     public function test_status()
     {
-        $response = $this->get("{$this->route}/status");
+      Storage::fake('dimages');
+      $response = $this->get("mh/dim/api/_status");
 
-        $response->assertStatus(200)->assertExactJson([
-          'success' => true
-        ]);
+      $response->assertStatus(200)->assertExactJson([
+        'success' => true
+      ]);
     }
 }

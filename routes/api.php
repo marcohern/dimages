@@ -6,21 +6,21 @@ Route::group([
     'prefix' => DimageConstants::DIMROUTE,
     'middleware' => ['api']
 ], function () {
-    Route::get ('/meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index'  );
-    //Route::post('/meta/stage/{session}'                   , 'DimageMetaController@stage'  );
-    //Route::post('/meta/confirm/{session}'                 , 'DimageMetaController@confirm');
+    Route::get ('/_meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index'  );
+    //Route::post('/_meta/stage/{session}'                   , 'DimageMetaController@stage'  );
+    //Route::post('/_meta/confirm/{session}'                 , 'DimageMetaController@confirm');
 
-    Route::get('/meta/{entity}/{identity}/{profile}/{density}/{index?}', 'DimageMetaController@view_exact');
-    Route::get('/meta/{entity}/{identity}/{index?}'                    , 'DimageMetaController@view');
+    Route::get('/_meta/{entity}/{identity}/{profile}/{density}/{index?}', 'DimageMetaController@view_exact');
+    Route::get('/_meta/{entity}/{identity}/{index?}'                    , 'DimageMetaController@view');
 
-    Route::post('/meta/{entity}/{identity}', "DimageMetaController@store");
-    Route::delete('/meta/{entity}/{identity}' , 'DimageMetaController@destroy');
+    Route::post  ('/_meta/{entity}/{identity}', "DimageMetaController@store");
+    Route::delete('/_meta/{entity}/{identity}', 'DimageMetaController@destroy');
 
-    Route::get('/meta/{entity}'            , 'DimageMetaController@identities');
-    Route::get('/meta'                     , 'DimageMetaController@entities');
+    Route::get('/_meta/{entity}', 'DimageMetaController@identities');
+    Route::get('/_meta'         , 'DimageMetaController@entities');
 
-    Route::get('/status' , 'DimController@status');
-    Route::post('/upload/{entity}/{identity}' , 'DimController@store');
+    Route::get('/_status'                                        , 'DimController@status');
+    Route::post('/_upload/{entity}/{identity}'                   , 'DimController@store');
     Route::get('{entity}/{identity}/{profile}/{density}/{index?}', "DimController@full");
     Route::get('{entity}/{identity}/{index?}'                    , "DimController@original");
 });
