@@ -36,7 +36,8 @@ class DimageMetaController extends Controller
     $dimage = $this->dimages->store($entity, $identity, $request->image);
     return [
       'dimage' => $dimage,
-      'url' => url($this->dimages->url($dimage))
+      'url' => url($this->dimages->url($dimage)),
+      'diskUrl' => $this->dimages->diskUrl($dimage),
     ];
   }
 
