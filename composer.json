@@ -10,12 +10,11 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "intervention/image": "^2.5"
+      "intervention/image": "^2.5"
     },
     "require-dev": {
       "intervention/image": "^2.5",
-      "phpunit/phpunit": "3.7.*",
-      "orchestra/testbench": "3.7.*"
+      "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
       "psr-4": {
