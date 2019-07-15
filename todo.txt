@@ -1,0 +1,10 @@
+REQUIRED FOR RELEASE:
+- Refactor Dimage to use disk file storage only.
+- Allow Deletion of Derived images (clear cache)
+- Allow Deletion Of Image Index (delete single index)
+- List All Source images of entity
+- List all images of entity (source and derived)
+OPTIONAL:
+- look into storing derived images in subfolders
+- optimize folder name and file name formatting
+- 
