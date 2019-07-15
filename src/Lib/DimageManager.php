@@ -22,6 +22,11 @@ class DimageManager {
     return DimageConstants::DIMROUTE.'/'.$dimage->toUrl();
   }
 
+  public function diskUrl($dimage) {
+    $disk = Storage::disk($this->scope);
+    return $disk->url($dimage->toIdentityPathFileName());
+  }
+
   public function file($dimage) {
     $disk = Storage::disk($this->scope);
     $storage = storage_path();
