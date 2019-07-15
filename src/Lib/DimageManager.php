@@ -67,7 +67,7 @@ class DimageManager {
         return $dimage;
       }
     }
-    throw new DimageNotFoundException("Image not found:$entity/$identity/$profile/$density/$index");
+    throw new DimageNotFoundException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b991f);
   }
 
   public function exists(DimageName $dimage) {
