@@ -90,12 +90,30 @@ class DimageManager {
 
   public function entities() {
     $disk = Storage::disk($this->scope);
-    return $disk->directories(DimageConstants::IMAGESUBDIR);
+    $prefix = DimageConstants::IMAGESUBDIR;
+    $plen = strlen($prefix) + 1;
+    $dirs = $disk->directories($prefix);
+    foreach ($dirs as $k => $dir) {
+      $dirs[$k] = substr($dir, $plen);
+    }
+    if (empty($dirs)) {
+      $disk->deleteDirectory($prefix);
+    }
+    return $dirs;
   }
 
   public function identities($entity) {
     $disk = Storage::disk($this->scope);
-    return $disk->directories(DimageConstants::IMAGESUBDIR."/$entity");
+    $prefix = DimageConstants::IMAGESUBDIR."/$entity";
+    $plen = strlen($prefix) + 1;
+    $dirs = $disk->directories($prefix);
+    foreach ($dirs as $k => $dir) {
+      $dirs[$k] = substr($dir, $plen);
+    }
+    if (empty($dirs)) {
+      $disk->deleteDirectory($prefix);
+    }
+    return $dirs;
   }
 
   public function update_index($entity, $identity, $source, $dest) {

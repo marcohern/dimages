@@ -41,10 +41,10 @@ class DimControllerTest extends TestCase
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
-      $this
-        ->json('POST',"mh/dim/api/_upload/test/image", ['image' => $image3])
-        ->assertOk()
-        ->assertExactJson(['index' => 2]);
+    $this
+      ->json('POST',"mh/dim/api/_upload/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
 
     Storage::disk('dimages')
       ->assertExists('img/test/image/000.jpg')
@@ -64,5 +64,34 @@ class DimControllerTest extends TestCase
           ]
         ]
       ]);
+  }
+
+  public function test_original() {
+    $disk = Storage::disk('dimages');
+    $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+    
+    $this
+      ->json('POST',"mh/dim/api/_upload/test/image", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"mh/dim/api/_upload/test/image", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"mh/dim/api/_upload/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+    
+    $this->get("mh/dim/api/test/image")->assertOk();
+    $this->get("mh/dim/api/test/image/1")->assertOk();
+    $this->get("mh/dim/api/test/image/2")->assertOk();
+
+    $disk->delete('seqs/test.image.id');
+    $disk->deleteDirectory('img/test/image');
   }
 }
