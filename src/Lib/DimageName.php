@@ -78,7 +78,7 @@ class DimageName {
    * 
    * @param $source image format
    */
-  protected function replace(string $source) {
+  protected function format(string $source) {
     $source = str_replace('%entity', $this->entity, $source);
     $source = str_replace('%identity', $this->identity, $source);
     $source = str_replace('%index', $this->index, $source);
@@ -112,6 +112,29 @@ class DimageName {
     $inf->ext      =   (array_key_exists('ext',$m)) ? $m['ext'] : '';
     return $inf;
   }
+  
+  /**
+   * Generate a DimageName using a file path as source.
+   * 
+   * @param $path file path
+   */
+  public static function fromFilePath(string $path) : DimageName {
+    return self::from(Dimage::xFileName(), $path);
+  }
+
+  /**
+   * Generate a DimageName using a URL as source.
+   * 
+   * @param $url URL path
+   * @param $ext File Extension
+   * 
+   * @return DimageName
+   */
+  public static function fromUrl(string $url, string $ext) : DimageName {
+    $dimage = self::from(Dimage::xUrl(), $url);
+    $dimage->ext = $ext;
+    return $dimage;
+  }
 
   /**
    * Returns the name of the source of this
@@ -136,29 +159,6 @@ class DimageName {
   public function isSource() {
     if (empty($this->profile) && empty($this->density)) return true;
     return false;
-  }
-  
-  /**
-   * Generate a DimageName using a file path as source.
-   * 
-   * @param $path file path
-   */
-  public static function fromFilePath(string $path) : DimageName {
-    return self::from(Dimage::xFileName(), $path);
-  }
-
-  /**
-   * Generate a DimageName using a URL as source.
-   * 
-   * @param $url URL path
-   * @param $ext File Extension
-   * 
-   * @return DimageName
-   */
-  public static function fromUrl(string $url, string $ext) : DimageName {
-    $dimage = self::from(Dimage::xUrl(), $url);
-    $dimage->ext = $ext;
-    return $dimage;
   }
   
   /**
@@ -209,7 +209,7 @@ class DimageName {
    */
   public function toUrl() : string {
     $urlTemplate = $this->urlTemplate();
-    return $this->replace($urlTemplate);
+    return $this->format($urlTemplate);
   }
 
   /**
@@ -219,9 +219,9 @@ class DimageName {
    */
   public function toFileName() {
     if (empty($this->profile) || empty($this->density)) {
-      return $this->replace(DimageConstants::RFILE_NAME_N);
+      return $this->format(DimageConstants::RFILE_NAME_N);
     }
-    return $this->replace(DimageConstants::RFILE_NAME_PDN);
+    return $this->format(DimageConstants::RFILE_NAME_PDN);
   }
 
   /**
@@ -230,7 +230,7 @@ class DimageName {
    * @return string image relative path
    */
   public function toIdentityPath() : string {
-    return $this->replace(DimageConstants::RFILE_PATH);
+    return $this->format(DimageConstants::RFILE_PATH);
   }
 
   /**
@@ -240,7 +240,7 @@ class DimageName {
    */
   public function toIdentityPathFileName() : string {
     $rfile = $this->fileTemplate();
-    return $this->replace($rfile);
+    return $this->format($rfile);
   }
 
   /**
