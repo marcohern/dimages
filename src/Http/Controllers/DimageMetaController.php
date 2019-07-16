@@ -63,8 +63,8 @@ class DimageMetaController extends Controller
   }
 
   public function switch_index($entity, $identity, Request $request) {
-    $source = $request->from;
-    $target = $request->to;
+    $source = $request->source;
+    $target = $request->target;
     $this->dimages->switchIndex($entity, $identity, $source, $target);
   }
 }
