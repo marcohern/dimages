@@ -84,10 +84,18 @@ class BaseDimageName {
   /**
    * Determines if this DimageName is a source image, rather than
    * a derived image. Source images are the ones uploaded by users.
-   * Derived images are images generated and resized from the source.
    */
   public function isSource() {
     if (empty($this->profile) && empty($this->density)) return true;
     return false;
+  }
+
+  /**
+   * Determines if this DimageName is a derived image, as opposed to
+   * a source image. Derived images are generated from a source image
+   * when requested.
+   */
+  public function isDerived() {
+    return !$this->isSource();
   }
 }

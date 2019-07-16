@@ -137,18 +137,23 @@ class DimageManager {
       if ($dimage->isSource()) {
         if      ($dimage->index == $source) $dsource = $dimage;
         else if ($dimage->index == $target) $dtarget = $dimage;
+      } else {
+        if ($dimage->index == $source || $dimage->index == $target)
+          $disk->delete($dimage->toFullPathFileName());
       }
-      if ($dsource && $dtarget) break;
+      //if ($dsource && $dtarget) break;
     }
     if (empty($dsource)) throw new DimageNotFoundException("Source index not found: $source",0x0);
-    if (empty($dtarget)) throw new DimageNotFoundException("Target index not found: $target",0x0);
-
-    $disk->move("$dir/".$dtarget->toFileName(), "$dir/tmp-".$dtarget->toFileName());
-    $disk->move("$dir/".$dsource->toFileName(), "$dir/".$dtarget->toFileName());
-    $disk->move("$dir/tmp-".$dtarget->toFileName(), "$dir/".$dsource->toFileName());
+    if (empty($dtarget)) {
+      $disk->move("$dir/".$dsource->toFileName(), "$dir/".$dtarget->toFileName());
+    } else {
+      $disk->move("$dir/".$dtarget->toFileName(), "$dir/tmp-".$dtarget->toFileName());
+      $disk->move("$dir/".$dsource->toFileName(), "$dir/".$dtarget->toFileName());
+      $disk->move("$dir/tmp-".$dtarget->toFileName(), "$dir/".$dsource->toFileName());
+    }
     $dsource->index = $target;
-    $dtarget->index = $source;    
-    return true;
+    $dtarget->index = $source;
+    return ['newSource' => $dsource, 'newTarget' => $dtarget ];
   }
 
   public function destroy($entity, $identity) {
