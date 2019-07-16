@@ -8,27 +8,41 @@ use Marcohern\Dimages\Lib\DimageConstants;
 class DimageSequencer {
 
   protected $scope;
+  protected $subdir;
+  protected $filename;
 
-  public function __construct($scope) {
-    $this->scope = $scope;
+  public function __construct($entity, $identity) {
+    $this->scope = DimageConstants::FSSCOPE;
+    $this->subdir = DimageConstants::SEQDIR;
+    $this->filename = "$entity.$identity.id";
   }
 
-  public function nextFrom($filename) {
-    $path = DimageConstants::SEQDIR."/$filename";
+  public function get() {
+    $path = "{$this->subdir}/{$this->filename}";
     $disk = Storage::disk($this->scope);
-    $next = 0;
     if ($disk->exists($path)) {
-      $next = 0 + $disk->get($path);
+      return 0 + $disk->get($path);
     }
-    $disk->put($path, $next+1);
+    return 0;
+  }
+
+  public function put($n) {
+    $path = "{$this->subdir}/{$this->filename}";
+    $disk = Storage::disk($this->scope);
+    $disk->put($path, $n);
+  }
+
+  public function next() {
+    $next = $this->get();
+    $this->put($next+1);
     return $next;
   }
 
-  public function dropFrom($filename) {
-    $path = DimageConstants::SEQDIR."/$filename";
+  public function drop() {
+    $path = "{$this->subdir}/{$this->filename}";
     $disk = Storage::disk($this->scope);
     if ($disk->exists($path)) {
-      $next = $disk->delete($path);
+      $disk->delete($path);
     }
   }
 }

@@ -34,9 +34,9 @@ class DimageManager {
   }
 
   public function store($entity, $identity, $upload) : DimageName {
-    $sequencer = new DimageSequencer($this->scope);
+    $sequencer = new DimageSequencer($entity, $identity);
     $disk = Storage::disk($this->scope);
-    $index = $sequencer->nextFrom("$entity.$identity.id");
+    $index = $sequencer->next();
 
     $dimage = new DimageName;
     $dimage->entity = $entity;
@@ -127,10 +127,10 @@ class DimageManager {
 
   public function destroy($entity, $identity) {
     $disk = Storage::disk($this->scope);
-    $sequencer = new DimageSequencer($this->scope);
+    $sequencer = new DimageSequencer($entity, $identity);
     $dir = DimageFunctions::identityFolder($entity,$identity);
     if ($disk->exists($dir)) {
-      $sequencer->dropFrom("$entity.$identity.id");
+      $sequencer->drop();
       $disk->deleteDirectory($dir);
     } else {
       throw new DimageNotFoundException("Dir not found: $dir");
