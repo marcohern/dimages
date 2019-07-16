@@ -24,30 +24,31 @@ class DimController extends Controller
 
   public function original($entity, $identity, $index=0) {
     $dimage = $this->dimages->getSourceName($entity, $identity, $index);
-    $path = $this->dimages->file($dimage);
-    $image = IImage::make($path);
+    $content = $this->dimages->content($dimage);
+    $image = IImage::make($content);
     return $image->response($dimage->ext);
   }
 
   public function full($entity, $identity, $profile, $density, $index=0) {
     $dimage = $this->dimages->getName($entity, $identity, $profile, $density, $index);
     if ($this->dimages->exists($dimage)) {
-      $path = $this->dimages->file($dimage);
-      $image = IImage::make($path);
+      $content = $this->dimages->content($dimage);
+      $image = IImage::make($content);
       return $image->response($dimage->ext);
     } else {
       $dsource = $dimage->source();
       if ($this->dimages->exists($dsource)) {
-        $spath = $this->dimages->file($dsource);
-        $dpath = $this->dimages->file($dimage);
-        $image = IImage::make($spath);
+        $source = $this->dimages->content($dsource);
+        $image = IImage::make($source);
         $p = config("dimages.profiles.$profile");
         $d = config("dimages.densities.$density");
+
         if (!$p) throw new DimagesException("Profile $profile invalid", 0xd9745b9921);
         if (!$d) throw new DimagesException("Density $density invalid", 0xd9745b9922);
         $w = $p[0]*$d;
         $h = $p[1]*$d;
-        $image->fit($w, $h)->save($dpath);
+        $derived = (string) $image->fit($w, $h)->encode($dimage->ext);
+        $this->dimages->put($dimage, $derived);
         return $image->response($dimage->ext);
       }
     }

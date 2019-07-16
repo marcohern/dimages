@@ -28,13 +28,13 @@ class DimageManager {
     return $disk->url($dimage->toIdentityPathFileName());
   }
 
-  public function file(DimageName $dimage) : string {
+  public function content(DimageName $dimage) : string {
+    return Storage::disk($this->scope)->get($dimage->toFullPathFileName());
+  }
+
+  public function put(DimageName $dimage, &$content) {
     $disk = Storage::disk($this->scope);
-    $storage = storage_path();
-    return $storage
-      .'/'.DimageConstants::FSPATH
-      .'/'.DimageConstants::IMAGESUBDIR
-      .'/'.$dimage->toIdentityPathFileName();
+    $disk->put($dimage->toFullPathFileName(), $content);
   }
 
   public function store(string $entity, string $identity, UploadedFile $upload) : DimageName {
