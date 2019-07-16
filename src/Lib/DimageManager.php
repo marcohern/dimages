@@ -125,8 +125,30 @@ class DimageManager {
     return $dirs;
   }
 
-  public function update_index($entity, $identity, $source, $dest) {
+  public function switchIndex($entity, $identity, $source, $target) {
     $disk = Storage::disk($this->scope);
+    $dir = DimageFunctions::identityFolder($entity,$identity);
+    $files = $disk->files($dir);
+    $dimages = [];
+    $dsource = null;
+    $dtarget = null;
+    foreach ($files as $file) {
+      $dimage = DimageName::fromFilePath($file);
+      if ($dimage->isSource()) {
+        if      ($dimage->index == $source) $dsource = $dimage;
+        else if ($dimage->index == $target) $dtarget = $dimage;
+      }
+      if ($dsource && $dtarget) break;
+    }
+    if (empty($dsource)) throw new DimageNotFoundException("Source index not found: $source",0x0);
+    if (empty($dtarget)) throw new DimageNotFoundException("Target index not found: $target",0x0);
+
+    $disk->move("$dir/".$dtarget->toFileName(), "$dir/tmp-".$dtarget->toFileName());
+    $disk->move("$dir/".$dsource->toFileName(), "$dir/".$dtarget->toFileName());
+    $disk->move("$dir/tmp-".$dtarget->toFileName(), "$dir/".$dsource->toFileName());
+    $dsource->index = $target;
+    $dtarget->index = $source;    
+    return true;
   }
 
   public function destroy($entity, $identity) {

@@ -35,8 +35,8 @@ class DimageMetaController extends Controller
   public function store(UploadDimageRequest $request, $entity, $identity) {
     $dimage = $this->dimages->store($entity, $identity, $request->image);
     return [
-      'dimage' => $dimage,
-      'url' => url($this->dimages->url($dimage)),
+      'dimage'  => $dimage,
+      'url'     => url($this->dimages->url($dimage)),
       'diskUrl' => $this->dimages->diskUrl($dimage),
     ];
   }
@@ -44,8 +44,9 @@ class DimageMetaController extends Controller
   public function view(Request $request, $entity, $identity, $index=0) {
     $dimage = $this->dimages->getSourceName($entity, $identity, $index);
     return [
-      'dimage' => $dimage,
-      'url' => url($this->dimages->url($dimage))
+      'dimage'  => $dimage,
+      'url'     => url($this->dimages->url($dimage)),
+      'diskUrl' => $this->dimages->diskUrl($dimage),
     ];
   }
 
@@ -59,5 +60,11 @@ class DimageMetaController extends Controller
 
   public function destroy($entity, $identity) {
     return $this->dimages->destroy($entity, $identity);
+  }
+
+  public function switch_index($entity, $identity, Request $request) {
+    $source = $request->from;
+    $target = $request->to;
+    $this->dimages->switchIndex($entity, $identity, $source, $target);
   }
 }

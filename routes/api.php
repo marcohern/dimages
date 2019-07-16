@@ -6,8 +6,9 @@ Route::group([
     'prefix' => DimageConstants::DIMROUTE,
     'middleware' => ['api']
 ], function () {
-    Route::get ('/_meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index'  );
-    Route::get ('/_meta/list_sources/{entity}/{identity}'  , 'DimageMetaController@list_sources'  );
+    Route::get ('/_meta/index/{entity}/{identity}/{index?}', 'DimageMetaController@index');
+    Route::get ('/_meta/_list_sources/{entity}/{identity}' ,'DimageMetaController@list_sources');
+    Route::post('/_meta/_switch_index/{entity}/{identity}' , 'DimageMetaController@switch_index');
     //Route::post('/_meta/stage/{session}'                   , 'DimageMetaController@stage'  );
     //Route::post('/_meta/confirm/{session}'                 , 'DimageMetaController@confirm');
 
