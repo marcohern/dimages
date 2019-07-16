@@ -50,7 +50,7 @@ class DimageMetaController extends Controller
   }
 
   public function view_exact(Request $request, $entity, $identity, $profile, $density, $index=0) {
-    $dimage = $this->dimages->viewExact($entity, $identity, $profile, $density, $index);
+    $dimage = $this->dimages->getName($entity, $identity, $profile, $density, $index);
     return [
       'dimage' => $dimage,
       'url' => url($this->dimages->url($dimage))

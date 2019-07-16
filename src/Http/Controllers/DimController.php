@@ -30,7 +30,7 @@ class DimController extends Controller
   }
 
   public function full($entity, $identity, $profile, $density, $index=0) {
-    $dimage = $this->dimages->viewExact($entity, $identity, $profile, $density, $index);
+    $dimage = $this->dimages->getName($entity, $identity, $profile, $density, $index);
     if ($this->dimages->exists($dimage)) {
       $path = $this->dimages->file($dimage);
       $image = IImage::make($path);

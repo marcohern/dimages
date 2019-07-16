@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as IImage;
 
@@ -18,22 +19,25 @@ class DimageManager {
     $this->scope = DimageConstants::FSSCOPE;
   }
 
-  public function url($dimage) {
+  public function url(DimageName $dimage) : string {
     return DimageConstants::DIMROUTE.'/'.$dimage->toUrl();
   }
 
-  public function diskUrl($dimage) {
+  public function diskUrl(DimageName $dimage) : string {
     $disk = Storage::disk($this->scope);
     return $disk->url($dimage->toIdentityPathFileName());
   }
 
-  public function file($dimage) {
+  public function file(DimageName $dimage) : string {
     $disk = Storage::disk($this->scope);
     $storage = storage_path();
-    return $storage.'/'.DimageConstants::FSPATH.'/'.DimageConstants::IMAGESUBDIR.'/'.$dimage->toIdentityPathFileName();
+    return $storage
+      .'/'.DimageConstants::FSPATH
+      .'/'.DimageConstants::IMAGESUBDIR
+      .'/'.$dimage->toIdentityPathFileName();
   }
 
-  public function store($entity, $identity, $upload) : DimageName {
+  public function store(string $entity, string $identity, UploadedFile $upload) : DimageName {
     $sequencer = new DimageSequencer($entity, $identity);
     $disk = Storage::disk($this->scope);
     $index = $sequencer->next();
@@ -58,7 +62,7 @@ class DimageManager {
     throw new DimageNotFoundException("Image not found:$entity/$identity/$index", 0xd9745b991e);
   }
 
-  public function viewExact($entity, $identity, $profile, $density, $index=0) {
+  public function getName($entity, $identity, $profile, $density, $index=0) : DimageName {
     $disk = Storage::disk($this->scope);
     $dir = DimageFunctions::identityFolder($entity,$identity);
     $files = $disk->files($dir);
