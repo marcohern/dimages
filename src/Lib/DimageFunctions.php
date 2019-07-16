@@ -6,7 +6,7 @@ use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimageFunctions {
 
-  public static function basePathRegex() {
+  public static function basePathRegex() : string {
     $xidf = DimageConstants::XIDF;
 
     $xentity = DimageConstants::XENTITY;
@@ -21,7 +21,7 @@ class DimageFunctions {
     return $xbasepath;
   }
 
-  public static function fileNameRegex() {
+  public static function fileNameRegex() : string {
     $xint = DimageConstants::XINT;
     $xidf = DimageConstants::XIDF;
 
@@ -52,7 +52,7 @@ class DimageFunctions {
     return "/$exp/";
   }
 
-  public static function urlRegex() {
+  public static function urlRegex() : string {
     $xint = DimageConstants::XINT;
     $xidf = DimageConstants::XIDF;
 
@@ -82,25 +82,25 @@ class DimageFunctions {
     return "/$exp/";
   }
 
-  public static function pad($number, $n) {
+  public static function pad($number, $n) : string {
     return str_pad($number, $n, '0', STR_PAD_LEFT);
   }
 
-  public static function padIndex($index) {
+  public static function padIndex($index) : string {
     return self::pad($index, DimageConstants::PADINDEX);
   }
 
-  public static function imagesFolder() {
+  public static function imagesFolder() : string {
     return DimageConstants::IMAGESUBDIR;
   }
 
-  public static function entityFolder($entity) {
+  public static function entityFolder($entity) : string {
     $folder = DimageConstants::RFILE_SUPERPATH;
     $folder = str_replace('%entity'  , $entity  , $folder);
     return DimageConstants::IMAGESUBDIR.'/'.$folder;
   }
 
-  public static function identityFolder($entity, $identity) {
+  public static function identityFolder($entity, $identity) : string {
     $folder = DimageConstants::RFILE_PATH;
     $folder = str_replace('%entity'  , $entity  , $folder);
     $folder = str_replace('%identity', $identity, $folder);
