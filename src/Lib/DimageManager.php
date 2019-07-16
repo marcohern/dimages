@@ -85,14 +85,49 @@ class DimageManager {
     return $disk->exists($file);
   }
 
-  public function list($entity, $identity) {
+  public function listAll($entity, $identity) {
     $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::identityFolder($entity,$identity);
+    $dir = DimageFunctions::identityFolder($entity, $identity);
     $files = $disk->files($dir);
     $dimages = [];
     foreach ($files as $file) {
-      $dimage = DimageName::fromFilePath("$dir/$file");
+      $dimages[] = DimageName::fromFilePath("$dir/$file");
+    }
+    return $dimages;
+  }
+
+  public function listAllSources($entity, $identity) {
+    $list = $this->listAll($entity, $identity);
+    $dimages = [];
+    foreach ($list as $dimage) {
       if ($dimage->isSource()) $dimages[] = $dimage;
+    }
+    return $dimages;
+  }
+
+  public function listAllDerived($entity, $identity) {
+    $list = $this->listAll($entity, $identity);
+    $dimages = [];
+    foreach ($list as $dimage) {
+      if (!$dimage->isSource()) $dimages[] = $dimage;
+    }
+    return $dimages;
+  }
+
+  public function listDerived($entity, $identity, $index) {
+    $list = $this->listAll($entity, $identity);
+    $dimages = [];
+    foreach ($list as $dimage) {
+      if (!$dimage->isSource() && $dimage->index == $index) $dimages[] = $dimage;
+    }
+    return $dimages;
+  }
+
+  public function list($entity, $identity, $index) {
+    $list = $this->listAll($entity, $identity);
+    $dimages = [];
+    foreach ($list as $dimage) {
+      if ($dimage->index == $index) $dimages[] = $dimage;
     }
     return $dimages;
   }
@@ -168,12 +203,6 @@ class DimageManager {
     } else {
       throw new DimageNotFoundException("Dir not found: $dir");
     }
-  }
-
-  public function getSourceAndDerivedFiles($entity, $identity, $index) {
-    $disk = Storage::disk($this->scope);
-    $dir = DimageFunctions::identityFolder($entity,$identity);
-    
   }
 
   public function destroySingle($entity, $identity, $index) {
