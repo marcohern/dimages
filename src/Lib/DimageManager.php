@@ -132,6 +132,7 @@ class DimageManager {
     $dimages = [];
     $dsource = null;
     $dtarget = null;
+    $toDelete = [];
     foreach ($files as $file) {
       $dimage = DimageName::fromFilePath($file);
       if ($dimage->isSource()) {
@@ -139,10 +140,11 @@ class DimageManager {
         else if ($dimage->index == $target) $dtarget = $dimage;
       } else {
         if ($dimage->index == $source || $dimage->index == $target)
-          $disk->delete($dimage->toFullPathFileName());
+          $toDelete = $dimage->toFullPathFileName();
       }
       //if ($dsource && $dtarget) break;
     }
+    $disk->delete($toDelete);
     if (empty($dsource)) throw new DimageNotFoundException("Source index not found: $source",0x0);
     if (empty($dtarget)) {
       $disk->move("$dir/".$dsource->toFileName(), "$dir/".$dtarget->toFileName());

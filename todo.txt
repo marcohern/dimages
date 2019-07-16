@@ -1,5 +1,4 @@
 REQUIRED FOR RELEASE:
-- Refactor Dimage to use disk file storage only.
 - Allow Deletion of Derived images (clear cache)
 - Allow Deletion Of Image Index (delete single index)
 - List All Source images of entity
