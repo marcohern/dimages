@@ -52,6 +52,14 @@ class DimageName extends ExportableDimageName {
     return self::from(Dimage::xFileName(), $path);
   }
 
+  public static function fromFilePathArray(array &$paths) : array {
+    $dimages = [];
+    foreach ($paths as $path) {
+      $dimages[] = self::fromFilePath($path);
+    }
+    return $dimages;
+  }
+
   /**
    * Generate a DimageName using a URL as source.
    * 
