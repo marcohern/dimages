@@ -11,7 +11,7 @@ use Marcohern\Dimages\Lib\DimageName;
 
 class BaseDimageManager {
 
-  private $scope;
+  private $scope = 'dimages';
 
   public function url(DimageName $dimage) : string {
     return Storage::disk($this->scope)->url($dimage->toIdentityPathFileName());
@@ -25,12 +25,14 @@ class BaseDimageManager {
     return Storage::disk($this->scope)->get($dimage->toFullPathFileName());
   }
 
-  public function delete(DimageName $dimage) {
+  public function deleteSingle(DimageName $dimage) {
     return Storage::disk($this->scope)->delete($dimage->toFullPathFileName());
   }
 
-  public function deleteIndex($entity, $identity, $index) : int {
-
+  public function deleteIdentity($entity, $identity) {
+    $dir = DimageFunctions::identityFolder($entity,$identity);
+    $disk = Storage::disk($this->scope);
+    if ($disk->exists($dir)) $disk->deleteDirectory($dir);
   }
 
   public function entityFolders() : array {
