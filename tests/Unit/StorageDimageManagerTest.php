@@ -101,7 +101,7 @@ class StorageDimageManagerTest extends TestCase {
     $disk->assertMissing('img/text/file');
   }
 
-  public function test_entityFolders() {
+  public function test_entities() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $disk->put('img/games/death-stranding/000.txt','HELLO WORLD!');
@@ -112,12 +112,12 @@ class StorageDimageManagerTest extends TestCase {
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
     $dimages = new StorageDimageManager;
-    $this->assertEquals($dimages->entityFolders(), [
+    $this->assertEquals($dimages->entities(), [
       'img/bars', 'img/games', 'img/pets'
     ]);
   }
 
-  public function test_identityFolders() {
+  public function test_identities() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $disk->put('img/games/death-stranding/000.txt','HELLO WORLD!');
@@ -128,13 +128,13 @@ class StorageDimageManagerTest extends TestCase {
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
     $dimages = new StorageDimageManager;
-    $this->assertEquals($dimages->identityFolders('pets'), [
+    $this->assertEquals($dimages->identities('pets'), [
       'img/pets/milo',
       'img/pets/mr-snuggles',
     ]);
   }
 
-  public function test_imageFiles() {
+  public function test_files() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $disk->put('img/games/death-stranding/000.txt','HELLO WORLD!');
@@ -147,7 +147,7 @@ class StorageDimageManagerTest extends TestCase {
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
     $dimages = new StorageDimageManager;
-    $this->assertEquals($dimages->imageFiles('games','death-stranding'), [
+    $this->assertEquals($dimages->files('games','death-stranding'), [
       'img/games/death-stranding/000.txt',
       'img/games/death-stranding/001.txt',
       'img/games/death-stranding/002.txt'
