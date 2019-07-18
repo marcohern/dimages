@@ -100,6 +100,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $dimages = new BaseDimageManager;
     $this->expectException(DimageNotFoundException::class);
+    $this->expectExceptionMessage('Image not found:games/death-stranding/0');
     $dimages->source('games','death-stranding');
   }
 
@@ -107,6 +108,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $dimages = new BaseDimageManager;
     $this->expectException(DimageNotFoundException::class);
+    $this->expectExceptionMessage('Image not found:games/death-stranding/5');
     $dimages->source('games','death-stranding', 5);
   }
 
@@ -127,6 +129,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $dimages = new BaseDimageManager;
     $this->expectException(DimageNotFoundException::class);
+    $this->expectExceptionMessage('Image not found:games/death-stranding/cover/mdpi/0');
     $dimages->derivative('games','death-stranding','cover','mdpi');
   }
 
@@ -134,6 +137,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $dimages = new BaseDimageManager;
     $this->expectException(DimageNotFoundException::class);
+    $this->expectExceptionMessage('Image not found:games/death-stranding/cover/mdpi/1');
     $dimages->derivative('games','death-stranding','cover','mdpi',1);
   }
 }
