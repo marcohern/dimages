@@ -39,7 +39,7 @@ class StorageDimageManager {
 
   public function entities() : array {
     return Storage::disk($this->scope)
-      ->directories(DimageFunctions::imagesFolder());
+      ->directories(DimageFunctions::rootFolder());
   }
 
   public function identities(string $identity) : array {

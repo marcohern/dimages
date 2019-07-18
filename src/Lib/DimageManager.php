@@ -134,7 +134,7 @@ class DimageManager {
 
   public function entities() {
     $disk = Storage::disk($this->scope);
-    $prefix = DimageFunctions::imagesFolder();
+    $prefix = DimageFunctions::rootFolder();
     $plen = strlen($prefix) + 1;
     $dirs = $disk->directories($prefix);
     foreach ($dirs as $k => $dir) {
