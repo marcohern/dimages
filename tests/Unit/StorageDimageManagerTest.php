@@ -11,7 +11,7 @@ use Marcohern\Dimages\Lib\Managers\StorageDimageManager;
 use Marcohern\Dimages\Lib\DimageName;
 use Marcohern\Dimages\Lib\Dimage;
 
-class BaseDimageManagerTest extends TestCase {
+class StorageDimageManagerTest extends TestCase {
   protected $dimages;
 
   protected function setUp() : void {
