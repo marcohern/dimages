@@ -57,4 +57,39 @@ class BaseDimageManager extends StorageDimageManager {
     throw new DimageNotFoundException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b991e);
   }
 
+  public function rename(DimageName $source, DimageName $target) {
+    if ($this->exists($target)) {
+      $this->move($source, $target);
+    } else {
+      $temp = clone $target;
+      $tamp->ext .= '---';
+      $this->move($target, $temp);
+      $this->move($source, $target);
+      $this->move($temp, $source);
+    }
+  }
+
+  public function switchIndex(string $entity, string $identity, int $source, int $target) {
+    $dimages = $this->dimages($entity, $identity);
+    $temps = [];
+    $moves = [];
+    foreach ($dimages as $dimage) {
+      if ($dimage->index === $target) {
+        $dtemp = clone $dimage;
+        $dtemp->ext .= '___';
+        $dsource = clone $dimage;
+        $dsource->index = $source;
+        $temps[] = ['from' => $dimage, 'temp' => $dtemp, 'to' => $dsource ];
+      }
+      else if ($dimage->index === $source) {
+        $dtarget = clone $dimage;
+        $dtarget->index = $target;
+        $moves[] = [ 'from' => $dtarget, 'to' => $dtarget ];
+      }
+    }
+    if (empty($moves)) throw new DimageNotFoundException("Source index not found: $entity/$identity/$source");
+    foreach ($temps as $temp) $this->move($temp['from'], $temp['temp']);
+    foreach ($moves as $move) $this->move($move['from'], $move['to']);
+    foreach ($temps as $temp) $this->move($temp['temp'], $temp['to']);
+  }
 }
