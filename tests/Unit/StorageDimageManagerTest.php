@@ -88,6 +88,47 @@ class StorageDimageManagerTest extends TestCase {
     Storage::disk('dimages')->assertMissing('img/games/death-stranding/004.boxart.hdpi.txt');
   }
 
+  public function test_deleteSingle_source_valid() {
+    Storage::fake('dimages');
+    Storage::disk('dimages')->put('img/games/death-stranding/004.txt','HELLO WORLD!');
+    $dimage = new DimageName;
+    $dimage->entity = 'games';
+    $dimage->identity = 'death-stranding';
+    $dimage->index = 4;
+    $dimage->ext = 'txt';
+
+    Storage::disk('dimages')->assertExists('img/games/death-stranding/004.txt');
+    $dimages = new BaseDimageManager;
+    $dimages->deleteSingle($dimage);
+    Storage::disk('dimages')->assertMissing('img/games/death-stranding/004.txt');
+  }
+
+  public function test_deleteMultiple() {
+    Storage::fake('dimages');
+    Storage::disk('dimages')->put('img/games/death-stranding/000.txt','HELLO WORLD!');
+    Storage::disk('dimages')->put('img/games/death-stranding/000.cover.mdpi.txt','HELLO WORLD!');
+    Storage::disk('dimages')->put('img/games/death-stranding/000.cover.ldpi.txt','HELLO WORLD!');
+    Storage::disk('dimages')->put('img/games/death-stranding/000.cover.hdpi.txt','HELLO WORLD!');
+
+    $dimage0 = DimageName::fromFilePath('games/death-stranding/000.txt');
+    $dimage1 = DimageName::fromFilePath('games/death-stranding/000.cover.mdpi.txt');
+    $dimage2 = DimageName::fromFilePath('games/death-stranding/000.cover.ldpi.txt');
+    $dimage3 = DimageName::fromFilePath('games/death-stranding/000.cover.hdpi.txt');
+
+    Storage::disk('dimages')->assertExists('img/games/death-stranding/000.txt');
+    Storage::disk('dimages')->assertExists('img/games/death-stranding/000.cover.mdpi.txt');
+    Storage::disk('dimages')->assertExists('img/games/death-stranding/000.cover.ldpi.txt');
+    Storage::disk('dimages')->assertExists('img/games/death-stranding/000.cover.hdpi.txt');
+
+    $dimages = new BaseDimageManager;
+    $dimages->deleteMultiple([ $dimage0, $dimage1, $dimage2, $dimage3 ]);
+
+    Storage::disk('dimages')->assertMissing('img/games/death-stranding/000.txt');
+    Storage::disk('dimages')->assertMissing('img/games/death-stranding/000.cover.mdpi.txt');
+    Storage::disk('dimages')->assertMissing('img/games/death-stranding/000.cover.ldpi.txt');
+    Storage::disk('dimages')->assertMissing('img/games/death-stranding/000.cover.hdpi.txt');
+  }
+
   public function test_deleteIdentity() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');

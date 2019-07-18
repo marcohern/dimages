@@ -106,4 +106,10 @@ class DimageFunctions {
     $folder = str_replace('%identity', $identity, $folder);
     return DimageConstants::IMAGESUBDIR.'/'.$folder;
   }
+
+  public static function toFilePaths(array &$dimages) : array {
+    $result = [];
+    foreach ($dimages as $dimage) $result[] = $dimage->toFullPathFileName();
+    return $result;
+  }
 }

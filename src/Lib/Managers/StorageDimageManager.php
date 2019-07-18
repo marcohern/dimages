@@ -31,6 +31,11 @@ class StorageDimageManager {
     return Storage::disk($this->scope)->delete($dimage->toFullPathFileName());
   }
 
+  public function deleteMultiple(array $dimages) {
+    $files = DimageFunctions::toFilePaths($dimages);
+    Storage::disk($this->scope)->delete($files);
+  }
+
   public function deleteIdentity(string $entity, string $identity) {
     $dir = DimageFunctions::identityFolder($entity,$identity);
     $disk = Storage::disk($this->scope);
