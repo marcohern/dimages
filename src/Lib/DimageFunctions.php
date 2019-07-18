@@ -90,7 +90,7 @@ class DimageFunctions {
     return self::pad($index, DimageConstants::PADINDEX);
   }
 
-  public static function imagesFolder() : string {
+  public static function rootFolder() : string {
     return DimageConstants::IMAGESUBDIR;
   }
 
