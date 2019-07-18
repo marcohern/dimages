@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use Marcohern\Dimages\Lib\DimageFunctions;
+use Marcohern\Dimages\Lib\DimageName;
 
 class DimageFunctionsTest extends TestCase
 {
@@ -23,6 +24,22 @@ class DimageFunctionsTest extends TestCase
     $this->assertRegExp($regex, 'tecno/sucks-to-be-you-by-prozzak/123');
     $this->assertRegExp($regex, 'tecno/sucks-to-be-you-by-prozzak/');
     $this->assertRegExp($regex, 'tecno/sucks-to-be-you-by-prozzak');
+  }
+
+  public function test_pad() {
+    $this->assertSame(DimageFunctions::pad(1, 1), '1');
+    $this->assertSame(DimageFunctions::pad(2, 2), '02');
+    $this->assertSame(DimageFunctions::pad(3, 3), '003');
+    $this->assertSame(DimageFunctions::pad(45, 4), '0045');
+    $this->assertSame(DimageFunctions::pad(12345, 5), '12345');
+    $this->assertSame(DimageFunctions::pad(12345, 3), '12345');
+  }
+
+  public function test_padIndex() {
+    $this->assertSame(DimageFunctions::padIndex(1), '001');
+    $this->assertSame(DimageFunctions::padIndex(12), '012');
+    $this->assertSame(DimageFunctions::padIndex(123), '123');
+    $this->assertSame(DimageFunctions::padIndex(1234), '1234');
   }
 
   public function test_imageFomder() {
@@ -42,19 +59,22 @@ class DimageFunctionsTest extends TestCase
     $this->assertSame($folder, 'img/movies/terminator');
   }
 
-  public function test_pad() {
-    $this->assertSame(DimageFunctions::pad(1, 1), '1');
-    $this->assertSame(DimageFunctions::pad(2, 2), '02');
-    $this->assertSame(DimageFunctions::pad(3, 3), '003');
-    $this->assertSame(DimageFunctions::pad(45, 4), '0045');
-    $this->assertSame(DimageFunctions::pad(12345, 5), '12345');
-    $this->assertSame(DimageFunctions::pad(12345, 3), '12345');
-  }
+  public function test_toFilePaths() {
+    $files = [
+      'games/death-stranding/000.txt',
+      'games/death-stranding/000.cover.mdpi.txt',
+      'games/death-stranding/000.cover.ldpi.txt',
+      'games/death-stranding/000.cover.hdpi.txt'
+    ];
+    $dimages = DimageName::fromFilePathArray($files);
 
-  public function test_padIndex() {
-    $this->assertSame(DimageFunctions::padIndex(1), '001');
-    $this->assertSame(DimageFunctions::padIndex(12), '012');
-    $this->assertSame(DimageFunctions::padIndex(123), '123');
-    $this->assertSame(DimageFunctions::padIndex(1234), '1234');
+    $rfiles = DimageFunctions::toFilePaths($dimages);
+
+    $this->assertEquals($rfiles, [
+      'img/games/death-stranding/000.txt',
+      'img/games/death-stranding/000.cover.mdpi.txt',
+      'img/games/death-stranding/000.cover.ldpi.txt',
+      'img/games/death-stranding/000.cover.hdpi.txt'
+    ]);
   }
 }
