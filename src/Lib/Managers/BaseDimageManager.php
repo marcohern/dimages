@@ -45,10 +45,13 @@ class BaseDimageManager {
       ->directories(DimageFunctions::entityFolder($identity));
   }
 
-  public function images($entity, $identity) : array {
-    return DimageName::fromFilePathArray(
-      Storage::disk($this->scope)
-        ->files(DimageFunctions::identityFolder($entity,$identity))
-    );
+  public function imageFiles($entity, $identity) : array {
+    return Storage::disk($this->scope)
+      ->files(DimageFunctions::identityFolder($entity,$identity));
+  }
+
+  public function dimages($entity, $identity) : array {
+    $files = $this->imageFiles($entity, $identity);
+    return DimageName::fromFilePathArray($files);
   }
 }
