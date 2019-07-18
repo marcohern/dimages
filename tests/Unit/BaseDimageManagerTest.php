@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
+use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Lib\Managers\BaseDimageManager;
 use Marcohern\Dimages\Lib\DimageName;
 use Marcohern\Dimages\Lib\Dimage;
@@ -95,6 +96,20 @@ class BaseDimageManagerTest extends TestCase {
     $this->assertEquals( $dimages->source('games','death-stranding', 1), $dimage1 );
   }
 
+  public function test_source_NoSource_Exception() {
+    Storage::fake('dimages');
+    $dimages = new BaseDimageManager;
+    $this->expectException(DimageNotFoundException::class);
+    $dimages->source('games','death-stranding');
+  }
+
+  public function test_source_NonExistent_Exception() {
+    Storage::fake('dimages');
+    $dimages = new BaseDimageManager;
+    $this->expectException(DimageNotFoundException::class);
+    $dimages->source('games','death-stranding', 5);
+  }
+
   public function test_derivative() {
     Storage::fake('dimages');
     $this->setUpFiles();
@@ -106,5 +121,19 @@ class BaseDimageManagerTest extends TestCase {
     $this->assertEquals( $dimages->derivative('games','death-stranding','cover','mdpi'), $dimage0 );
     $this->assertEquals( $dimages->derivative('games','death-stranding','cover','mdpi',0), $dimage0 );
     $this->assertEquals( $dimages->derivative('games','death-stranding','cover','mdpi',1), $dimage1 );
+  }
+
+  public function test_derivative_NoSource_Exception() {
+    Storage::fake('dimages');
+    $dimages = new BaseDimageManager;
+    $this->expectException(DimageNotFoundException::class);
+    $dimages->derivative('games','death-stranding','cover','mdpi');
+  }
+
+  public function test_derivative_NonExistent_Exception() {
+    Storage::fake('dimages');
+    $dimages = new BaseDimageManager;
+    $this->expectException(DimageNotFoundException::class);
+    $dimages->derivative('games','death-stranding','cover','mdpi',1);
   }
 }
