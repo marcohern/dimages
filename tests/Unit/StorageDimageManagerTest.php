@@ -216,7 +216,7 @@ class StorageDimageManagerTest extends TestCase {
     ]);
   }
 
-  public function test_storeDirect() {
+  public function test_store() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
 
@@ -225,7 +225,7 @@ class StorageDimageManagerTest extends TestCase {
     
     $disk->assertMissing('img/games/darksouls-3/000.cover.mdpi.png');
     $dimages = new BaseDimageManager;
-    $dimages->storeDirect($dimage, $upload);
+    $dimages->store($dimage, $upload);
     $disk->assertExists('img/games/darksouls-3/000.cover.mdpi.png');
   }
 
