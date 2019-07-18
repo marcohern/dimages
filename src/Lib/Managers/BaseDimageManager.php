@@ -39,4 +39,22 @@ class BaseDimageManager extends StorageDimageManager {
     return $result;
   }
 
+  public function source(string $entity, string $identity, int $index = 0) : DimageName {
+    $dimages = $this->sources($entity, $identity);
+    foreach($dimages as $dimage) {
+      if ($dimage->index === $index) return $dimage;
+    }
+    throw new DimageNotFoundException("Image not found:$entity/$identity/$index", 0xd9745b991e);
+  }
+
+  public function derivative(string $entity, string $identity, string $profile, string $density, int $index = 0) : DimageName {
+    $dimages = $this->derivatives($entity, $identity);
+    foreach($dimages as $dimage) {
+      if ($dimage->index === $index &&
+        $dimage->profile === $profile &&
+        $dimage->density === $density) return $dimage;
+    }
+    throw new DimageNotFoundException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b991e);
+  }
+
 }
