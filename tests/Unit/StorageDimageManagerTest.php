@@ -3,6 +3,7 @@
 namespace Marcohern\Dimages\Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
@@ -172,5 +173,18 @@ class StorageDimageManagerTest extends TestCase {
       DimageName::fromFilePath('img/games/death-stranding/001.txt'),
       DimageName::fromFilePath('img/games/death-stranding/002.txt'),
     ]);
+  }
+
+  public function test_storeDirect() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+
+    $upload = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+    $dimage = DimageName::fromFilePath('games/darksouls-3/000.cover.mdpi.png');
+    
+    $disk->assertMissing('img/games/darksouls-3/000.cover.mdpi.png');
+    $dimages = new StorageDimageManager;
+    $dimages->storeDirect($dimage, $upload);
+    $disk->assertExists('img/games/darksouls-3/000.cover.mdpi.png');
   }
 }

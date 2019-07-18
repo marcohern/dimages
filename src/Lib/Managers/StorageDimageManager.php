@@ -57,8 +57,8 @@ class StorageDimageManager {
     return DimageName::fromFilePathArray($files);
   }
 
-  public function storeDirect(DimageName $dimage, UploadedFile $upload) : DimageName {
-    return Storage::disk($this->scope)
+  public function storeDirect(DimageName $dimage, UploadedFile $upload) {
+    Storage::disk($this->scope)
       ->putFileAs($dimage->toFullPath(), $upload, $dimage->toFileName());
   }
 }
