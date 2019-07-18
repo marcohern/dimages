@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\Managers\BaseDimageManager;
+use Marcohern\Dimages\Lib\Managers\StorageDimageManager;
 use Marcohern\Dimages\Lib\DimageName;
 use Marcohern\Dimages\Lib\Dimage;
 
@@ -34,7 +34,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage->density = 'hdpi';
     $dimage->ext = 'jpeg';
 
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertEquals($dimages->url($dimage),'/storage/games/death-stranding/003.boxart.hdpi.jpeg');
   }
 
@@ -50,7 +50,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage->ext = 'txt';
 
     Storage::disk('dimages')->assertExists('img/games/death-stranding/004.boxart.hdpi.txt');
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertTrue($dimages->exists($dimage));
   }
 
@@ -66,7 +66,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage->ext = 'txt';
 
     Storage::disk('dimages')->assertExists('img/games/death-stranding/004.boxart.hdpi.txt');
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertEquals($dimages->content($dimage), 'HELLO WORLD!');
   }
 
@@ -82,7 +82,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage->ext = 'txt';
 
     Storage::disk('dimages')->assertExists('img/games/death-stranding/004.boxart.hdpi.txt');
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $dimages->deleteSingle($dimage);
     Storage::disk('dimages')->assertMissing('img/games/death-stranding/004.boxart.hdpi.txt');
   }
@@ -96,7 +96,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->put('img/text/file/003.txt','HELLO WORLD!');
 
     $disk->assertExists('img/text/file');
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $dimages->deleteIdentity('text','file');
     $disk->assertMissing('img/text/file');
   }
@@ -111,7 +111,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->put('img/bars/bbc-andino/000.txt','HELLO WORLD!');
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertEquals($dimages->entityFolders(), [
       'img/bars', 'img/games', 'img/pets'
     ]);
@@ -127,7 +127,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->put('img/bars/bbc-andino/000.txt','HELLO WORLD!');
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertEquals($dimages->identityFolders('pets'), [
       'img/pets/milo',
       'img/pets/mr-snuggles',
@@ -146,7 +146,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->put('img/bars/bbc-andino/000.txt','HELLO WORLD!');
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertEquals($dimages->imageFiles('games','death-stranding'), [
       'img/games/death-stranding/000.txt',
       'img/games/death-stranding/001.txt',
@@ -166,7 +166,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->put('img/bars/bbc-andino/000.txt','HELLO WORLD!');
     $disk->put('img/bars/mdf-calle-10/000.txt','HELLO WORLD!');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new StorageDimageManager;
     $this->assertEquals($dimages->dimages('games','death-stranding'), [
       DimageName::fromFilePath('img/games/death-stranding/000.txt'),
       DimageName::fromFilePath('img/games/death-stranding/001.txt'),

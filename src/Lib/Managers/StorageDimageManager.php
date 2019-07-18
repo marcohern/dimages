@@ -9,7 +9,7 @@ use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageName;
 
-class BaseDimageManager {
+class StorageDimageManager {
 
   private $scope = 'dimages';
 
