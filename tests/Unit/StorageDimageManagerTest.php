@@ -228,4 +228,21 @@ class StorageDimageManagerTest extends TestCase {
     $dimages->storeDirect($dimage, $upload);
     $disk->assertExists('img/games/darksouls-3/000.cover.mdpi.png');
   }
+
+  public function test_move() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $disk->put('img/games/death-stranding/001.txt','THIS IS THE SOURCE!');
+
+    $disk->assertExists('img/games/death-stranding/001.txt');
+    $disk->assertMissing('img/games/death-stranding/004.txt');
+
+    $dimages = new BaseDimageManager;
+    $dsource = DimageName::fromFilePath('img/games/death-stranding/001.txt');
+    $dtarget = DimageName::fromFilePath('img/games/death-stranding/004.txt');
+    $dimages->move($dsource, $dtarget);
+
+    $disk->assertMissing('img/games/death-stranding/001.txt');
+    $disk->assertExists('img/games/death-stranding/004.txt');
+  }
 }
