@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
+use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageSequencer;
@@ -58,14 +59,10 @@ class BaseDimageManager extends StorageDimageManager {
   }
 
   public function rename(DimageName $source, DimageName $target) {
-    if ($this->exists($target)) {
+    if (!$this->exists($target)) {
       $this->move($source, $target);
     } else {
-      $temp = clone $target;
-      $tamp->ext .= '---';
-      $this->move($target, $temp);
-      $this->move($source, $target);
-      $this->move($temp, $source);
+      throw new DimageOperationInvalidException("Cannot rename '$source' to '$target': target exists.", 0xd9745b991e);
     }
   }
 
@@ -84,12 +81,13 @@ class BaseDimageManager extends StorageDimageManager {
       else if ($dimage->index === $source) {
         $dtarget = clone $dimage;
         $dtarget->index = $target;
-        $moves[] = [ 'from' => $dtarget, 'to' => $dtarget ];
+        $moves[] = [ 'from' => $dimage, 'to' => $dtarget ];
       }
     }
+    //dd($temps);
     if (empty($moves)) throw new DimageNotFoundException("Source index not found: $entity/$identity/$source");
     foreach ($temps as $temp) $this->move($temp['from'], $temp['temp']);
-    foreach ($moves as $move) $this->move($move['from'], $move['to']);
-    foreach ($temps as $temp) $this->move($temp['temp'], $temp['to']);
+    foreach ($moves as $move) $this->move($move['from'], $move['to'  ]);
+    foreach ($temps as $temp) $this->move($temp['temp'], $temp['to'  ]);
   }
 }

@@ -35,6 +35,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->put('img/games/death-stranding/000.cover.ldpi.txt','HELLO WORLD!');
     $disk->put('img/games/death-stranding/000.cover.mdpi.txt','HELLO WORLD!');
     $disk->put('img/games/death-stranding/000.cover.hdpi.txt','HELLO WORLD!');
+    $disk->put('img/games/death-stranding/000.topbar.ldpi.txt','HELLO WORLD!');
     $disk->put('img/games/death-stranding/001.txt','HELLO WORLD!');
     $disk->put('img/games/death-stranding/001.icon.ldpi.txt','HELLO WORLD!');
     $disk->put('img/games/death-stranding/001.icon.mdpi.txt','HELLO WORLD!');
@@ -69,6 +70,7 @@ class BaseDimageManagerTest extends TestCase {
       'games/death-stranding/000.icon.hdpi.txt',
       'games/death-stranding/000.icon.ldpi.txt',
       'games/death-stranding/000.icon.mdpi.txt',
+      'games/death-stranding/000.topbar.ldpi.txt',
 
       'games/death-stranding/001.cover.hdpi.txt',
       'games/death-stranding/001.cover.ldpi.txt',
@@ -139,5 +141,37 @@ class BaseDimageManagerTest extends TestCase {
     $this->expectExceptionMessage('Image not found:games/death-stranding/cover/mdpi/1');
     $dimages = new BaseDimageManager;
     $dimages->derivative('games','death-stranding','cover','mdpi',1);
+  }
+
+  public function test_rename() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $this->setUpFiles();
+
+    $dsource = DimageName::fromFilePath('games/death-stranding/000.cover.hdpi.txt');
+    $dtarget = DimageName::fromFilePath('games/death-stranding/005.cover.hdpi.txt');
+
+    $disk->assertExists ($dsource->toFullPathFileName());
+    $disk->assertMissing($dtarget->toFullPathFileName());
+
+    $dimages = new BaseDimageManager;
+    $dimages->rename($dsource, $dtarget);
+
+    $disk->assertMissing($dsource->toFullPathFileName());
+    $disk->assertExists ($dtarget->toFullPathFileName());
+  }
+
+  public function test_switchIndex() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $this->setUpFiles();
+
+    $disk->assertExists ('img/games/death-stranding/000.topbar.ldpi.txt');
+
+    $dimages = new BaseDimageManager;
+    $dimages->switchIndex('games','death-stranding',0,1);
+    
+    $disk->assertMissing('img/games/death-stranding/000.topbar.ldpi.txt');
+    $disk->assertExists ('img/games/death-stranding/001.topbar.ldpi.txt');
   }
 }
