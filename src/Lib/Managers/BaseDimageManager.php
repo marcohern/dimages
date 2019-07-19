@@ -90,4 +90,9 @@ class BaseDimageManager extends StorageDimageManager {
     foreach ($moves as $move) $this->move($move['from'], $move['to'  ]);
     foreach ($temps as $temp) $this->move($temp['temp'], $temp['to'  ]);
   }
+
+  public function deleteDerivatives($entity, $identity) {
+    $derivatives = $this->derivatives($entity, $identity);
+    $this->deleteMultiple($derivatives);
+  }
 }

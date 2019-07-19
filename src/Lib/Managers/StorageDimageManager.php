@@ -28,7 +28,7 @@ class StorageDimageManager {
   }
 
   public function deleteSingle(DimageName $dimage) {
-    return Storage::disk($this->scope)->delete($dimage->toFullPathFileName());
+    Storage::disk($this->scope)->delete($dimage->toFullPathFileName());
   }
 
   public function deleteMultiple(array $dimages) {

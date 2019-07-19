@@ -174,4 +174,45 @@ class BaseDimageManagerTest extends TestCase {
     $disk->assertMissing('img/games/death-stranding/000.topbar.ldpi.txt');
     $disk->assertExists ('img/games/death-stranding/001.topbar.ldpi.txt');
   }
+
+  public function test_deleteDerivatives() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $this->setUpFiles();
+
+    $disk->assertExists('img/games/death-stranding/000.txt');
+    $disk->assertExists('img/games/death-stranding/000.icon.ldpi.txt');
+    $disk->assertExists('img/games/death-stranding/000.icon.mdpi.txt');
+    $disk->assertExists('img/games/death-stranding/000.icon.hdpi.txt');
+    $disk->assertExists('img/games/death-stranding/000.cover.ldpi.txt');
+    $disk->assertExists('img/games/death-stranding/000.cover.mdpi.txt');
+    $disk->assertExists('img/games/death-stranding/000.cover.hdpi.txt');
+    $disk->assertExists('img/games/death-stranding/000.topbar.ldpi.txt');
+    $disk->assertExists('img/games/death-stranding/001.txt');
+    $disk->assertExists('img/games/death-stranding/001.icon.ldpi.txt');
+    $disk->assertExists('img/games/death-stranding/001.icon.mdpi.txt');
+    $disk->assertExists('img/games/death-stranding/001.icon.hdpi.txt');
+    $disk->assertExists('img/games/death-stranding/001.cover.ldpi.txt');
+    $disk->assertExists('img/games/death-stranding/001.cover.mdpi.txt');
+    $disk->assertExists('img/games/death-stranding/001.cover.hdpi.txt');
+
+    $dimages = new BaseDimageManager;
+    $dimages->deleteDerivatives('games','death-stranding');
+
+    $disk->assertExists ('img/games/death-stranding/000.txt');
+    $disk->assertMissing('img/games/death-stranding/000.icon.ldpi.txt');
+    $disk->assertMissing('img/games/death-stranding/000.icon.mdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/000.icon.hdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/000.cover.ldpi.txt');
+    $disk->assertMissing('img/games/death-stranding/000.cover.mdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/000.cover.hdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/000.topbar.ldpi.txt');
+    $disk->assertExists ('img/games/death-stranding/001.txt');
+    $disk->assertMissing('img/games/death-stranding/001.icon.ldpi.txt');
+    $disk->assertMissing('img/games/death-stranding/001.icon.mdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/001.icon.hdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/001.cover.ldpi.txt');
+    $disk->assertMissing('img/games/death-stranding/001.cover.mdpi.txt');
+    $disk->assertMissing('img/games/death-stranding/001.cover.hdpi.txt');
+  }
 }
