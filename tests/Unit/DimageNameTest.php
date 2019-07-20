@@ -22,6 +22,39 @@ class DimageNameTest extends TestCase
     Dimage::shutdown();
   }
 
+  public function test_isSource() {
+    $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.jpg');
+    $this->assertTrue($dimage->isSource());
+  }
+
+  public function test_isDerived() {
+    $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.ldpi.jpg');
+    $this->assertTrue($dimage->isDerived());
+  }
+
+  public function test_toMethods() {
+    $dimage = new DimageName;
+    $dimage->entity = 'movies';
+    $dimage->identity = 'terminator';
+    $dimage->index = 5;
+    $dimage->profile = 'toolbar';
+    $dimage->density = 'hdpi';
+    $dimage->ext = 'jpg';
+
+    //URL
+    $this->assertEquals($dimage,        'movies/terminator/toolbar/hdpi/5');//toString
+    $this->assertSame($dimage->toUrl(), 'movies/terminator/toolbar/hdpi/5');
+
+    //Path
+    $this->assertSame($dimage->toFullPath(), 'img/movies/terminator');
+    $this->assertSame($dimage->toIdentityPath(), 'movies/terminator');
+
+    //File
+    $this->assertSame($dimage->toFullPathFileName(), 'img/movies/terminator/005.toolbar.hdpi.jpg');
+    $this->assertSame($dimage->toIdentityPathFileName(), 'movies/terminator/005.toolbar.hdpi.jpg');
+    $this->assertSame($dimage->toFileName(),                               '005.toolbar.hdpi.jpg');
+  }
+
   public function test_fromFilePath() {
     $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
 
@@ -61,10 +94,24 @@ class DimageNameTest extends TestCase
     $dimage = DimageName::fromFilePath('path/to/invalid_file_name.jpeg');
   }
 
-  public function test_source() {
-    $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
-    $source = $dimage->source();
-    $this->assertEquals($source->toIdentityPathFileName(), 'music/sure-know-something-by-kiss/002.jpg');
+  public function test_fromFilePathArray() {
+    $paths = [
+      'img/music/thriller-by-michael-jackson/000.jpg',
+      'img/music/thriller-by-michael-jackson/000.cover.mdpi.jpg',
+      'img/music/thriller-by-michael-jackson/001.jpg',
+      'img/music/thriller-by-michael-jackson/001.boxart.ldpi.jpg',
+      'img/music/thriller-by-michael-jackson/002.jpg',
+      'img/music/thriller-by-michael-jackson/001.icon.hdpi.jpg',
+      'img/music/thriller-by-michael-jackson/003.jpg',
+      'img/music/thriller-by-michael-jackson/003.icon.xhdpi.jpg'
+    ];
+
+    $dimages = DimageName::fromFilePathArray($paths);
+
+    $this->assertEquals(count($dimages), 8);
+    foreach ($dimages as $dimage) {
+      $this->assertTrue(($dimage instanceof DimageName));
+    }
   }
 
   public function test_fromUrl() {
@@ -78,26 +125,9 @@ class DimageNameTest extends TestCase
     $this->assertSame($dimage->toIdentityPathFileName(), 'tecno/sucks-to-be-you-by-prozzak/004.cd-cover.hdpi.jpeg');
   }
 
-  public function test_toMethods() {
-    $dimage = new DimageName;
-    $dimage->entity = 'movies';
-    $dimage->identity = 'terminator';
-    $dimage->index = 5;
-    $dimage->profile = 'toolbar';
-    $dimage->density = 'hdpi';
-    $dimage->ext = 'jpg';
-
-    //URL
-    $this->assertEquals($dimage,        'movies/terminator/toolbar/hdpi/5');//toString
-    $this->assertSame($dimage->toUrl(), 'movies/terminator/toolbar/hdpi/5');
-
-    //Path
-    $this->assertSame($dimage->toFullPath(), 'img/movies/terminator');
-    $this->assertSame($dimage->toIdentityPath(), 'movies/terminator');
-
-    //File
-    $this->assertSame($dimage->toFullPathFileName(), 'img/movies/terminator/005.toolbar.hdpi.jpg');
-    $this->assertSame($dimage->toIdentityPathFileName(), 'movies/terminator/005.toolbar.hdpi.jpg');
-    $this->assertSame($dimage->toFileName(),                               '005.toolbar.hdpi.jpg');
+  public function test_source() {
+    $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.cover.mdpi.jpg');
+    $source = $dimage->source();
+    $this->assertEquals($source->toIdentityPathFileName(), 'music/sure-know-something-by-kiss/002.jpg');
   }
 }
