@@ -31,13 +31,13 @@ class DimController extends Controller
     ];
   }
 
-  public function original($entity, $identity, $index=0) {
+  public function source($entity, $identity, $index=0) {
     $dimage = $this->dimages->source($entity, $identity, $index);
     $content = $this->dimages->content($dimage);
     return IImage::make($content)->response($dimage->ext);
   }
 
-  public function full($entity, $identity, $profile, $density, $index=0) {
+  public function derive($entity, $identity, $profile, $density, $index=0) {
     $dimage = $this->dimages->get($entity, $identity, $profile, $density, $index);
     $content = $this->dimages->content($dimage);
     return IImage::make($content)->response($dimage->ext);
