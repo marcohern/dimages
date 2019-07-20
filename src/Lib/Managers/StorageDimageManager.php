@@ -71,4 +71,9 @@ class StorageDimageManager {
     Storage::disk($this->scope)
       ->move($source->toFullPathFileName(), $target->toFullPathFileName());
   }
+
+  public function put(DimageName $dimage, &$content) {
+    Storage::disk($this->scope)
+      ->put($dimage->toFullPathFileName(), $content);
+  }
 }

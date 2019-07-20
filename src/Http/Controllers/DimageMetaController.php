@@ -17,8 +17,8 @@ class DimageMetaController extends Controller
     $this->dimages = $dimages;
   }
 
-  public function index(Request $request, $entity, $identity) {
-    $dimages = $this->dimages->list($entity, $identity);
+  public function index(Request $request, string $entity, string $identity) {
+    $dimages = $this->dimages->dimages($entity, $identity);
     return $dimages;
   }
 
@@ -27,42 +27,40 @@ class DimageMetaController extends Controller
     return $entities;
   }
 
-  public function identities(Request $request, $entity) {
+  public function identities(Request $request, string $entity) {
     $identities = $this->dimages->identities($entity);
     return $identities;
   }
 
-  public function store(UploadDimageRequest $request, $entity, $identity) {
-    $dimage = $this->dimages->store($entity, $identity, $request->image);
+  public function store(UploadDimageRequest $request, string $entity, string $identity) {
+    $dimage = $this->dimages->storeIdentity($entity, $identity, $request->image);
     return [
       'dimage'  => $dimage,
       'url'     => url($this->dimages->url($dimage)),
-      'diskUrl' => $this->dimages->diskUrl($dimage),
     ];
   }
 
-  public function view(Request $request, $entity, $identity, $index=0) {
-    $dimage = $this->dimages->getSourceName($entity, $identity, $index);
+  public function view(Request $request, string $entity, string $identity, $index=0) {
+    $dimage = $this->dimages->source($entity, $identity, $index);
     return [
       'dimage'  => $dimage,
       'url'     => url($this->dimages->url($dimage)),
-      'diskUrl' => $this->dimages->diskUrl($dimage),
     ];
   }
 
-  public function view_exact(Request $request, $entity, $identity, $profile, $density, $index=0) {
-    $dimage = $this->dimages->getName($entity, $identity, $profile, $density, $index);
+  public function view_exact(Request $request, string $entity, string $identity, string $profile, string $density, $index=0) {
+    $dimage = $this->dimages->get($entity, $identity, $profile, $density, $index);
     return [
       'dimage' => $dimage,
-      'url' => url($this->dimages->url($dimage))
+      'url' => url($this->dimages->url($dimage)),
     ];
   }
 
   public function destroy($entity, $identity) {
-    return $this->dimages->destroy($entity, $identity);
+    return $this->dimages->deleteIdentity($entity, $identity);
   }
 
-  public function switch_index($entity, $identity, Request $request) {
+  public function switch_index(string $entity, string $identity, Request $request) {
     $source = $request->source;
     $target = $request->target;
     $this->dimages->switchIndex($entity, $identity, $source, $target);
