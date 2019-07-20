@@ -151,9 +151,9 @@ class BaseDimageManager extends StorageDimageManager {
       $image = IImage::make($source);
       $p = config("dimages.profiles.$profile");
       $d = config("dimages.densities.$density");
-
-      if (!$p) throw new DimagesException("Profile $profile invalid", 0xd9745b9921);
-      if (!$d) throw new DimagesException("Density $density invalid", 0xd9745b9922);
+      
+      if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
+      if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
       $w = $p[0]*$d;
       $h = $p[1]*$d;
       $derived = (string) $image->fit($w, $h)->encode($dderived->ext);
