@@ -28,6 +28,6 @@ class DimageManagerTest extends TestCase {
   public function test_url() {
     $dimage = DimageName::fromFilePath('music/sure-know-something-by-kiss/002.jpg');
 
-    $this->assertSame($this->dimages->url($dimage), '/mh/dim/api/music/sure-know-something-by-kiss/2');
+    $this->assertSame($this->dimages->url($dimage), env('APP_URL').'/dimages/music/sure-know-something-by-kiss/002.jpg');
   }
 }

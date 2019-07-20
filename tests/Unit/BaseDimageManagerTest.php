@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
-use Marcohern\Dimages\Lib\Managers\BaseDimageManager;
+use Marcohern\Dimages\Lib\DimageManager;
 use Marcohern\Dimages\Lib\DimageName;
 use Marcohern\Dimages\Lib\Dimage;
 
@@ -52,7 +52,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage0 = DimageName::fromFilePath('games/death-stranding/000.txt');
     $dimage1 = DimageName::fromFilePath('games/death-stranding/001.txt');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $this->assertEquals(
       $dimages->sources('games','death-stranding'),
       [ $dimage0, $dimage1 ]
@@ -81,7 +81,7 @@ class BaseDimageManagerTest extends TestCase {
     ];
     $list = DimageName::fromFilePathArray($files);
 
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $this->assertEquals( $dimages->derivatives('games','death-stranding'), $list );
   }
 
@@ -92,7 +92,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage0 = DimageName::fromFilePath('games/death-stranding/000.txt');
     $dimage1 = DimageName::fromFilePath('games/death-stranding/001.txt');
     
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $this->assertEquals( $dimages->source('games','death-stranding'), $dimage0 );
     $this->assertEquals( $dimages->source('games','death-stranding', 0), $dimage0 );
     $this->assertEquals( $dimages->source('games','death-stranding', 1), $dimage1 );
@@ -102,7 +102,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $this->expectException(DimageNotFoundException::class);
     $this->expectExceptionMessage('Image not found:games/death-stranding/0');
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->source('games','death-stranding');
   }
 
@@ -110,7 +110,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $this->expectException(DimageNotFoundException::class);
     $this->expectExceptionMessage('Image not found:games/death-stranding/5');
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->source('games','death-stranding', 5);
   }
 
@@ -121,7 +121,7 @@ class BaseDimageManagerTest extends TestCase {
     $dimage0 = DimageName::fromFilePath('games/death-stranding/000.cover.mdpi.txt');
     $dimage1 = DimageName::fromFilePath('games/death-stranding/001.cover.mdpi.txt');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $this->assertEquals( $dimages->derivative('games','death-stranding','cover','mdpi'), $dimage0 );
     $this->assertEquals( $dimages->derivative('games','death-stranding','cover','mdpi',0), $dimage0 );
     $this->assertEquals( $dimages->derivative('games','death-stranding','cover','mdpi',1), $dimage1 );
@@ -131,7 +131,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $this->expectException(DimageNotFoundException::class);
     $this->expectExceptionMessage('Image not found:games/death-stranding/cover/mdpi/0');
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->derivative('games','death-stranding','cover','mdpi');
   }
 
@@ -139,7 +139,7 @@ class BaseDimageManagerTest extends TestCase {
     Storage::fake('dimages');
     $this->expectException(DimageNotFoundException::class);
     $this->expectExceptionMessage('Image not found:games/death-stranding/cover/mdpi/1');
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->derivative('games','death-stranding','cover','mdpi',1);
   }
 
@@ -154,7 +154,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->assertExists ($dsource->toFullPathFileName());
     $disk->assertMissing($dtarget->toFullPathFileName());
 
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->rename($dsource, $dtarget);
 
     $disk->assertMissing($dsource->toFullPathFileName());
@@ -168,7 +168,7 @@ class BaseDimageManagerTest extends TestCase {
 
     $disk->assertExists ('img/games/death-stranding/000.topbar.ldpi.txt');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->switchIndex('games','death-stranding',0,1);
     
     $disk->assertMissing('img/games/death-stranding/000.topbar.ldpi.txt');
@@ -196,7 +196,7 @@ class BaseDimageManagerTest extends TestCase {
     $disk->assertExists('img/games/death-stranding/001.cover.mdpi.txt');
     $disk->assertExists('img/games/death-stranding/001.cover.hdpi.txt');
 
-    $dimages = new BaseDimageManager;
+    $dimages = new DimageManager;
     $dimages->deleteDerivatives('games','death-stranding');
 
     $disk->assertExists ('img/games/death-stranding/000.txt');

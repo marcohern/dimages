@@ -13,7 +13,7 @@ use Marcohern\Dimages\Lib\DimageName;
 
 class StorageDimageManager {
 
-  private $scope = 'dimages';
+  protected $scope;
 
   public function url(DimageName $dimage) : string {
     return Storage::disk($this->scope)->url($dimage->toIdentityPathFileName());
