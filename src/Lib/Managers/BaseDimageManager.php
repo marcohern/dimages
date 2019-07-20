@@ -257,7 +257,7 @@ class BaseDimageManager extends StorageDimageManager {
     $switches = [];
     foreach ($sources as $i => $source) {
       if ($source->index != $i)
-        $this->dimages->switchIndex($entity, $identity, $source->index, $i);
+        $this->switchIndex($entity, $identity, $source->index, $i);
     }
     $sequencer = new DimageSequencer($entity, $identity);
     $sequencer->put($n);

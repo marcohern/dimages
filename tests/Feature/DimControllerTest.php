@@ -148,6 +148,43 @@ class DimControllerTest extends TestCase
     
     $this->post("mh/dim/api/test/image/switch/1/with/2")->assertOk();
 
+    $disk->assertExists('img/test/image/000.jpg');
+    $disk->assertExists('img/test/image/001.png');
+    $disk->assertExists('img/test/image/002.jpeg');
+  }
 
+  public function test_normalize() {
+    Storage::fake('dimages');
+    $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+    
+    $this
+      ->json('POST',"mh/dim/api/test/image", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"mh/dim/api/test/image", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"mh/dim/api/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+
+    $disk = Storage::disk('dimages');
+
+    $disk->assertExists('img/test/image/001.jpeg');
+    $disk->delete('img/test/image/001.jpeg');
+
+    $disk->assertExists('img/test/image/000.jpg');
+    $disk->assertExists('img/test/image/002.png');
+    
+    $this->json('POST',"mh/dim/api/test/image/normalize")->assertOk();
+
+    $disk->assertExists('img/test/image/000.jpg');
+    $disk->assertExists('img/test/image/001.png');
   }
 }

@@ -61,6 +61,6 @@ class DimController extends Controller
   }
 
   public function normalize($entity, $identity) {
-    $this->dimages->normalize($entity, $idenitty);
+    $this->dimages->normalize($entity, $identity);
   }
 }
