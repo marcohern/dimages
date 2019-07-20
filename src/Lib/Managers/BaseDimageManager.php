@@ -13,8 +13,19 @@ use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageSequencer;
 use Marcohern\Dimages\Lib\DimageName;
 
+/**
+ * Contains additional methods to manager storage.
+ */
 class BaseDimageManager extends StorageDimageManager {
 
+  /**
+   * Get a list of all source images
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $index Index (optional)
+   * @return array List of Source Dimage Names
+   */
   public function sources(string $entity, string $identity, $index=null) : array {
     $dimages = $this->dimages($entity, $identity);
     $result = [];
@@ -28,6 +39,14 @@ class BaseDimageManager extends StorageDimageManager {
     return $result;
   }
 
+  /**
+   * Get a list of all derivative images
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $index Index (optional)
+   * @return array List of Derivative Dimage Names
+   */
   public function derivatives(string $entity, string $identity, $index=null) : array {
     $dimages = $this->dimages($entity, $identity);
     $dsource = null;
@@ -44,6 +63,15 @@ class BaseDimageManager extends StorageDimageManager {
     return $result;
   }
 
+  /**
+   * Get the existing Source Dimage name
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $index Index (optional) default to zero.
+   * @return array Source Dimage Name, if it exists
+   * @throws DimageNotFoundException if not found
+   */
   public function source(string $entity, string $identity, int $index = 0) : DimageName {
     $dimages = $this->sources($entity, $identity);
     foreach($dimages as $dimage) {
@@ -52,6 +80,17 @@ class BaseDimageManager extends StorageDimageManager {
     throw new DimageNotFoundException("Image not found:$entity/$identity/$index", 0xd9745b991e);
   }
 
+  /**
+   * Get the existing Derivative Dimage name
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $profile Profile
+   * @param $density Density
+   * @param $index Index (optional) default to zero.
+   * @return array Derivative Dimage Name, if it exists
+   * @throws DimageNotFoundException if not found
+   */
   public function derivative(string $entity, string $identity, string $profile, string $density, int $index = 0) : DimageName {
     $dimages = $this->derivatives($entity, $identity);
     foreach($dimages as $dimage) {
@@ -62,6 +101,17 @@ class BaseDimageManager extends StorageDimageManager {
     throw new DimageNotFoundException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b991e);
   }
 
+  /**
+   * Search for a Derivative image. But if not found, get the corresponding source image.
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $profile Profile
+   * @param $density Density
+   * @param $index Index (optional) default to zero.
+   * @return DimageName Image found
+   * @throws DimageNotFoundException if not found
+   */
   public function derivativeOrSource(string $entity, string $identity, string $profile, string $density, int $index = 0) : DimageName {
     $dimages = $this->dimages($entity, $identity);
     $dsource = null;
@@ -78,6 +128,17 @@ class BaseDimageManager extends StorageDimageManager {
     throw new DimageNotFoundException("Image not found:$entity/$identity/$profile/$density/$index", 0xd9745b991e);
   }
 
+  /**
+   * Get or Generate the approriate image requested. If the image exists return it.
+   * If not, generate it and return that one.
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $profile Profile
+   * @param $density Density
+   * @param $index Index (optional) default to zero.
+   * @return DimageName Image found
+   */
   public function get(string $entity, string $identity, string $profile, string $density, int $index = 0) : DimageName {
     $dimage = $this->derivativeOrSource($entity, $identity, $profile, $density, $index);
 
@@ -101,6 +162,14 @@ class BaseDimageManager extends StorageDimageManager {
     }
   }
 
+  /**
+   * Append a newly uploaded image. Add a new index to the image.
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $upload Uploaded file
+   * @return DimageName name of new image
+   */
   public function storeIdentity(string $entity, string $identity, UploadedFile $upload) {
     $sequencer = new DimageSequencer($entity, $identity);
     $dimage = new DimageName;
@@ -112,6 +181,12 @@ class BaseDimageManager extends StorageDimageManager {
     return $dimage;
   }
 
+  /**
+   * Rename image
+   * 
+   * @param $source Source name
+   * @param $target Target name
+   */
   public function rename(DimageName $source, DimageName $target) {
     if (!$this->exists($target)) {
       $this->move($source, $target);
@@ -120,6 +195,14 @@ class BaseDimageManager extends StorageDimageManager {
     }
   }
 
+  /**
+   * Switch an index of an image (source and derivatives)
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $source Source index
+   * @param @target Target index
+   */
   public function switchIndex(string $entity, string $identity, int $source, int $target) {
     $dimages = $this->dimages($entity, $identity);
     $temps = [];
@@ -145,12 +228,25 @@ class BaseDimageManager extends StorageDimageManager {
     foreach ($temps as $temp) $this->move($temp['temp'], $temp['to'  ]);
   }
 
-  public function deleteDerivatives($entity, $identity) {
+  /**
+   * Delete all derivative images
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   */
+  public function deleteDerivatives(string $entity, string $identity) {
     $derivatives = $this->derivatives($entity, $identity);
     $this->deleteMultiple($derivatives);
   }
 
-  public function deleteIndex($entity, $identity, $index) {
+  /**
+   * Delete all image source and all derivatives
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $index Index
+   */
+  public function deleteIndex(string $entity, string $identity, int $index) {
     $dimages = $this->dimages($entity, $identity, $index);
     $this->deleteMultiple($dimages);
   }
