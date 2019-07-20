@@ -50,7 +50,8 @@ class DimController extends Controller
     ];
   }
 
-  public function destroy($entity, $identity) {
-    $this->dimages->deleteIdentity($entity, $identity);
+  public function destroy($entity, $identity, $index = null) {
+    if (is_null($index)) $this->dimages->deleteIdentity($entity, $identity);
+    else $this->dimages->deleteIndex($entity, $identity, $index);
   }
 }
