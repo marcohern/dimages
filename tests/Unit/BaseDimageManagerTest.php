@@ -166,7 +166,18 @@ class BaseDimageManagerTest extends TestCase {
     $dimages = new DimageManager;
     $dimage = $dimages->get('games','death-stranding','launcher-icons','mdpi',1);
 
-    $disk->assertExists('img/games/death-stranding', $upload, '001.launcher-icons.mdpi.jpg');
+    $disk->assertExists('img/games/death-stranding/001.launcher-icons.mdpi.jpg');
+  }
+
+  public function test_storeIdentity() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $upload = UploadedFile::fake()->image('image.png',1920, 1080);
+
+    $dimages = new DimageManager;
+    $dimages->storeIdentity('racing-games', 'need-for-speed-xviii', $upload);
+
+    $disk->assertExists('img/racing-games/need-for-speed-xviii/000.png');
   }
 
   public function test_rename() {
