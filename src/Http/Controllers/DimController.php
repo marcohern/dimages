@@ -23,24 +23,24 @@ class DimController extends Controller
     $this->dimages = $dimages;
   }
 
-  public function original($entity, $identity, $index=0) {
-    $dimage = $this->dimages->source($entity, $identity, $index);
-    $content = $this->dimages->content($dimage);
-    $image = IImage::make($content);
-    return $image->response($dimage->ext);
-  }
-
-  public function full($entity, $identity, $profile, $density, $index=0) {
-    $dimage = $this->dimages->get($entity, $identity, $profile, $density, $index);
-    return IImage::make($dimage->toFullPathFileName())->response($dimage->ext);
-  }
-
   public function status() {
     return [
       'success' => true,
       'xFileName' => Dimage::xFileName(),
       'xUrl' => Dimage::xUrl()
     ];
+  }
+
+  public function original($entity, $identity, $index=0) {
+    $dimage = $this->dimages->source($entity, $identity, $index);
+    $content = $this->dimages->content($dimage);
+    return IImage::make($content)->response($dimage->ext);
+  }
+
+  public function full($entity, $identity, $profile, $density, $index=0) {
+    $dimage = $this->dimages->get($entity, $identity, $profile, $density, $index);
+    $content = $this->dimages->content($dimage);
+    return IImage::make($content)->response($dimage->ext);
   }
 
   public function store(UploadDimageRequest $request, $entity, $identity) {

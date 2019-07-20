@@ -27,7 +27,7 @@ class DimControllerTest extends TestCase
     ]);
   }
 
-  public function test_upload() {
+  public function test_store() {
     Storage::fake('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg');
     $image2 = UploadedFile::fake()->image('test2.jpeg');
@@ -54,7 +54,7 @@ class DimControllerTest extends TestCase
       ->assertExists('img/test/image/002.png');
   }
 
-  public function test_upload_NoImage_UnprocesableEntity() {
+  public function test_store_NoImage_UnprocesableEntity() {
     $this
       ->json('POST',"mh/dim/api/test/image")
       ->assertStatus(422)
@@ -66,6 +66,34 @@ class DimControllerTest extends TestCase
           ]
         ]
       ]);
+  }
+
+  public function test_full() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+    
+    $this
+      ->json('POST',"mh/dim/api/konami/contra-3", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"mh/dim/api/konami/contra-3", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"mh/dim/api/konami/contra-3", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+    
+    $this->get("mh/dim/api/konami/contra-3/ref/hdpi")->assertOk();
+    $this->get("mh/dim/api/konami/contra-3/ref/hdpi/1")->assertOk();
+    $this->get("mh/dim/api/konami/contra-3/ref/hdpi/2")->assertOk();
+
   }
 
   public function test_original() {
