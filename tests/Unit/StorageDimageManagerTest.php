@@ -155,7 +155,7 @@ class StorageDimageManagerTest extends TestCase {
 
     $dimages = new DimageManager;
     $this->assertEquals($dimages->entities(), [
-      'img/bars', 'img/games', 'img/pets'
+      'bars', 'games', 'pets'
     ]);
   }
 
@@ -171,8 +171,8 @@ class StorageDimageManagerTest extends TestCase {
 
     $dimages = new DimageManager;
     $this->assertEquals($dimages->identities('pets'), [
-      'img/pets/milo',
-      'img/pets/mr-snuggles',
+      'milo',
+      'mr-snuggles',
     ]);
   }
 
