@@ -88,8 +88,13 @@ class StorageDimageManager {
    * @return array list of entities
    */
   public function entities() : array {
-    return Storage::disk($this->scope)
-      ->directories(DimageFunctions::rootFolder());
+    $dir = DimageFunctions::rootFolder();
+    $dlen = strlen($dir) + 1;
+    $folders = Storage::disk($this->scope)->directories($dir);
+    foreach ($folders as $i => $folder) {
+      $folders[$i] = substr($folder, $dlen);
+    }
+    return $folders;
   }
 
   /**
@@ -99,8 +104,13 @@ class StorageDimageManager {
    * @return array List of identities inside entity
    */
   public function identities(string $entity) : array {
-    return Storage::disk($this->scope)
-      ->directories(DimageFunctions::entityFolder($entity));
+    $dir = DimageFunctions::entityFolder($entity);
+    $dlen = strlen($dir) + 1;
+    $folders = Storage::disk($this->scope)->directories($dir);
+    foreach ($folders as $i => $folder) {
+      $folders[$i] = substr($folder, $dlen);
+    }
+    return $folders;
   }
 
   /**

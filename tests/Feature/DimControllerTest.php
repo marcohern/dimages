@@ -20,8 +20,10 @@ class DimControllerTest extends TestCase
   {
     $response = $this->get("mh/dim/api/_status");
 
-    $response->assertOk()->assertExactJson([
-      'success' => true
+    $response->assertOk()->assertJson([
+      'success' => true,
+      'xFileName' => true,
+      'xUrl' => true
     ]);
   }
 

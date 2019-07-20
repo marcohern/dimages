@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimagesException;
 
+use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\DimageManager;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Http\Requests\UploadDimageRequest;
@@ -35,7 +36,11 @@ class DimController extends Controller
   }
 
   public function status() {
-    return ['success' => true];
+    return [
+      'success' => true,
+      'xFileName' => Dimage::xFileName(),
+      'xUrl' => Dimage::xUrl()
+    ];
   }
 
   public function store(UploadDimageRequest $request, $entity, $identity) {
