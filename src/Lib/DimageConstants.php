@@ -9,7 +9,7 @@ class DimageConstants {
   public const FSPATH = 'app/dimages';
   public const DIMROUTE  = '/mh/dim/api';
   
-  public const XIDF = '[a-z][\w\-_]*';
+  public const XIDF = '[A-Za-z][\w\-_]*';
   public const XINT = '\d+';
 
   public const XENTITY   = '(?<entity>%idf)';
