@@ -143,6 +143,20 @@ class BaseDimageManagerTest extends TestCase {
     $dimages->derivative('games','death-stranding','cover','mdpi',1);
   }
 
+  public function test_derivativeOrSource() {
+    Storage::fake('dimages');
+    $this->setUpFiles();
+
+    $dimages = new DimageManager;
+    $dimage = $dimages->derivativeOrSource('games','death-stranding','icon','ldpi',1);
+
+    $this->assertTrue($dimage->isDerived());
+    
+    $dimage = $dimages->derivativeOrSource('games','death-stranding','icon','xxxhdpi',1);
+
+    $this->assertTrue($dimage->isSource());
+  }
+
   public function test_rename() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
