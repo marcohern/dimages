@@ -251,6 +251,14 @@ class BaseDimageManager extends StorageDimageManager {
     $this->deleteMultiple($dimages);
   }
 
+  /**
+   * Make sure all indexes of a list of identity images start from zero,
+   * and fill in any missing indexes. For example, if we have an identity
+   * with images [001, 003, 005] these will be renamed to [000, 001, 002].
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   */
   public function normalize(string $entity, string $identity) {
     $sources = $this->sources($entity, $identity);
     $n = count($sources);
