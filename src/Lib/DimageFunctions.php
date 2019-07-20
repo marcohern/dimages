@@ -6,6 +6,12 @@ use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimageFunctions {
 
+  /**
+   * Return the Regular Expression that matches the base path
+   * for any image (entity/identity)
+   * 
+   * @return string Base Path Regex
+   */
   public static function basePathRegex() : string {
     $xidf = DimageConstants::XIDF;
 
@@ -21,6 +27,12 @@ class DimageFunctions {
     return $xbasepath;
   }
 
+  /**
+   * Return the Regular Expression that matches the file name
+   * for any image (index.profile.density.ext)
+   * 
+   * @return string File Name Regex
+   */
   public static function fileNameRegex() : string {
     $xint = DimageConstants::XINT;
     $xidf = DimageConstants::XIDF;
@@ -52,6 +64,12 @@ class DimageFunctions {
     return "/$exp/";
   }
 
+  /**
+   * Return the Regular Expression the url
+   * for any image (entity/identity/profile/density/index)
+   * 
+   * @return string File Name Regex
+   */
   public static function urlRegex() : string {
     $xint = DimageConstants::XINT;
     $xidf = DimageConstants::XIDF;
@@ -82,24 +100,55 @@ class DimageFunctions {
     return "/$exp/";
   }
 
+  /**
+   * Pad a number with zeroes to the left. Example 5 -> 00005
+   * 
+   * @param $number Number
+   * @param $n Amount of padding
+   * @return string Padded number
+   */
   public static function pad($number, $n) : string {
     return str_pad($number, $n, '0', STR_PAD_LEFT);
   }
 
+  /**
+   * Pad an image index. Example 2 -> 002
+   * 
+   * @param $index Index
+   * @return string Padded index
+   */
   public static function padIndex($index) : string {
     return self::pad($index, DimageConstants::PADINDEX);
   }
 
+  /**
+   * Return the image root folder
+   * 
+   * @param string root folder
+   */
   public static function rootFolder() : string {
     return DimageConstants::IMAGESUBDIR;
   }
 
+  /**
+   * Return the entity folder
+   * 
+   * @param $entity Entity
+   * @return string entity folder
+   */
   public static function entityFolder($entity) : string {
     $folder = DimageConstants::RFILE_SUPERPATH;
     $folder = str_replace('%entity'  , $entity  , $folder);
     return DimageConstants::IMAGESUBDIR.'/'.$folder;
   }
 
+  /**
+   * Generate the propper identity folder
+   * 
+   * @param $entity Enitty
+   * @param $identity Identity
+   * @return string identity folder
+   */
   public static function identityFolder($entity, $identity) : string {
     $folder = DimageConstants::RFILE_PATH;
     $folder = str_replace('%entity'  , $entity  , $folder);
@@ -107,6 +156,12 @@ class DimageFunctions {
     return DimageConstants::IMAGESUBDIR.'/'.$folder;
   }
 
+  /**
+   * Convert a list of dimages to file paths
+   * 
+   * @param $dimages list of images
+   * @return array list of file paths
+   */
   public static function toFilePaths(array &$dimages) : array {
     $result = [];
     foreach ($dimages as $dimage) $result[] = $dimage->toFullPathFileName();
