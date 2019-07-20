@@ -123,4 +123,31 @@ class DimControllerTest extends TestCase
     $this->get("mh/dim/api/test/image/2")->assertOk();
 
   }
+
+  public function test_switch() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+    
+    $this
+      ->json('POST',"mh/dim/api/test/image", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"mh/dim/api/test/image", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"mh/dim/api/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+    
+    $this->post("mh/dim/api/test/image/switch/1/with/2")->assertOk();
+
+
+  }
 }

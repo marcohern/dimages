@@ -21,10 +21,12 @@ Route::group([
     Route::get('/_meta/{entity}', 'DimageMetaController@identities');
     Route::get('/_meta'         , 'DimageMetaController@entities');
 
-    Route::get   ('_status'                                         , 'DimController@status' );
-    Route::get   ('{entity}/{identity}/{profile}/{density}/{index?}', 'DimController@derive' );
-    Route::put   ('{entity}/{identity}/{index}'                     , 'DimController@update' );
-    Route::delete('{entity}/{identity}/{index?}'                    , 'DimController@destroy');
-    Route::get   ('{entity}/{identity}/{index?}'                    , 'DimController@source' );
-    Route::post  ('{entity}/{identity}'                             , 'DimController@store'  );
+    Route::get   ('_status'                                           , 'DimController@status' );
+    Route::post  ('{entity}/{identity}/switch/{source}/with/{target}' , 'DimController@switch' );
+    Route::post  ('{entity}/{identity}/normalize'                     , 'DimController@normalize');
+    Route::get   ('{entity}/{identity}/{profile}/{density}/{index?}'  , 'DimController@derive' );
+    Route::put   ('{entity}/{identity}/{index}'                       , 'DimController@update' );
+    Route::delete('{entity}/{identity}/{index?}'                      , 'DimController@destroy');
+    Route::get   ('{entity}/{identity}/{index?}'                      , 'DimController@source' );
+    Route::post  ('{entity}/{identity}'                               , 'DimController@store'  );
 });

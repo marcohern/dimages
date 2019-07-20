@@ -12,6 +12,7 @@ use Marcohern\Dimages\Exceptions\DimagesException;
 
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\DimageManager;
+use Marcohern\Dimages\Lib\DimageSequencer;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Http\Requests\UploadDimageRequest;
 
@@ -53,5 +54,20 @@ class DimController extends Controller
   public function destroy($entity, $identity, $index = null) {
     if (is_null($index)) $this->dimages->deleteIdentity($entity, $identity);
     else $this->dimages->deleteIndex($entity, $identity, $index);
+  }
+
+  public function switch($entity, $identity, $source, $target) {
+    $this->dimages->switchIndex($entity, $identity, $source, $target);
+  }
+
+  public function normalize($entity, $identity) {
+    $sources = $this->dimages->sources($entity, $identity);
+    $switches = [];
+    foreach ($sources as $i => $source) {
+      if ($source->index != $i)
+        $this->dimages->switchIndex($entity, $identity, $source->index, $i);
+    }
+    $sequencer = new DimageSequencer($entity, $identity);
+    $sequencer->drop();
   }
 }
