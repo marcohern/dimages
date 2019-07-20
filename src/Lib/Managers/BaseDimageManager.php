@@ -250,4 +250,16 @@ class BaseDimageManager extends StorageDimageManager {
     $dimages = $this->dimages($entity, $identity, $index);
     $this->deleteMultiple($dimages);
   }
+
+  public function normalize(string $entity, string $identity) {
+    $sources = $this->sources($entity, $identity);
+    $n = count($sources);
+    $switches = [];
+    foreach ($sources as $i => $source) {
+      if ($source->index != $i)
+        $this->dimages->switchIndex($entity, $identity, $source->index, $i);
+    }
+    $sequencer = new DimageSequencer($entity, $identity);
+    $sequencer->put($n);
+  }
 }

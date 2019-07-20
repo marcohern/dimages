@@ -61,13 +61,6 @@ class DimController extends Controller
   }
 
   public function normalize($entity, $identity) {
-    $sources = $this->dimages->sources($entity, $identity);
-    $switches = [];
-    foreach ($sources as $i => $source) {
-      if ($source->index != $i)
-        $this->dimages->switchIndex($entity, $identity, $source->index, $i);
-    }
-    $sequencer = new DimageSequencer($entity, $identity);
-    $sequencer->drop();
+    $this->dimages->normalize($entity, $idenitty);
   }
 }
