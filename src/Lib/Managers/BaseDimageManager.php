@@ -149,4 +149,9 @@ class BaseDimageManager extends StorageDimageManager {
     $derivatives = $this->derivatives($entity, $identity);
     $this->deleteMultiple($derivatives);
   }
+
+  public function deleteIndex($entity, $identity, $index) {
+    $dimages = $this->dimages($entity, $identity, $index);
+    $this->deleteMultiple($dimages);
+  }
 }

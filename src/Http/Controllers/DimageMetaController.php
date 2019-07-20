@@ -56,8 +56,11 @@ class DimageMetaController extends Controller
     ];
   }
 
-  public function destroy($entity, $identity) {
-    return $this->dimages->deleteIdentity($entity, $identity);
+  public function destroy($entity, $identity, $index = null) {
+    if (is_null($index))
+      return $this->dimages->deleteIdentity($entity, $identity);
+    else
+      return $this->dimages->deleteIndex($entity, $identity, $index);
   }
 
   public function switch_index(string $entity, string $identity, Request $request) {

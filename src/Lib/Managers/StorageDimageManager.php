@@ -52,13 +52,24 @@ class StorageDimageManager {
       ->directories(DimageFunctions::entityFolder($identity));
   }
 
-  public function files(string $entity, string $identity) : array {
-    return Storage::disk($this->scope)
-      ->files(DimageFunctions::identityFolder($entity,$identity));
+  public function files(string $entity, string $identity, $index = null) : array {
+    if (is_null($index))
+      return Storage::disk($this->scope)
+        ->files(DimageFunctions::identityFolder($entity,$identity));
+    else {
+      $rfiles = [];
+      $files = Storage::disk($this->scope)
+        ->files(DimageFunctions::identityFolder($entity,$identity));
+      foreach ($files as $file) {
+        $dimage = DimageName::fromFilePath($file);
+        if ($dimage->index === $index) $rfiles[] = $file;
+      }
+      return $rfiles;
+    }
   }
 
-  public function dimages(string $entity, string $identity) : array {
-    $files = $this->files($entity, $identity);
+  public function dimages(string $entity, string $identity, $index = null) : array {
+    $files = $this->files($entity, $identity, $index);
     return DimageName::fromFilePathArray($files);
   }
 
