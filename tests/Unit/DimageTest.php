@@ -24,4 +24,9 @@ class DimageTest extends TestCase
   {
     $this->assertNotEmpty(Dimage::xFileName());
   }
+
+  public function testXUrl()
+  {
+    $this->assertNotEmpty(Dimage::xUrl());
+  }
 }
