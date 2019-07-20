@@ -215,4 +215,26 @@ class BaseDimageManagerTest extends TestCase {
     $disk->assertMissing('img/games/death-stranding/001.cover.mdpi.txt');
     $disk->assertMissing('img/games/death-stranding/001.cover.hdpi.txt');
   }
+
+  public function test_normalize() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    
+    $disk->put('img/games/death-stranding/001.txt','HELLO WORLD!');
+    $disk->put('img/games/death-stranding/001.cover.hdpi.txt','HELLO WORLD!');
+    $disk->put('img/games/death-stranding/003.txt','HELLO WORLD!');
+    $disk->put('img/games/death-stranding/003.cover.mdpi.txt','HELLO WORLD!');
+    $disk->put('img/games/death-stranding/005.txt','HELLO WORLD!');
+    $disk->put('img/games/death-stranding/005.boxart.mdpi.txt','HELLO WORLD!');
+
+    $dimages = new DimageManager;
+    $dimages->normalize('games','death-stranding');
+
+    $disk->assertExists ('img/games/death-stranding/000.txt');
+    $disk->assertExists ('img/games/death-stranding/000.cover.hdpi.txt');
+    $disk->assertExists ('img/games/death-stranding/001.txt');
+    $disk->assertExists ('img/games/death-stranding/001.cover.mdpi.txt');
+    $disk->assertExists ('img/games/death-stranding/002.txt');
+    $disk->assertExists ('img/games/death-stranding/002.boxart.mdpi.txt');
+  }
 }
