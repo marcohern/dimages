@@ -113,4 +113,21 @@ class DimController extends Controller
     }
     $this->dimages->deleteIdentity($src_ent, $src_idn);
   }
+
+  public function session() {
+    $template = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+    $tlen = strlen($template);
+    $string = '';
+    for($i=0;$i<128;$i++) {
+      $n = rand(0,$tlen-1);
+      $string .= $template[$n];
+    }
+    $date = date("Y-m-d H:i:s");
+    $number = rand(10000, 99999);
+    $md5 = md5("$date/$string/$number");
+    $session = substr($md5,0,16);
+    return [
+      'session' => $session
+    ];
+  }
 }
