@@ -6,7 +6,6 @@ class DimageConstants {
 
   public const PADINDEX = 3;
   public const FSSCOPE = 'dimages';
-  public const FSPATH = 'app/public/dimages';
   public const DIMROUTE  = '/dimages';
   
   public const XIDF = '[A-Za-z][\w\-_]*';
