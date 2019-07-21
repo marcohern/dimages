@@ -179,10 +179,10 @@ class BaseDimageManager extends StorageDimageManager {
     $dimage->identity = $identity;
     $dimage->index = $index;
     $dimage->ext = $upload->getClientOriginalExtension();
-    if (!$this->exists($dimage))
-      throw new DimageNotFoundException("Source image not found: $entity/$identity/$index");
     
     $dimages = $this->dimages($entity, $identity, $index);
+    if (empty($dimages))
+      throw new DimageNotFoundException("Source image not found: $entity/$identity/$index");
     $this->deleteMultiple($dimages);
     $this->store($dimage, $upload);
     return $dimage;

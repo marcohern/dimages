@@ -18,7 +18,7 @@ class DimControllerTest extends TestCase
    */
   public function test_status()
   {
-    $response = $this->get("mh/dim/api/_status");
+    $response = $this->get("mh/dim/api/status");
 
     $response->assertOk()->assertJson([
       'success' => true,
@@ -127,23 +127,24 @@ class DimControllerTest extends TestCase
   public function test_update() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
-    $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
-    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image1 = UploadedFile::fake()->image('test1.jpeg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpg', 1920, 1080);
     $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
 
-    $disk->putFileAs('img/bands/kiss', $image1, '000.jpg');
+    $disk->putFileAs('img/bands/kiss', $image1, '000.jpeg');
     $disk->putFileAs('img/bands/kiss', $image2, '001.jpg');
     $disk->putFileAs('img/bands/kiss', $image2, '001.cover.hdpi.jpg');
     $disk->putFileAs('img/bands/kiss', $image2, '001.cover.mdpi.jpg');
     $disk->putFileAs('img/bands/kiss', $image3, '002.png');
 
     $image4 = UploadedFile::fake()->image('test4.jpeg' , 1920, 1080);
-
+    
     $disk->assertExists('img/bands/kiss/001.jpg');
     $disk->assertExists('img/bands/kiss/001.cover.hdpi.jpg');
     $disk->assertExists('img/bands/kiss/001.cover.mdpi.jpg');
 
-    $this->json('POST',"mh/dim/api/bands/kiss/1", ['image' => $image4 ])->assertOk();
+    $response = $this->json('POST',"mh/dim/api/bands/kiss/1", ['image' => $image4 ]);
+    $response->assertOk();
 
     $disk->assertExists ('img/bands/kiss/001.jpeg');
     $disk->assertMissing('img/bands/kiss/001.jpg');
