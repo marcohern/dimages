@@ -20,6 +20,8 @@ $ php artisan vendor:publish
 You will be prompted to select a provider. Select **Marcohern\Dimages\DimagesServiceProvider** by
 typing the number, then press RETURN.
 
+A message will confirm that the dimages config has been copied to your config directory.
+
 ```bash
 Copied File [\vendor\marcohern\dimages\publishables\config\dimages.php] To [\config\dimages.php]
 Publishing complete.
@@ -28,7 +30,27 @@ You are now all set to use the Image Management API.
 
 ## Using dimages
 
-<TODO>
+**dimages** exposes endpoints that help you manage images, and download them for specific 
+profiles and density.
+
+```bash
+GET    /mh/dim/api/
+GET    /mh/dim/api/{entity}
+POST   /mh/dim/api/{entity}/{identity}
+GET    /mh/dim/api/{entity}/{identity}
+GET    /mh/dim/api/{entity}/{identity}/{index?}
+DELETE /mh/dim/api/{entity}/{identity}/{index?}
+POST   /mh/dim/api/{entity}/{identity}/{index}
+GET    /mh/dim/api/{entity}/{identity}/{profile}/{identity}/{index?}
+GET    /mh/dim/api/{entity}/{identity}/derivatives
+GET    /mh/dim/api/{entity}/{identity}/sources
+GET    /mh/dim/api/{entity}/{identity}/images
+GET    /mh/dim/api/{entity}/{identity}/dimages
+POST   /mh/dim/api/{entity}/{identity}/normalize
+POST   /mh/dim/api/{entity}/{identity}/switch/{source}/with/{target}
+POST   /mh/dim/api/move/{src_ent}/{src_idn}/to/{trg_ent}/{trg_idn}
+GET    /mh/dim/api/status
+```
 
 ## Installation fo Development Environment
 
