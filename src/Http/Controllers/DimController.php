@@ -102,4 +102,15 @@ class DimController extends Controller
     $identities = $this->dimages->identities($entity);
     return $identities;
   }
+
+  public function move(string $src_ent, string $src_idn, string $trg_ent, string $trg_idn) {
+    $sources = $this->dimages($src_ent, $src_idn);
+    foreach ($sources as $source) {
+      $target = clone $source;
+      $target->entity = $trg_ent;
+      $target->identity = $trg_idn;
+      $this->dimages->move($source, $target);
+    }
+    $this->dimages->deleteIdentity($src_ent, $src_idn);
+  }
 }

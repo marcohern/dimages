@@ -239,4 +239,39 @@ class DimControllerTest extends TestCase
     $disk->assertExists('img/test/image/000.jpg');
     $disk->assertExists('img/test/image/001.png');
   }
+
+  public function test_move() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+    
+    $this
+      ->json('POST',"mh/dim/api/staging/a639b1e1789f4be", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"mh/dim/api/staging/a639b1e1789f4be", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"mh/dim/api/staging/a639b1e1789f4be", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+
+    $disk->assertExists('img/staging/a639b1e1789f4be/000.jpg');
+    $disk->assertExists('img/staging/a639b1e1789f4be/001.jpeg');
+    $disk->assertExists('img/staging/a639b1e1789f4be/002.png');
+
+    $this->json('POST',"mh/dim/api/move/staging/a639b1e1789f4be/to/konami/contra-3")
+      ->assertOk();
+
+    $disk->assertExists('img/konami/contra-3/000.jpg');
+    $disk->assertExists('img/konami/contra-3/001.jpeg');
+    $disk->assertExists('img/konami/contra-3/002.png');
+    $disk->assertMissing('img/staging/a639b1e1789f4be');
+  }
 }

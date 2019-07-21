@@ -7,6 +7,7 @@ Route::group([
     'middleware' => ['api']
 ], function () {
     Route::get   ('status'                                            , 'DimController@status'     )->name('dim-status');
+    Route::post  ('move/{src_ent}/{src_idn}/to/{trg_ent}/{trg_idn}'   , 'DimController@move'       )->name('dim-move');
     Route::post  ('{entity}/{identity}/switch/{source}/with/{target}' , 'DimController@switch'     )->name('dim-switch');
     Route::post  ('{entity}/{identity}/normalize'                     , 'DimController@normalize'  )->name('dim-normalize');
     Route::get   ('{entity}/{identity}/dimages'                       , 'DimController@index'      )->name('dim-index');
