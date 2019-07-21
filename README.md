@@ -177,7 +177,7 @@ DELETE /mh/dim/api/games/death-stranding
 **index**: (optional) the index of the image. Images with the matching index will be deleted.
 If not specified, all images associated with the identity will be deleted.
 
-### Other endpoint available
+### Other endpoints available
 
 ```bash
 # get a list of entities
