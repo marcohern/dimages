@@ -113,6 +113,50 @@ used for, such as, as an **icon**, or a **cover**. Essentially it defines the **
 
 The image in the appropriate size.
 
+### Configuring image sizes
+
+The image sizes can be configured in the **config/dimages.php**  file.
+There are settings to begin with.
+
+```php
+return [
+  'densities' => [
+    'ldpi'    => 0.75,
+    'mdpi'    => 1.00,
+    'hdpi'    => 1.50,
+    'xhdpi'   => 2.00,
+    'xxhdpi'  => 3.00,
+    'xxxhdpi' => 4.00,
+
+    'single'  => 1.00,
+    'double'  => 2.00,
+  ],
+  'profiles' => [
+    'ref'                => [480, 320],
+    'launcher-icons'     => [48, 48],
+    'actionbar-icons'    => [24, 24],
+    'small-icons'        => [16, 16],
+    'notification-icons' => [22, 22],
+  ]
+];
+```
+**densities**: A list of densities in inches per pixel. This will used to calculate the size
+of any image requested with the specified density.
+
+**profiles**: A list of image sizes in pixels. It is the size of the image if the density was
+equal to 1 (mdpi). Sizes are calculated by multiplying the specified density with each dimension
+of the specified profile.
+
+Examples:
+```bash
+Request    Profile Pr Size     Density Mult  Requested Size
+ref/ldpi   ref     [480, 320]  ldpi    0.75  [360, 240]
+ref/mdpi   ref     [480, 320]  mdpi    1.00  [480, 320]
+ref/hdpi   ref     [480, 320]  hdpi    1.50  [720, 480]
+ref/xhdpi  ref     [480, 320]  xhdpi   2.00  [950, 640]
+ref/xxhdpi ref     [480, 320]  xhdpi   3.00  [1440, 960]
+```
+
 ### Other endpoint available
 
 ```bash
