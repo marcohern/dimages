@@ -141,11 +141,12 @@ return [
 ];
 ```
 **densities**: A list of densities in inches per pixel. This will used to calculate the size
-of any image requested with the specified density.
+of any image requested with the specified density. You can add new density multipliers if you
+like.
 
 **profiles**: A list of image sizes in pixels. It is the size of the image if the density was
 equal to 1 (mdpi). Sizes are calculated by multiplying the specified density with each dimension
-of the specified profile.
+of the specified profile. In principle, you will be adding more profiles as your app requires.
 
 Examples:
 ```bash
