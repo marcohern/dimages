@@ -149,7 +149,7 @@ of the specified profile.
 
 Examples:
 ```bash
-Request    Profile Pr Size     Density Mult  Requested Size
+Request    Profile Image Size  Density Mult  Requested Size
 ref/ldpi   ref     [480, 320]  ldpi    0.75  [360, 240]
 ref/mdpi   ref     [480, 320]  mdpi    1.00  [480, 320]
 ref/hdpi   ref     [480, 320]  hdpi    1.50  [720, 480]
@@ -157,24 +157,76 @@ ref/xhdpi  ref     [480, 320]  xhdpi   2.00  [950, 640]
 ref/xxhdpi ref     [480, 320]  xhdpi   3.00  [1440, 960]
 ```
 
+### Deleting images
+```bash
+DELETE /mh/dim/api/{entity}/{identity}/{index?}
+```
+#### Examples
+```bash
+# Delete a single image
+DELETE /mh/dim/api/games/death-stranding/1
+
+# Delete all images associated with identity
+DELETE /mh/dim/api/games/death-stranding
+```
+#### Parameters
+**entity**: Entity of the image.
+
+**identity**: Identity.
+
+**index**: (optional) the index of the image. Images with the matching index will be deleted.
+If not specified, all images associated with the identity will be deleted.
+
 ### Other endpoint available
 
 ```bash
+# get a list of entities
 GET    /mh/dim/api/
+
+# get a list of identities
 GET    /mh/dim/api/{entity}
+
+# add a new image
 POST   /mh/dim/api/{entity}/{identity}
+
+# get the source image
 GET    /mh/dim/api/{entity}/{identity}
+
+# get the specified source image
 GET    /mh/dim/api/{entity}/{identity}/{index?}
+
+# delete the specified image
 DELETE /mh/dim/api/{entity}/{identity}/{index?}
+
+# update an existing image
 POST   /mh/dim/api/{entity}/{identity}/{index}
+
+# get an resampled image of the source.
 GET    /mh/dim/api/{entity}/{identity}/{profile}/{identity}/{index?}
+
+# get a list of existing derivate images
 GET    /mh/dim/api/{entity}/{identity}/derivatives
+
+# get a list of existing source images
 GET    /mh/dim/api/{entity}/{identity}/sources
+
+# get a file list of all existing images
 GET    /mh/dim/api/{entity}/{identity}/images
+
+# get a tabulated list of all existing images
 GET    /mh/dim/api/{entity}/{identity}/dimages
+
+# make sure there is a default image (index 0)
+# and remove all gaps in indexes,
 POST   /mh/dim/api/{entity}/{identity}/normalize
+
+# switch an image index for another index
 POST   /mh/dim/api/{entity}/{identity}/switch/{source}/with/{target}
+
+# move files from one entity/identity to another
 POST   /mh/dim/api/move/{src_ent}/{src_idn}/to/{trg_ent}/{trg_idn}
+
+# get a status of the service. 200 means it is ok.
 GET    /mh/dim/api/status
 ```
 
