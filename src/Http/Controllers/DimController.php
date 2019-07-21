@@ -81,7 +81,16 @@ class DimController extends Controller
   }
 
   public function dimages(string $entity, string $identity) {
-    $this->dimages->dimages($entity, $identity);
+    return $this->dimages->dimages($entity, $identity);
+  }
+
+  public function images(string $entity, string $identity) {
+    $dimages = $this->dimages->sources($entity, $identity);
+    $urls = [];
+    foreach ($dimages as $dimage) {
+      $urls[] = DimageConstants::DIMROUTE."/$entity/$identity/{$dimage->index}";
+    }
+    return $urls;
   }
 
   public function entities(Request $request) {

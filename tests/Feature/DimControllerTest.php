@@ -152,6 +152,30 @@ class DimControllerTest extends TestCase
     $disk->assertMissing('img/bands/kiss/001.cover.mdpi.jpg');
   }
 
+  public function test_images() {
+    Storage::fake('dimages');
+    $disk = Storage::disk('dimages');
+    $image1 = UploadedFile::fake()->image('test1.jpeg' , 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
+
+    $disk->putFileAs('img/bands/kiss', $image1, '000.jpeg');
+    $disk->putFileAs('img/bands/kiss', $image2, '001.jpg');
+    $disk->putFileAs('img/bands/kiss', $image2, '001.cover.hdpi.jpg');
+    $disk->putFileAs('img/bands/kiss', $image2, '001.cover.mdpi.jpg');
+    $disk->putFileAs('img/bands/kiss', $image3, '002.png');
+
+    $image4 = UploadedFile::fake()->image('test4.jpeg' , 1920, 1080);
+
+    $this->json('GET',"mh/dim/api/bands/kiss/images")
+      ->assertOk()
+      ->assertExactJson([
+        '/mh/dim/api/bands/kiss/0',
+        '/mh/dim/api/bands/kiss/1',
+        '/mh/dim/api/bands/kiss/2'
+      ]);
+  }
+
   public function test_switch() {
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');

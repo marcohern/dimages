@@ -10,6 +10,7 @@ Route::group([
     Route::post  ('{entity}/{identity}/switch/{source}/with/{target}' , 'DimController@switch'     )->name('dim-switch');
     Route::post  ('{entity}/{identity}/normalize'                     , 'DimController@normalize'  )->name('dim-normalize');
     Route::get   ('{entity}/{identity}/dimages'                       , 'DimController@index'      )->name('dim-index');
+    Route::get   ('{entity}/{identity}/images'                        , 'DimController@images'     )->name('dim-images');
     Route::get   ('{entity}/{identity}/sources'                       , 'DimController@sources'    )->name('dim-sources');
     Route::get   ('{entity}/{identity}/derivatives'                   , 'DimController@derivatives')->name('dim-derivatives');
     Route::get   ('{entity}/{identity}/{profile}/{density}/{index?}'  , 'DimController@derive'     )->name('dim-derive');
