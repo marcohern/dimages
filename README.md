@@ -33,6 +33,59 @@ You are now all set to use the Image Management API.
 **dimages** exposes endpoints that help you manage images, and download them for specific 
 profiles and density.
 
+To make sure to get a result in JSON format, make sure to add header **Accept: application/json**.
+
+### Uploading images
+
+```bash
+POST /mh/dim/api/{entity}/{identity}
+```
+#### Example
+```bash
+POST /mh/dim/api/games/death-stranding
+```
+#### Parameters
+
+**entity**: Entity of the image. such as **user**, **user-profile** or **albums**.
+
+**identity**: Reference to the object attached to the image, such as the username or a slug. Examples: **john-doe**, **my-album-2020-01-22**.
+
+**image**: (in body) Upload a file in a field called **image**. Content-Type must be **application/x-www-form-urlencoded**.
+
+#### Returns
+
+```javascript
+{
+  "index": 0
+}
+```
+You can only upload one image per request. If you upload more than one image (with multiple requests),
+each image will return an index number, the first one being 0, then 1, and so on.
+
+### Downloading Images
+
+```bash
+GET /mh/dim/api/{entity}/{identity}/{index?}
+```
+#### Examples
+```bash
+GET /mh/dim/api/games/death-stranding
+GET /mh/dim/api/games/death-stranding/0
+GET /mh/dim/api/games/death-stranding/2
+```
+#### Parameters
+
+**entity**: Entity of the image. such as **user**, **user-profile** or **albums**.
+
+**identity**: Reference to the object attached to the image, such as the username or a slug. Examples: **john-doe**, **my-album-2020-01-22**.
+
+**index**: (optional) the index of the image. If no index is specified, index zero (0) is used.
+
+#### Returns
+
+Returns the source image, in it's original size, as it was uploaded.
+
+
 ```bash
 GET    /mh/dim/api/
 GET    /mh/dim/api/{entity}
