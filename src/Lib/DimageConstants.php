@@ -8,7 +8,7 @@ class DimageConstants {
   public const FSSCOPE = 'dimages';
   public const DIMROUTE  = '/dimages';
   
-  public const XIDF = '[A-Za-z][\w\-_]*';
+  public const XIDF = '[A-Za-z\-_][\w\-_]*';
   public const XINT = '\d+';
 
   public const XENTITY   = '(?<entity>%idf)';
