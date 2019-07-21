@@ -59,6 +59,14 @@ class DimController extends Controller
     $this->dimages->update($entity, $identity, $index, $request->image);
   }
 
+  public function sources(string $entity, string $identity) {
+    return $this->dimages->sources($entity, $identity);
+  }
+
+  public function derivatives(string $entity, string $identity) {
+    return $this->dimages->derivatives($entity, $identity);
+  }
+
   public function destroy(string $entity, string $identity, $index = null) {
     if (is_null($index)) $this->dimages->deleteIdentity($entity, $identity);
     else $this->dimages->deleteIndex($entity, $identity, $index);

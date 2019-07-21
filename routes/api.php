@@ -26,7 +26,7 @@ Route::group([
     Route::post  ('{entity}/{identity}/normalize'                     , 'DimController@normalize'  );
     Route::get   ('{entity}/{identity}/dimages'                       , 'DimController@index'      );
     Route::get   ('{entity}/{identity}/sources'                       , 'DimController@sources'    );
-    Route::get   ('{entity}/{identity}/derivates'                     , 'DimController@derivatives');
+    Route::get   ('{entity}/{identity}/derivatives'                   , 'DimController@derivatives');
     Route::get   ('{entity}/{identity}/{profile}/{density}/{index?}'  , 'DimController@derive'     );
     Route::post  ('{entity}/{identity}/{index}'                       , 'DimController@update'     );
     Route::delete('{entity}/{identity}/{index?}'                      , 'DimController@destroy'    );
