@@ -18,7 +18,7 @@ class DimControllerTest extends TestCase
    */
   public function test_status()
   {
-    $response = $this->get("mh/dim/api/status");
+    $response = $this->get("/dimages/status");
 
     $response->assertOk()->assertJson([
       'success' => true,
@@ -34,17 +34,17 @@ class DimControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png');
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image1])
+      ->json('POST',"/dimages/test/image", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image2])
+      ->json('POST',"/dimages/test/image", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image3])
+      ->json('POST',"/dimages/test/image", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
 
@@ -56,7 +56,7 @@ class DimControllerTest extends TestCase
 
   public function test_store_NoImage_UnprocesableEntity() {
     $this
-      ->json('POST',"mh/dim/api/test/image")
+      ->json('POST',"/dimages/test/image")
       ->assertStatus(422)
       ->assertExactJson([
         'message' => 'The given data was invalid.',
@@ -76,23 +76,23 @@ class DimControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
     
     $this
-      ->json('POST',"mh/dim/api/konami/contra-3", ['image' => $image1])
+      ->json('POST',"/dimages/konami/contra-3", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"mh/dim/api/konami/contra-3", ['image' => $image2])
+      ->json('POST',"/dimages/konami/contra-3", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"mh/dim/api/konami/contra-3", ['image' => $image3])
+      ->json('POST',"/dimages/konami/contra-3", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
     
-    $this->get("mh/dim/api/konami/contra-3/ref/hdpi")->assertOk();
-    $this->get("mh/dim/api/konami/contra-3/ref/hdpi/1")->assertOk();
-    $this->get("mh/dim/api/konami/contra-3/ref/hdpi/2")->assertOk();
+    $this->get("/dimages/konami/contra-3/ref/hdpi")->assertOk();
+    $this->get("/dimages/konami/contra-3/ref/hdpi/1")->assertOk();
+    $this->get("/dimages/konami/contra-3/ref/hdpi/2")->assertOk();
 
   }
 
@@ -104,23 +104,23 @@ class DimControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image1])
+      ->json('POST',"/dimages/test/image", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image2])
+      ->json('POST',"/dimages/test/image", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image3])
+      ->json('POST',"/dimages/test/image", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
     
-    $this->get("mh/dim/api/test/image")->assertOk();
-    $this->get("mh/dim/api/test/image/1")->assertOk();
-    $this->get("mh/dim/api/test/image/2")->assertOk();
+    $this->get("/dimages/test/image")->assertOk();
+    $this->get("/dimages/test/image/1")->assertOk();
+    $this->get("/dimages/test/image/2")->assertOk();
 
   }
 
@@ -143,7 +143,7 @@ class DimControllerTest extends TestCase
     $disk->assertExists('img/bands/kiss/001.cover.hdpi.jpg');
     $disk->assertExists('img/bands/kiss/001.cover.mdpi.jpg');
 
-    $response = $this->json('POST',"mh/dim/api/bands/kiss/1", ['image' => $image4 ]);
+    $response = $this->json('POST',"/dimages/bands/kiss/1", ['image' => $image4 ]);
     $response->assertOk();
 
     $disk->assertExists ('img/bands/kiss/001.jpeg');
@@ -167,12 +167,12 @@ class DimControllerTest extends TestCase
 
     $image4 = UploadedFile::fake()->image('test4.jpeg' , 1920, 1080);
 
-    $this->json('GET',"mh/dim/api/bands/kiss/images")
+    $this->json('GET',"/dimages/bands/kiss/images")
       ->assertOk()
       ->assertExactJson([
-        '/mh/dim/api/bands/kiss/0',
-        '/mh/dim/api/bands/kiss/1',
-        '/mh/dim/api/bands/kiss/2'
+        '/dimages/bands/kiss/0',
+        '/dimages/bands/kiss/1',
+        '/dimages/bands/kiss/2'
       ]);
   }
 
@@ -184,21 +184,21 @@ class DimControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image1])
+      ->json('POST',"/dimages/test/image", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image2])
+      ->json('POST',"/dimages/test/image", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image3])
+      ->json('POST',"/dimages/test/image", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
     
-    $this->post("mh/dim/api/test/image/switch/1/with/2")->assertOk();
+    $this->post("/dimages/test/image/switch/1/with/2")->assertOk();
 
     $disk->assertExists('img/test/image/000.jpg');
     $disk->assertExists('img/test/image/001.png');
@@ -212,17 +212,17 @@ class DimControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image1])
+      ->json('POST',"/dimages/test/image", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image2])
+      ->json('POST',"/dimages/test/image", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"mh/dim/api/test/image", ['image' => $image3])
+      ->json('POST',"/dimages/test/image", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
 
@@ -234,7 +234,7 @@ class DimControllerTest extends TestCase
     $disk->assertExists('img/test/image/000.jpg');
     $disk->assertExists('img/test/image/002.png');
     
-    $this->json('POST',"mh/dim/api/test/image/normalize")->assertOk();
+    $this->json('POST',"/dimages/test/image/normalize")->assertOk();
 
     $disk->assertExists('img/test/image/000.jpg');
     $disk->assertExists('img/test/image/001.png');
@@ -248,17 +248,17 @@ class DimControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png' , 1920, 1080);
     
     $this
-      ->json('POST',"mh/dim/api/staging/a639b1e1789f4be", ['image' => $image1])
+      ->json('POST',"dimages/staging/a639b1e1789f4be", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"mh/dim/api/staging/a639b1e1789f4be", ['image' => $image2])
+      ->json('POST',"dimages/staging/a639b1e1789f4be", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"mh/dim/api/staging/a639b1e1789f4be", ['image' => $image3])
+      ->json('POST',"/dimages/staging/a639b1e1789f4be", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
 
@@ -266,7 +266,7 @@ class DimControllerTest extends TestCase
     $disk->assertExists('img/staging/a639b1e1789f4be/001.jpeg');
     $disk->assertExists('img/staging/a639b1e1789f4be/002.png');
 
-    $this->json('POST',"mh/dim/api/move/staging/a639b1e1789f4be/to/konami/contra-3")
+    $this->json('POST',"/dimages/move/staging/a639b1e1789f4be/to/konami/contra-3")
       ->assertOk();
 
     $disk->assertExists('img/konami/contra-3/000.jpg');
