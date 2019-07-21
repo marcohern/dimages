@@ -35,7 +35,7 @@ profiles and density.
 
 To make sure to get a result in JSON format, make sure to add header **Accept: application/json**.
 
-### Uploading images
+### Uploading one or more images
 
 ```bash
 POST /mh/dim/api/{entity}/{identity}
@@ -62,7 +62,7 @@ POST /mh/dim/api/games/death-stranding
 You can only upload one image per request. If you upload more than one image (with multiple requests),
 each image will return an index number, the first one being 0, then 1, and so on.
 
-### Downloading Images
+### Downloading uploaded images
 
 ```bash
 GET /mh/dim/api/{entity}/{identity}/{index?}
@@ -85,6 +85,35 @@ GET /mh/dim/api/games/death-stranding/2
 
 Returns the source image, in it's original size, as it was uploaded.
 
+### Downloading uploaded images in different sizes
+
+```bash
+GET /mh/dim/api/{entity}/{identity}/{profile}/{density}/{index?}
+```
+#### Examples
+```bash
+GET /mh/dim/api/games/death-stranding/icons/ldpi
+GET /mh/dim/api/games/death-stranding/launcher-icons/mdpi/0
+GET /mh/dim/api/games/death-stranding/ref/hdpi/2
+```
+#### Parameters
+
+**entity**: Entity of the image. such as **user**, **user-profile** or **albums**.
+
+**identity**: Reference to the object attached to the image, such as the username or a slug. Examples: **john-doe**, **my-album-2020-01-22**.
+
+**profile**: The profile of the image. The profile is essentially a reference to what the image will be
+used for, such as, as an **icon**, or a **cover**. Essentially it defines the **aspect ratio**.
+
+**density**: Reference to the object attached to the image, such as the username or a slug. Examples: **john-doe**, **my-album-2020-01-22**.
+
+**index**: (optional) the index of the image. If no index is specified, index zero (0) is used.
+
+#### Returns
+
+The image in the appropriate size.
+
+### Other endpoint available
 
 ```bash
 GET    /mh/dim/api/
