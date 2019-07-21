@@ -163,6 +163,32 @@ class BaseDimageManager extends StorageDimageManager {
   }
 
   /**
+   * Update an existing image with newly uploaded image.
+   * 
+   * @param $entity Entity
+   * @param $identity Identity
+   * @param $index Index to override
+   * @param $upload Uploaded file
+   * @return DimageName name of new image
+   * @throws DimageNotFoundException If image is not found
+   */
+  public function update(string $entity, string $identity, int $index, UploadedFile $upload) {
+    
+    $dimage = new DimageName;
+    $dimage->entity = $entity;
+    $dimage->identity = $identity;
+    $dimage->index = $index;
+    $dimage->ext = $upload->getClientOriginalExtension();
+    if (!$this->exists($dimage))
+      throw new DimageNotFoundException("Source image not found: $entity/$identity/$index");
+    
+    $dimages = $this->dimages($entity, $identity, $index);
+    $this->deleteMultiple($dimages);
+    $this->store($dimage, $upload);
+    return $dimage;
+  }
+
+  /**
    * Append a newly uploaded image. Add a new index to the image.
    * 
    * @param $entity Entity

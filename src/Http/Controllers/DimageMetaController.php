@@ -22,16 +22,6 @@ class DimageMetaController extends Controller
     return $dimages;
   }
 
-  public function entities(Request $request) {
-    $entities = $this->dimages->entities();
-    return $entities;
-  }
-
-  public function identities(Request $request, string $entity) {
-    $identities = $this->dimages->identities($entity);
-    return $identities;
-  }
-
   public function view(Request $request, string $entity, string $identity, $index=0) {
     $dimage = $this->dimages->source($entity, $identity, $index);
     return [
@@ -69,5 +59,15 @@ class DimageMetaController extends Controller
     $source = $request->source;
     $target = $request->target;
     $this->dimages->switchIndex($entity, $identity, $source, $target);
+  }
+
+  public function identities(Request $request, string $entity) {
+    $identities = $this->dimages->identities($entity);
+    return $identities;
+  }
+
+  public function entities(Request $request) {
+    $entities = $this->dimages->entities();
+    return $entities;
   }
 }

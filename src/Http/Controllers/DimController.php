@@ -32,35 +32,57 @@ class DimController extends Controller
     ];
   }
 
-  public function source($entity, $identity, $index=0) {
+  public function index(string $entity, string $identity) {
+    return $this->dimages->dimages($entity, $identity);
+  }
+
+  public function source(string $entity, string $identity, int $index=0) {
     $dimage = $this->dimages->source($entity, $identity, $index);
     $content = $this->dimages->content($dimage);
     return IImage::make($content)->response($dimage->ext);
   }
 
-  public function derive($entity, $identity, $profile, $density, $index=0) {
+  public function derive(string $entity, string $identity, string $profile, string $density, int $index=0) {
     $dimage = $this->dimages->get($entity, $identity, $profile, $density, $index);
     $content = $this->dimages->content($dimage);
     return IImage::make($content)->response($dimage->ext);
   }
 
-  public function store(UploadDimageRequest $request, $entity, $identity) {
+  public function store(UploadDimageRequest $request, string $entity, string $identity) {
     $dimage = $this->dimages->storeIdentity($entity, $identity, $request->image);
     return [
       'index' => $dimage->index
     ];
   }
 
-  public function destroy($entity, $identity, $index = null) {
+  public function update(UploadDimageRequest $request, string $entity, string $identity, int $index) {
+    $this->dimages->update($entity, $identity, $index, $request->image);
+  }
+
+  public function destroy(string $entity, string $identity, $index = null) {
     if (is_null($index)) $this->dimages->deleteIdentity($entity, $identity);
     else $this->dimages->deleteIndex($entity, $identity, $index);
   }
 
-  public function switch($entity, $identity, $source, $target) {
+  public function switch(string $entity, string $identity, int $source, int $target) {
     $this->dimages->switchIndex($entity, $identity, $source, $target);
   }
 
-  public function normalize($entity, $identity) {
+  public function normalize(string $entity, string $identity) {
     $this->dimages->normalize($entity, $identity);
+  }
+
+  public function dimages(string $entity, string $identity) {
+    $this->dimages->dimages($entity, $identity);
+  }
+
+  public function entities(Request $request) {
+    $entities = $this->dimages->entities();
+    return $entities;
+  }
+
+  public function identities(Request $request, string $entity) {
+    $identities = $this->dimages->identities($entity);
+    return $identities;
   }
 }
