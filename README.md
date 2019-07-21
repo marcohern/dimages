@@ -7,23 +7,23 @@ dimages can resample images depending on what the image will be used for and the
 
 Install dimages with composer:
 
-´´´bash
+```bash
 $ composer require marcohern/dimages
-´´´
+```
 
 Next, publish the **dimages.php** configuration. Type the following command:
 
-´´´bash
+```bash
 $ php artisan vendor:publish
-´´´
+```
 
 You will be prompted to select a provider. Select **Marcohern\Dimages\DimagesServiceProvider** by
 typing the number, then press RETURN.
 
-´´´bash
+```bash
 Copied File [\vendor\marcohern\dimages\publishables\config\dimages.php] To [\config\dimages.php]
 Publishing complete.
-´´´
+```
 You are now all set to use the Image Management API.
 
 ## Using dimages
