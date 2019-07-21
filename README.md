@@ -150,7 +150,7 @@ of the specified profile. In principle, you will be adding more profiles as your
 
 Examples:
 ```bash
-Request    Profile Image Size  Density Mult  Requested Size
+Request    Profile Size        Density Mult  Requested Size
 ref/ldpi   ref     [480, 320]  ldpi    0.75  [360, 240]
 ref/mdpi   ref     [480, 320]  mdpi    1.00  [480, 320]
 ref/hdpi   ref     [480, 320]  hdpi    1.50  [720, 480]
