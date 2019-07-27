@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Passport;
+use App\User;
 
 class DimControllerTest extends TestCase
 {
@@ -28,6 +30,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_store() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg');
     $image2 = UploadedFile::fake()->image('test2.jpeg');
@@ -55,6 +58,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_store_NoImage_UnprocesableEntity() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     $this
       ->json('POST',"/dimages/test/image")
       ->assertStatus(422)
@@ -69,6 +73,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_derive() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
@@ -97,6 +102,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_source() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
@@ -125,6 +131,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_update() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpeg' , 1920, 1080);
@@ -153,6 +160,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_images() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpeg' , 1920, 1080);
@@ -177,6 +185,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_switch() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
@@ -206,6 +215,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_normalize() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
     $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
@@ -241,6 +251,7 @@ class DimControllerTest extends TestCase
   }
 
   public function test_move() {
+    Passport::actingAs(factory(User::class)->create(),['*']);
     Storage::fake('dimages');
     $disk = Storage::disk('dimages');
     $image1 = UploadedFile::fake()->image('test1.jpg' , 1920, 1080);
