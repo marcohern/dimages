@@ -13,7 +13,7 @@ class Dimage {
   public static function xUrl() : string { return self::$xUrl; }
 
   public static function boot() {
-    self::$xFileName = DimageFunctions::fileNameRegex();
+    self::$xFileName = DimageFunctions::regex(DimageConstants::FEXP, DimageConstants::$dimage);
     self::$xUrl = DimageFunctions::urlRegex();
   }
 

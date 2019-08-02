@@ -8,9 +8,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageName;
+use Marcohern\Dimages\Lib\Dimage;
 
 class DimageFunctionsTest extends TestCase
 {
+
+  protected function setUp() : void {
+    Dimage::boot();
+    parent::setUp();
+  }
+
+  protected function tearDown() : void {
+    parent::tearDown();
+    Dimage::shutdown();
+  }
   public function test_fileNameRegex() {
     $regex = DimageFunctions::fileNameRegex();
     $this->assertRegExp($regex, 'tecno/sucks-to-be-you-by-prozzak/123.cover.mdpi.jpeg');
@@ -61,10 +72,10 @@ class DimageFunctionsTest extends TestCase
 
   public function test_toFilePaths() {
     $files = [
-      'games/death-stranding/000.txt',
-      'games/death-stranding/000.cover.mdpi.txt',
-      'games/death-stranding/000.cover.ldpi.txt',
-      'games/death-stranding/000.cover.hdpi.txt'
+      'marco/games/death-stranding/000.txt',
+      'marco/games/death-stranding/000.cover.mdpi.txt',
+      'marco/games/death-stranding/000.cover.ldpi.txt',
+      'marco/games/death-stranding/000.cover.hdpi.txt'
     ];
     $dimages = DimageName::fromFilePathArray($files);
 
@@ -76,5 +87,29 @@ class DimageFunctionsTest extends TestCase
       'img/games/death-stranding/000.cover.ldpi.txt',
       'img/games/death-stranding/000.cover.hdpi.txt'
     ]);
+  }
+
+  public function test_findVariables() {
+    $vars = DimageFunctions::findVariables('%var1/%var2/%var3');
+    $this->assertSame($vars, ['var1','var2','var3']);
+  }
+
+  public function test_regex() {
+    $source = '%entity\/%identity\/%index(\/%profile\/%density)?\.%ext';
+    $expressions = [
+      'entity'   => '(?<entity>%idf)',
+      'identity' => '(?<identity>%idf)',
+      'index'    => '(?<identity>%int)',
+      'profile'  => '(?<profile>%idf)',
+      'density'  => '(?<density>%idf)',
+      'ext'      => '(?<ext>%idf)',
+      'idf'      => '[\w\-_\.@]+',
+      'int'      => '\d+',
+    ];
+    $exp = DimageFunctions::regex($source, $expressions);
+    
+    $this->assertEquals(
+      $exp, "/(?<entity>[\w\-_\.@]+)\/(?<identity>[\w\-_\.@]+)\/(?<identity>\d+)(\/(?<profile>[\w\-_\.@]+)\/(?<density>[\w\-_\.@]+))?\.(?<ext>[\w\-_\.@]+)/"
+    );
   }
 }

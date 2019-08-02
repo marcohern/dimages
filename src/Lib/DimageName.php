@@ -29,6 +29,7 @@ class DimageName extends ExportableDimageName {
    */
   protected static function from(string $needle, string $haystack) : DimageName {
     $m = null;
+    
     $r = preg_match($needle, $haystack, $m);
     if (!$r) {
       throw new SourceInvalidException("source invalid: $haystack.", 0xa996a53d53);

@@ -6,6 +6,25 @@ use Marcohern\Dimages\Lib\DimageConstants;
 
 class DimageFunctions {
 
+  public static function findVariables($source) {
+    $m = [];
+    $r = [];
+    preg_match_all("/%(\w+)/", $source, $m);
+    return array_unique($m[1]);
+  }
+  
+  public static function regex(string $source, array &$expressions) : string {
+    do {
+      $vars = self::findVariables($source);
+      foreach ($vars as $var) {
+        $value = $expressions[$var];
+        $source = str_replace("%$var", $value, $source);
+      }
+    } while (count($vars) > 0);
+    
+    return "/$source/";
+  }
+
   /**
    * Return the Regular Expression that matches the base path
    * for any image (entity/identity)

@@ -43,4 +43,9 @@ class DimageFoldersTest extends TestCase {
     $folder = DimageFolders::staging('the-user','abcdefgh');
     $this->assertEquals($folder, 'img/the-user/_tmp/abcdefgh');
   }
+
+  public function test_derived() {
+    $folder = DimageFolders::derived('the-user','the-entity','the-image',12,'cover','mdpi','jpeg');
+    $this->assertEquals($folder, 'img/the-user/the-entity/the-image/012/cover/mdpi.jpeg');
+  }
 }

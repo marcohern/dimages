@@ -30,6 +30,23 @@ class DimageFolders {
     $pindex = DimageFunctions::padIndex($index);
     return self::images("$tenant/$entity/$identity/$pindex"); 
   }
+  
+  public static function sourceFile(string $tenant, string $entity, string $identity, int $index, string $ext): string
+  {
+    $pindex = DimageFunctions::padIndex($index);
+    return self::images("$tenant/$entity/$identity/$pindex.$ext"); 
+  }
+  
+  public static function sourceFileName(int $index, string $ext): string
+  {
+    $pindex = DimageFunctions::padIndex($index);
+    return "$pindex.$ext";
+  }
+  
+  public static function derivedFileName(string $density, string $ext): string
+  {
+    return "$density.$ext";
+  }
 
   public static function profile(
     string $tenant, 
@@ -46,5 +63,16 @@ class DimageFolders {
 
   public static function staging(string $tenant, string $session) {
     return self::images("$tenant/_tmp/$session");
+  }
+
+  public static function derived(
+    string $tenant,
+    string $entity, string $identity,
+    int $index,
+    string $profile, string $density,
+    string $ext)
+  {
+    $pindex = DimageFunctions::padIndex($index);
+    return self::images("$tenant/$entity/$identity/$pindex/$profile/$density.$ext");
   }
 }
