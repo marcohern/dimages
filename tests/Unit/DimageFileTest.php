@@ -75,4 +75,15 @@ class DimageFileTest extends TestCase {
     $this->assertSame($file1->toFileName(), 'mdpi.txt');
     $this->assertSame($file2->toFileName(), '005.txt');
   }
+
+  public function test_fromFilePath() {
+    $file = DimageFile::fromFilePath('marco/games/death-stranding/012.txt');
+    $this->assertSame($file->tenant, 'marco');
+    $this->assertSame($file->entity, 'games');
+    $this->assertSame($file->identity, 'death-stranding');
+    $this->assertSame($file->index, 12);
+    $this->assertSame($file->profile, '');
+    $this->assertSame($file->density, '');
+    $this->assertSame($file->ext, 'txt');
+  }
 }

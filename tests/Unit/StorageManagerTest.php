@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\DimageName;
+use Marcohern\Dimages\Lib\Files\DimageFile;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
 
 class StorageManagerTest extends TestCase {
@@ -16,8 +16,8 @@ class StorageManagerTest extends TestCase {
   protected $sm = null;
 
   protected function setUp():void {
-    $this->sm = new StorageManager;
     parent::setUp();
+    $this->sm = new StorageManager;
   }
 
   protected function tearDown():void {
@@ -26,13 +26,7 @@ class StorageManagerTest extends TestCase {
   }
 
   public function test_url() {
-    $dimage = new DimageName;
-    $dimage->entity = 'games';
-    $dimage->identity = 'death-stranding';
-    $dimage->index = 123;
-    $dimage->profile = 'cover';
-    $dimage->density = 'hdpi';
-    $dimage->ext = 'jpeg';
+    $dimage = new DimageFile('games','death-stranding',123,'jpeg','cover','hdpi');
 
     $this->assertEquals(
       $this->sm->url($dimage),
@@ -41,17 +35,11 @@ class StorageManagerTest extends TestCase {
   }
 
   public function test_exists() {
-    //Storage::fake('dimages');
+    Storage::fake('dimages');
     Storage::disk('dimages')->put('_global/games/death-stranding/004/boxart/hdpi.txt','HELLO');
 
-    Storage::disk('dimages')->assertExists('_global/games/death-stranding/004/boxart/hdpi.txt');
+    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi');
 
-    $dimage = new DimageName;
-    $dimage->entity = 'games';
-    $dimage->identity = 'death-stranding';
-    $dimage->index = 4;
-    $dimage->profile = 'boxart';
-    $dimage->density = 'hdpi';
-    $dimage->ext = 'txt';
+    $this->assertTrue($this->sm->exists($dimage));
   }
 }

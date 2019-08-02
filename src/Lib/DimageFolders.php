@@ -7,7 +7,7 @@ use Marcohern\Dimages\Lib\DimageFunctions;
 class DimageFolders {
   protected static function images(string $suffix): string
   {
-    return "img/$suffix"; 
+    return $suffix; 
   }
 
   public static function entities(string $tenant): string

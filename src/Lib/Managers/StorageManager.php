@@ -4,34 +4,24 @@ namespace Marcohern\Dimages\Lib\Managers;
 
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\DimageName;
+use Marcohern\Dimages\Lib\Files\DimageFile;
 
 class StorageManager {
   protected $scope = 'dimages';
-  protected $tenant = '_global';
 
   public function setScope($scope) {
     $this->scope = $scope;
   }
 
-  public function setTenant($tenant) {
-    $this->tenant = $tenant;
+  public function url(DimageFile $dimage) : string {
+    return Storage::disk($this->scope)->url($dimage->toFilePath());
   }
 
-  public function tenant($suffix) {
-    return "{$this->tenant}/$suffix";
+  public function exists(DimageFile $dimage) : bool {
+    return Storage::disk($this->scope)->exists($dimage->toFilePath());
   }
 
-  public function url(DimageName $dimage) : string {
-    return Storage::disk($this->scope)->url($this->tenant($dimage->toIdentityPathFileName()));
-  }
-
-  public function exists(DimageName $dimage) : string {
-    $r = Storage::disk($this->scope)->exists($this->tenant($dimage->toIdentityPathFileName()));
-    return $r;
-  }
-
-  public function content(DimageName $dimage) : string {
-    return Storage::disk($this->scope)->exists($this->tenant($dimage->toIdentityPathFileName()));
+  public function content(DimageFile $dimage) : string {
+    return Storage::disk($this->scope)->content($dimage->toFilePath());
   }
 }

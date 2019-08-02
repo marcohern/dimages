@@ -2,7 +2,9 @@
 
 namespace Marcohern\Dimages\Lib\Files;
 
+use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\DimageFolders;
+use Marcohern\Dimages\Exceptions\SourceInvalidException;
 
 class DimageFile {
   
@@ -14,13 +16,25 @@ class DimageFile {
   public $density = '';
   public $ext;
 
-  public function __construct($entity, $identity, $index, $ext, $profile='', $density='') {
+  public static function fromFilePath($filepath):DimageFile {
+    $m = null;
+    $r = preg_match(Dimage::xFile(),$filepath, $m);
+    if (!$r) {
+      throw new SourceInvalidException("source invalid: $haystack.", 0xa996a53d53);
+    }
+    $m = (object)$m;
+    
+    return new DimageFile($m->entity, $m->identity, 0+$m->index, $m->ext, $m->profile, $m->density, $m->tenant);
+  }
+
+  public function __construct($entity, $identity, $index, $ext, $profile='', $density='', $tenant='_global') {
     $this->entity = $entity;
     $this->identity = $identity;
     $this->index = $index;
     $this->ext = $ext;
     $this->profile = $profile;
     $this->density = $density;
+    $this->tenant = $tenant;
   }
 
   public function isSource(): bool {
