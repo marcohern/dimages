@@ -120,6 +120,20 @@ class StorageManagerTest extends TestCase {
     Storage::disk('dimages')->put('marcohern@gmail.com/games/darksouls-3/000/cover/mdpi.txt','HELLO DIMAGE');
     Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/icon/ldpi.txt','HELLO DIMAGE');
 
-    $this->assertSame(['games','video-games'], $this->sm->identities('marcohern@gmail.com','games'));
+    $this->assertSame(['darksouls-3','death-stranding'], $this->sm->identities('marcohern@gmail.com','games'));
+  }
+
+  public function test_sources() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/004.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DIMAGE');
+
+    $this->assertSame(
+      [
+        'marcohern@gmail.com/games/death-stranding/000.txt',
+        'marcohern@gmail.com/games/death-stranding/002.txt',
+        'marcohern@gmail.com/games/death-stranding/004.txt',
+      ], $this->sm->sources('marcohern@gmail.com','games','death-stranding')
+    );
   }
 }

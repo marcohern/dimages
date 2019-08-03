@@ -57,8 +57,8 @@ class StorageManager {
     return DimageFunctions::suffix($subfolders, strlen($folder)+1);
   }
 
-  public function images(string $tenant, string $entity) : array {
-    $folder = DimageFolders::identities($tenant, $entity, $identity);
+  public function sources(string $tenant, string $entity, string $identity) : array {
+    $folder = DimageFolders::sources($tenant, $entity, $identity);
     return Storage::disk($this->scope)->files($folder);
   }
 }
