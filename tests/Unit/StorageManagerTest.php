@@ -136,4 +136,30 @@ class StorageManagerTest extends TestCase {
       ], $this->sm->sources('marcohern@gmail.com','games','death-stranding')
     );
   }
+
+  public function test_profiles() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/boxart/hdpi.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/cover/mdpi.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/icon/ldpi.txt','HELLO DIMAGE');
+
+    $this->assertSame(
+      ['boxart','cover','icon',],
+      $this->sm->profiles('marcohern@gmail.com','games','death-stranding',2)
+    );
+  }
+
+  public function test_derivatives() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/boxart/hdpi.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/boxart/mdpi.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/002/boxart/ldpi.txt','HELLO DIMAGE');
+
+    $this->assertSame(
+      [
+        'marcohern@gmail.com/games/death-stranding/002/boxart/hdpi.txt',
+        'marcohern@gmail.com/games/death-stranding/002/boxart/ldpi.txt',        
+        'marcohern@gmail.com/games/death-stranding/002/boxart/mdpi.txt',
+      ],
+      $this->sm->derivatives('marcohern@gmail.com','games','death-stranding',2,'boxart')
+    );
+  }
 }
