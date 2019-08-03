@@ -183,7 +183,20 @@ class DimageFunctions {
    */
   public static function toFilePaths(array &$dimages) : array {
     $result = [];
-    foreach ($dimages as $dimage) $result[] = $dimage->toFullPathFileName();
+    foreach ($dimages as $dimage) {
+      if ($dimage instanceof DimageName)
+        $result[] = $dimage->toFullPathFileName();
+      else
+        $result[] = $dimage->toFilePath();
+    }
     return $result;
+  }
+
+  public static function suffix(array &$strings,int $len) : array {
+    $entities = [];
+    foreach ($strings as $s) {
+      $entities[] = substr($s, $len);
+    }
+    return $entities;
   }
 }
