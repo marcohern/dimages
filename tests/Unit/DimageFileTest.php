@@ -36,8 +36,8 @@ class DimageFileTest extends TestCase {
     $file2 = new DimageFile('games','death-stranding',5,'txt');
     $file1->tenant = $file2->tenant = 'marco';
 
-    $this->assertSame($file1->toFilePath(), 'img/marco/games/death-stranding/005/cover/mdpi.txt');
-    $this->assertSame($file2->toFilePath(), 'img/marco/games/death-stranding/005.txt');
+    $this->assertSame($file1->toFilePath(), 'marco/games/death-stranding/005/cover/mdpi.txt');
+    $this->assertSame($file2->toFilePath(), 'marco/games/death-stranding/005.txt');
   }
 
   public function test_isSource() {
@@ -56,16 +56,16 @@ class DimageFileTest extends TestCase {
     $file1 = new DimageFile('games','death-stranding',5,'txt','cover','mdpi');
     $file2 = new DimageFile('games','death-stranding',5,'txt');
 
-    $this->assertSame($file1->toFilePath(), 'img/_global/games/death-stranding/005/cover/mdpi.txt');
-    $this->assertSame($file2->toFilePath(), 'img/_global/games/death-stranding/005.txt');
+    $this->assertSame($file1->toFilePath(), '_global/games/death-stranding/005/cover/mdpi.txt');
+    $this->assertSame($file2->toFilePath(), '_global/games/death-stranding/005.txt');
   }
 
   public function test_toFolder() {
     $file1 = new DimageFile('games','death-stranding',5,'txt','cover','mdpi');
     $file2 = new DimageFile('games','death-stranding',5,'txt');
 
-    $this->assertSame($file1->toFolder(), 'img/_global/games/death-stranding/005/cover');
-    $this->assertSame($file2->toFolder(), 'img/_global/games/death-stranding');
+    $this->assertSame($file1->toFolder(), '_global/games/death-stranding/005/cover');
+    $this->assertSame($file2->toFolder(), '_global/games/death-stranding');
   }
 
   public function test_toFileName() {
