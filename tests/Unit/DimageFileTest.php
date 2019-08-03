@@ -77,8 +77,8 @@ class DimageFileTest extends TestCase {
   }
 
   public function test_fromFilePath() {
-    $file = DimageFile::fromFilePath('marco/games/death-stranding/012.txt');
-    $this->assertSame($file->tenant, 'marco');
+    $file = DimageFile::fromFilePath('marcohern@gmail.com/games/death-stranding/012.txt');
+    $this->assertSame($file->tenant, 'marcohern@gmail.com');
     $this->assertSame($file->entity, 'games');
     $this->assertSame($file->identity, 'death-stranding');
     $this->assertSame($file->index, 12);
