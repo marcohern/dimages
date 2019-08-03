@@ -36,6 +36,16 @@ class StorageManager {
     Storage::disk($this->scope)->delete($files);
   }
 
+  public function move(DimageFile $source, DimageFile $target) : void {
+    Storage::disk($this->scope)->move($source->toFilePath(), $target->toFilePath());
+  }
+
+  public function attach($tenant, $session, $targetEntity, $targetIdentity):void {
+    $source = DimageFolders::staging($tenant, $session);
+    $target = DimageFolders::sources($tenant, $targetEntity, $targetIdentity);
+    Storage::disk($this->scope)->move($source, $target);
+  }
+
   public function deleteIdentity(string $tenant,string $entity,string $identity):void {
     $folder = DimageFolders::sources($tenant, $entity, $identity);
     Storage::disk($this->scope)->deleteDirectory($folder);

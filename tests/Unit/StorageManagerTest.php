@@ -162,4 +162,39 @@ class StorageManagerTest extends TestCase {
       $this->sm->derivatives('marcohern@gmail.com','games','death-stranding',2,'boxart')
     );
   }
+
+  public function test_move() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
+
+    $source = DimageFile::fromFilePath('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $target = DimageFile::fromFilePath('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
+
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    Storage::disk('dimages')->assertMissing('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
+
+    $this->sm->move($source, $target);
+
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    Storage::disk('dimages')->assertExists('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
+  }
+
+  public function test_attach() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
+
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/games/death-stranding/002.txt');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/games/death-stranding/000.txt');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/games/death-stranding/004.txt');
+
+    $this->sm->attach('marcohern@gmail.com','abcdefg','games','death-stranding');
+
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt');
+
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/games/death-stranding/002.txt');
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/games/death-stranding/004.txt');
+  }
 }
