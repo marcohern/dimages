@@ -61,6 +61,10 @@ class DimageFolders {
     return self::images("$tenant/_seq/$entity.$identity.id");
   }
 
+  public static function stagingFolder(string $tenant) {
+    return self::images("$tenant/_tmp");
+  }
+
   public static function staging(string $tenant, string $session) {
     return self::images("$tenant/_tmp/$session");
   }

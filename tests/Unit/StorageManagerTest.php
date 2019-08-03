@@ -99,6 +99,46 @@ class StorageManagerTest extends TestCase {
     Storage::disk('dimages')->assertMissing('marcohern@gmail.com/games/death-stranding/002/icon/ldpi.txt');
   }
 
+  public function test_deleteStaging() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
+
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/_tmp/abcdefg/004.txt');
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/_tmp/abcdefg/000.txt');
+    Storage::disk('dimages')->assertExists('marcohern@gmail.com/_tmp/abcdefg/002.txt');
+
+    $this->sm->deleteStaging('marcohern@gmail.com','abcdefg');
+
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt');
+  }
+
+  public function test_deleteStagingForTenants() {
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('giovanni.castellanos/_tmp/tuvwxyz/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('giovanni.castellanos/_tmp/tuvwxyz/002.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('giovanni.castellanos/_tmp/tuvwxyz/003.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marco/_tmp/hijklmn/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marco/_tmp/hijklmn/001.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->put('marco/_tmp/hijklmn/002.txt','HELLO DIMAGE');
+
+    $this->sm->deleteStagingForTenants(['marcohern@gmail.com','marco']);
+
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertExists('giovanni.castellanos/_tmp/tuvwxyz/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertExists('giovanni.castellanos/_tmp/tuvwxyz/002.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertExists('giovanni.castellanos/_tmp/tuvwxyz/003.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertMissing('marco/_tmp/hijklmn/000.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertMissing('marco/_tmp/hijklmn/001.txt','HELLO DIMAGE');
+    Storage::disk('dimages')->assertMissing('marco/_tmp/hijklmn/002.txt','HELLO DIMAGE');
+  }
+
   public function test_tenants() {
     Storage::disk('dimages')->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
     Storage::disk('dimages')->put('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt','HELLO DIMAGE');

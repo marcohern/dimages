@@ -51,6 +51,18 @@ class StorageManager {
     Storage::disk($this->scope)->deleteDirectory($folder);
   }
 
+  public function deleteStaging(string $tenant, string $session) : void {
+    $folder = DimageFolders::staging($tenant, $session);
+    Storage::disk($this->scope)->deleteDirectory($folder);
+  }
+
+  public function deleteStagingForTenants(array $tenants) : void {
+    foreach ($tenants as $tenant) {
+      $folder = DimageFolders::stagingFolder($tenant);
+      Storage::disk($this->scope)->deleteDirectory($folder);
+    }
+  }
+
   public function tenants() : array {
     return Storage::disk($this->scope)->directories("/");
   }
