@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManagerStatic as IImage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimagesException;
 
@@ -66,5 +65,27 @@ class DimageController extends Controller {
 
   public function sources(string $tenant, string $entity, string $identity) {
     return $this->im->sources($tenant, $entity, $identity);
+  }
+
+  public function source(string $tenant, string $entity, string $identity, int $index = 0) {
+    return $this->im->get($tenant, $entity, $identity, $index);
+  }
+
+  public function store(UploadDimageRequest $request, string $tenant, string $entity, string $identity) {
+    $dimage = $this->sm->storeIdentity($tenant, $entity, $identity, $request->image);
+    return [
+      'index' => $dimage->index
+    ];
+  }
+
+  public function stage(UploadDimageRequest $request, string $tenant, string $session) {
+    $dimage = $this->sm->stageIdentity($tenant, $session, $request->image);
+    return [
+      'index' => $dimage->index
+    ];
+  }
+
+  public function attach(string $tenant, string $session, string $entity, string $identity) {
+    $dimage = $this->sm->attach($tenant, $session, $entity, $identity);
   }
 }

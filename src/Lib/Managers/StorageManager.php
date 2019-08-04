@@ -3,10 +3,12 @@
 namespace Marcohern\Dimages\Lib\Managers;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 use Marcohern\Dimages\Lib\Files\DimageFile;
 use Marcohern\Dimages\Lib\DimageFolders;
 use Marcohern\Dimages\Lib\DimageFunctions;
+use Marcohern\Dimages\Lib\DimageSequencer;
 
 class StorageManager {
   protected $scope = 'dimages';
@@ -44,6 +46,27 @@ class StorageManager {
     $source = DimageFolders::staging($tenant, $session);
     $target = DimageFolders::sources($tenant, $targetEntity, $targetIdentity);
     Storage::disk($this->scope)->move($source, $target);
+  }
+
+  public function store(DimageFile $dimage, UploadedFile $upload) {
+    Storage::disk($this->scope)
+      ->putFileAs($dimage->toFolder(), $upload, $dimage->toFileName());
+  }
+
+  public function storeIdentity(string $tenant, string $entity, string $identity, UploadedFile $upload) {
+    $sequencer = new DimageSequencer($entity, $identity, $tenant);
+    $dimage = new DimageFile(
+      $entity, $identity,
+      $sequencer->next(),
+      $upload->getClientOriginalExtension(),
+      '', '', $tenant
+    );
+    $this->store($dimage, $upload);
+    return $dimage;
+  }
+
+  public function stageIdentity(string $tenant, string $session, UploadedFile $upload) {
+    return $this->storeIdentity($tenant, '_tmp', $session, $upload);
   }
 
   public function deleteIdentity(string $tenant,string $entity,string $identity):void {

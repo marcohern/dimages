@@ -11,28 +11,41 @@ use Marcohern\Dimages\Lib\DimageSequencer;
 
 class DimageSequencerTest extends TestCase
 {
-  public function test_get() {
+  protected $disk = null;
+
+  protected function setUp():void {
+    parent::setUp();
     Storage::fake('dimages');
-    Storage::disk('dimages')->put('seqs/test.image.id', 5);
+    $this->disk = Storage::disk('dimages');
+  }
+
+  protected function tearDown():void {
+    unset($this->disk);
+    parent::tearDown();
+  }
+  public function test_get() {
+    $this->disk->put('marco-hernandez/_seq/test.image.id', 5);
+    $this->disk->put('_global/_seq/test.image.id', 13);
 
     $sequencer = new DimageSequencer('test','image');
-    $this->assertEquals($sequencer->get(), 5);
+    $this->assertEquals(13, $sequencer->get());
 
-    $sequencer = new DimageSequencer('othertest','image');
-    $this->assertEquals($sequencer->get(), 0);
+    $sequencer = new DimageSequencer('test','image','marco-hernandez');
+    $this->assertEquals(5, $sequencer->get());
+
+    $sequencer = new DimageSequencer('othertest','image','marco-hernandez');
+    $this->assertEquals(0, $sequencer->get());
   }
 
   public function test_put() {
-    Storage::fake('dimages');
-
     $sequencer = new DimageSequencer('test','image');
     $sequencer->put(3);
+    $this->disk->assertExists('_global/_seq/test.image.id');
     $this->assertEquals($sequencer->get(), 3);
   }
 
   public function test_next() {
-    Storage::fake('dimages');
-    Storage::disk('dimages')->put('seqs/othertest.image.id', 8);
+    $this->disk->put('_global/_seq/othertest.image.id', 8);
 
     $sequencer = new DimageSequencer('test','image');
     
@@ -47,15 +60,15 @@ class DimageSequencerTest extends TestCase
   }
 
   public function test_drop() {
-    Storage::fake('dimages');
-    Storage::disk('dimages')->put('seqs/test.image.id', 3);
+    
+    $this->disk->put('_global/_seq/othertest.image.id', 3);
 
-    Storage::disk('dimages')->assertExists('seqs/test.image.id');
+    $this->disk->assertExists('_global/_seq/othertest.image.id');
 
     $sequencer = new DimageSequencer('test','image');
     $sequencer->drop();
     
-    Storage::disk('dimages')->assertMissing('seqs/test.image.id');
+    $this->disk->assertMissing('seqs/test.image.id');
 
   }
 }

@@ -100,4 +100,56 @@ class DimageControllerTest extends TestCase
         ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>2]
       ]);
   }
+
+  public function test_store() {
+    $image1 = UploadedFile::fake()->image('test1.jpg');
+    $image2 = UploadedFile::fake()->image('test2.jpeg');
+    $image3 = UploadedFile::fake()->image('test3.png');
+
+    $this
+      ->json('POST',"/dimages2/user/test/image", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"/dimages2/user/test/image", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"/dimages2/user/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+    
+    $this->disk->assertExists('user/test/image/000.jpg');
+    $this->disk->assertExists('user/test/image/001.jpeg');
+    $this->disk->assertExists('user/test/image/002.png');
+
+  }
+
+  public function test_stage() {
+    $image1 = UploadedFile::fake()->image('test1.jpg');
+    $image2 = UploadedFile::fake()->image('test2.jpeg');
+    $image3 = UploadedFile::fake()->image('test3.png');
+
+    $this
+      ->json('POST',"/dimages2/user/test/image", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"/dimages2/user/test/image", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"/dimages2/user/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+    
+    $this->disk->assertExists('user/test/image/000.jpg');
+    $this->disk->assertExists('user/test/image/001.jpeg');
+    $this->disk->assertExists('user/test/image/002.png');
+
+  }
 }

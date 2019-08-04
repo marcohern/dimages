@@ -29,6 +29,17 @@ class ImageManager {
     return $dimages;
   }
 
+  public function source(string $tenant, string $entity, string $identity, int $index=0):string {
+    $files = $this->sm->sources($tenant, $entity, $identity);
+    foreach ($files as $file) {
+      $source = DimageFile::fromFilePath($file);
+      if ($source->index === $index) {
+        return $this->sm->content($source);
+      }
+    }
+    throw new DimageNotFoundException("Source Image Not found: $tenant/$entity/$identity/$index", 0xd9745b9923);
+  }
+
   public function get(
     string $tenant, string $entity, string $identity,
     string $profile, string $density, int $index=0) : string
@@ -40,25 +51,19 @@ class ImageManager {
         return $this->sm->content($target);
       }
     }
-    $files = $this->sm->sources($tenant, $entity, $identity);
-    foreach ($files as $file) {
-      $source = DimageFile::fromFilePath($file);
-      if ($source->index === $index) {
-        $sourceContent = $this->sm->content($source);
-        $target = clone $source;
-        $target->profile = $profile;
-        $target->density = $density;
-        $p = config("dimages.profiles.$profile");
-        $d = config("dimages.densities.$density");
-        if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
-        if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
-        $w = $p[0]*$d;
-        $h = $p[1]*$d;
-        $targetContent = (string) IImage::make($sourceContent)->fit($w, $h)->encode($target->ext);
-        $this->put($target, $targetContent);
-        return $targetContent;
-      }
-    }
-    throw new DimageNotFoundException("Image Not found", 0xd9745b9923);
+    
+    $sourceContent = $this->source($tenant, $entity, $identity, $index);
+    $target = clone $source;
+    $target->profile = $profile;
+    $target->density = $density;
+    $p = config("dimages.profiles.$profile");
+    $d = config("dimages.densities.$density");
+    if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
+    if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
+    $w = $p[0]*$d;
+    $h = $p[1]*$d;
+    $targetContent = (string) IImage::make($sourceContent)->fit($w, $h)->encode($target->ext);
+    $this->put($target, $targetContent);
+    return $targetContent;
   }
 }

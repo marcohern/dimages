@@ -4,6 +4,7 @@ namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\Storage;
 use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\DimageFolders;
 
 /**
  * Generate an index sequence for images
@@ -16,14 +17,9 @@ class DimageSequencer {
   protected $scope;
 
   /**
-   * Sub folder where sequences are stored
+   * Name and path to file sequence
    */
-  protected $subdir;
-
-  /**
-   * File name of a sequence
-   */
-  protected $filename;
+  protected $filepath;
 
   /**
    * Constructor
@@ -31,20 +27,18 @@ class DimageSequencer {
    * @param $entity Entity
    * @param $identity Identity
    */
-  public function __construct($entity, $identity) {
+  public function __construct(string $entity, string $identity, string $tenant='_global') {
     $this->scope = DimageConstants::FSSCOPE;
-    $this->subdir = DimageConstants::SEQDIR;
-    $this->filename = "$entity.$identity.id";
+    $this->filepath = DimageFolders::sequenceFile($tenant, $entity, $identity);
   }
 
   /**
    * The the current value of a sequence.
    */
   public function get() {
-    $path = "{$this->subdir}/{$this->filename}";
     $disk = Storage::disk($this->scope);
-    if ($disk->exists($path)) {
-      return 0 + $disk->get($path);
+    if ($disk->exists($this->filepath)) {
+      return 0 + $disk->get($this->filepath);
     }
     return 0;
   }
@@ -55,9 +49,8 @@ class DimageSequencer {
    * @param $n sequence value
    */
   public function put($n) {
-    $path = "{$this->subdir}/{$this->filename}";
     $disk = Storage::disk($this->scope);
-    $disk->put($path, $n);
+    $disk->put($this->filepath, $n);
   }
 
   /**
@@ -75,10 +68,9 @@ class DimageSequencer {
    * Delete the sequence file
    */
   public function drop() {
-    $path = "{$this->subdir}/{$this->filename}";
     $disk = Storage::disk($this->scope);
-    if ($disk->exists($path)) {
-      $disk->delete($path);
+    if ($disk->exists($this->filepath)) {
+      $disk->delete($this->filepath);
     }
   }
 }
