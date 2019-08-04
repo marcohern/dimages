@@ -90,8 +90,8 @@ class StorageManager {
     return DimageFunctions::suffix($subfolders, strlen($folder)+1);
   }
 
-  public function derivatives(string $tenant, string $entity, string $identity, int $index, string $boxart) : array {
-    $folder = DimageFolders::derivatives($tenant, $entity, $identity, $index, $boxart);
+  public function derivatives(string $tenant, string $entity, string $identity, int $index, string $profile) : array {
+    $folder = DimageFolders::derivatives($tenant, $entity, $identity, $index, $profile);
     return Storage::disk($this->scope)->files($folder);
   }
 }

@@ -46,6 +46,12 @@ class DimageFile {
     return !$this->isSource();
   }
 
+  public function source(): DimageFile {
+    return new DimageFile(
+      $this->entity, $this->identity, $this->index,
+      $this->ext, '', '', $this->tenant);
+  }
+
   public function toFilePath(): string {
     if ($this->isSource())
       return DimageFolders::sourceFile(
