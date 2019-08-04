@@ -14,9 +14,14 @@ use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class ImageManager {
   protected $sm;
+  protected $tenant = '_global';
 
   public function __construct(StorageManager $sm) {
     $this->sm = $sm;
+  }
+
+  public function sources($tenant, $entity, $identity) {
+    $this->sm->sources($tenant, $entity, $identity);
   }
 
   public function get(
