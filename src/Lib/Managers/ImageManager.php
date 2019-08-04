@@ -21,7 +21,12 @@ class ImageManager {
   }
 
   public function sources($tenant, $entity, $identity) {
-    $this->sm->sources($tenant, $entity, $identity);
+    $files = $this->sm->sources($tenant, $entity, $identity);
+    $dimages = [];
+    foreach ($files as $file) {
+      $dimages[] = DimageFile::fromFilePath($file);
+    }
+    return $dimages;
   }
 
   public function get(

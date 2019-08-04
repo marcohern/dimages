@@ -2,6 +2,8 @@
 
 namespace Marcohern\Dimages\Tests\Feature;
 
+use Marcohern\Dimages\Lib\Files\DimageFile;
+
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -81,6 +83,21 @@ class DimageControllerTest extends TestCase
       ->assertOk()
       ->assertJson([
         'death-stranding'
+      ]);
+  }
+
+  public function test_sources() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/000.txt','HELLO DMIAGE!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO DMIAGE!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DMIAGE!');
+    $this->disk->put('giovanni/games/darksouls-3/000.txt','HELLO DMIAGE!');
+
+    $this->get("/dimages2/marcohern@gmail.com/games/death-stranding/sources")
+      ->assertOk()
+      ->assertJson([
+        ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>0],
+        ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>1],
+        ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>2]
       ]);
   }
 }

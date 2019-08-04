@@ -63,4 +63,8 @@ class DimageController extends Controller {
   public function identities(string $tenant, string $entity) {
     return $this->sm->identities($tenant, $entity);
   }
+
+  public function sources(string $tenant, string $entity, string $identity) {
+    return $this->im->sources($tenant, $entity, $identity);
+  }
 }
