@@ -3,22 +3,22 @@ use Marcohern\Dimages\Lib\DimageConstants;
 
 Route::group([
     'namespace' => 'Marcohern\Dimages\Http\Controllers',
-    'prefix' => DimageConstants::DIMROUTE
+    'prefix' => 'dimages'
 ], function () {
-    Route::get   ('status'                                            , 'DimController@status'     )->middleware('api'     )->name('dim-status');
-    Route::get   ('session'                                           , 'DimController@session'    )->middleware('auth:api')->name('dim-session');
-    Route::post  ('move/{src_ent}/{src_idn}/to/{trg_ent}/{trg_idn}'   , 'DimController@move'       )->middleware('auth:api')->name('dim-move');
-    Route::post  ('{entity}/{identity}/switch/{source}/with/{target}' , 'DimController@switch'     )->middleware('auth:api')->name('dim-switch');
-    Route::post  ('{entity}/{identity}/normalize'                     , 'DimController@normalize'  )->middleware('auth:api')->name('dim-normalize');
-    Route::get   ('{entity}/{identity}/dimages'                       , 'DimController@index'      )->middleware('auth:api')->name('dim-index');
-    Route::get   ('{entity}/{identity}/images'                        , 'DimController@images'     )->middleware('auth:api')->name('dim-images');
-    Route::get   ('{entity}/{identity}/sources'                       , 'DimController@sources'    )->middleware('auth:api')->name('dim-sources');
-    Route::get   ('{entity}/{identity}/derivatives'                   , 'DimController@derivatives')->middleware('auth:api')->name('dim-derivatives');
-    Route::get   ('{entity}/{identity}/{profile}/{density}/{index?}'  , 'DimController@derive'     )->middleware('api'     )->name('dim-derive');
-    Route::post  ('{entity}/{identity}/{index}'                       , 'DimController@update'     )->middleware('auth:api')->name('dim-update');
-    Route::delete('{entity}/{identity}/{index?}'                      , 'DimController@destroy'    )->middleware('auth:api')->name('dim-destroy');
-    Route::get   ('{entity}/{identity}/{index?}'                      , 'DimController@source'     )->middleware('api'     )->name('dim-source');
-    Route::post  ('{entity}/{identity}'                               , 'DimController@store'      )->middleware('auth:api')->name('dim-store');
-    Route::get   ('{entity}'                                          , 'DimController@identities' )->middleware('auth:api')->name('dim-identities');
-    Route::get   ('/'                                                 , 'DimController@entities'   )->middleware('auth:api')->name('dim-entities');
+    Route::get   ('status'                                                     , 'DimageController@status'      )->middleware('api')->name('dim-status');
+    Route::get   ('session'                                                    , 'DimageController@session'     )->middleware('api')->name('dim-session');
+    Route::post  ('stage/{tenant}/{session}'                                   , 'DimageController@stage'       )->middleware('api')->name('dim-stage');
+    Route::post  ('attach/{tenant}/{session}/{entity}/{identity}'              , 'DimageController@attach'      )->middleware('api')->name('dim-attach');
+    Route::post  ('{tenant}/{entity}/{identity}/switch/{source}/with/{target}' , 'DimageController@switch'      )->middleware('api')->name('dim-switch');
+    Route::post  ('{tenant}/{entity}/{identity}/normalize'                     , 'DimageController@normalize'   )->middleware('api')->name('dim-normalize');
+    Route::get   ('{tenant}/{entity}/{identity}/sources'                       , 'DimageController@index'       )->middleware('api')->name('dim-sources');
+    Route::get   ('{tenant}/{entity}/{identity}/{profile}/{density}/{index?}'  , 'DimageController@derive'      )->middleware('api')->name('dim-derive');
+    Route::post  ('{tenant}/{entity}/{identity}/{index}'                       , 'DimageController@update'      )->middleware('api')->name('dim-update');
+    Route::delete('{tenant}/{entity}/{identity}/{index}'                       , 'DimageController@destroyIndex')->middleware('api')->name('dim-destroyIndex');
+    Route::get   ('{tenant}/{entity}/{identity}/{index?}'                      , 'DimageController@source'      )->middleware('api')->name('dim-source');
+    Route::post  ('{tenant}/{entity}/{identity}'                               , 'DimageController@store'       )->middleware('api')->name('dim-store');
+    Route::delete('{tenant}/{entity}/{identity}'                               , 'DimageController@destroy'     )->middleware('api')->name('dim-destroy');
+    Route::get   ('{tenant}/{entity}'                                          , 'DimageController@identities'  )->middleware('api')->name('dim-identities');
+    Route::get   ('{tenant}'                                                   , 'DimageController@entities'    )->middleware('api')->name('dim-entities');
+    Route::get   ('/'                                                          , 'DimageController@tenants'     )->middleware('api')->name('dim-tenants');
 });

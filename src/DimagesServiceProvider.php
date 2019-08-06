@@ -22,8 +22,7 @@ class DimagesServiceProvider extends ServiceProvider {
         IImage::configure(['driver' => 'gd']);
 
         //Load the routes for this package
-        //$this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/api_v2.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         //$this->loadRoutesFrom(__DIR__.'/../routes/image.php');
         //$this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
