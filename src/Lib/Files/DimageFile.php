@@ -67,7 +67,7 @@ class DimageFile {
     if ($this->isSource())
       return DimageFolders::sources($this->tenant, $this->entity, $this->identity);
     else
-      return DimageFolders::profiles($this->tenant, $this->entity, $this->identity, $this->index, $this->profile);
+      return DimageFolders::densities($this->tenant, $this->entity, $this->identity, $this->index, $this->profile);
   }
 
   public function toFileName(): string {

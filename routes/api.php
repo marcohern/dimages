@@ -11,7 +11,7 @@ Route::group([
     Route::post  ('attach/{tenant}/{session}/{entity}/{identity}'              , 'DimageController@attach'      )->middleware('api')->name('dim-attach');
     Route::post  ('{tenant}/{entity}/{identity}/switch/{source}/with/{target}' , 'DimageController@switch'      )->middleware('api')->name('dim-switch');
     Route::post  ('{tenant}/{entity}/{identity}/normalize'                     , 'DimageController@normalize'   )->middleware('api')->name('dim-normalize');
-    Route::get   ('{tenant}/{entity}/{identity}/sources'                       , 'DimageController@index'       )->middleware('api')->name('dim-sources');
+    Route::get   ('{tenant}/{entity}/{identity}/sources'                       , 'DimageController@sources'     )->middleware('api')->name('dim-sources');
     Route::get   ('{tenant}/{entity}/{identity}/{profile}/{density}/{index?}'  , 'DimageController@derive'      )->middleware('api')->name('dim-derive');
     Route::post  ('{tenant}/{entity}/{identity}/{index}'                       , 'DimageController@update'      )->middleware('api')->name('dim-update');
     Route::delete('{tenant}/{entity}/{identity}/{index}'                       , 'DimageController@destroyIndex')->middleware('api')->name('dim-destroyIndex');

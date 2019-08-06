@@ -70,25 +70,6 @@ class DimageFunctionsTest extends TestCase
     $this->assertSame($folder, 'img/movies/terminator');
   }
 
-  public function test_toFilePaths() {
-    $files = [
-      'marco/games/death-stranding/000.txt',
-      'marco/games/death-stranding/000.cover.mdpi.txt',
-      'marco/games/death-stranding/000.cover.ldpi.txt',
-      'marco/games/death-stranding/000.cover.hdpi.txt'
-    ];
-    $dimages = DimageName::fromFilePathArray($files);
-
-    $rfiles = DimageFunctions::toFilePaths($dimages);
-
-    $this->assertEquals($rfiles, [
-      'img/games/death-stranding/000.txt',
-      'img/games/death-stranding/000.cover.mdpi.txt',
-      'img/games/death-stranding/000.cover.ldpi.txt',
-      'img/games/death-stranding/000.cover.hdpi.txt'
-    ]);
-  }
-
   public function test_findVariables() {
     $vars = DimageFunctions::findVariables('%var1/%var2/%var3');
     $this->assertSame($vars, ['var1','var2','var3']);

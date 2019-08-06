@@ -31,6 +31,12 @@ class DimageFolders {
     return self::images("$tenant/$entity/$identity/$pindex"); 
   }
   
+  public static function densities(string $tenant, string $entity, string $identity, int $index, string $profile): string
+  {
+    $pindex = DimageFunctions::padIndex($index);
+    return self::images("$tenant/$entity/$identity/$pindex/$profile");
+  }
+  
   public static function sourceFile(string $tenant, string $entity, string $identity, int $index, string $ext): string
   {
     $pindex = DimageFunctions::padIndex($index);

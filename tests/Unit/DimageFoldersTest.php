@@ -24,14 +24,9 @@ class DimageFoldersTest extends TestCase {
     $this->assertEquals('the-user/the-entity/the-image', $folder);
   }
 
-  public function test_source() {
-    $folder = DimageFolders::source('the-user','the-entity','the-image',12);
+  public function test_profiles() {
+    $folder = DimageFolders::profiles('the-user','the-entity','the-image',12);
     $this->assertEquals('the-user/the-entity/the-image/012', $folder);
-  }
-
-  public function test_profile() {
-    $folder = DimageFolders::profile('the-user','the-entity','the-image',12,'cover');
-    $this->assertEquals('the-user/the-entity/the-image/012/cover', $folder);
   }
 
   public function test_sequenceFile() {
