@@ -88,4 +88,14 @@ class DimageController extends Controller {
   public function attach(string $tenant, string $session, string $entity, string $identity) {
     $dimage = $this->sm->attach($tenant, $session, $entity, $identity);
   }
+
+  public function switch(string $tenant, string $entity, string $identity, int $source, int $target) {
+    $this->sm->switchIndex($tenant, $entity, $identity, $source, $target);
+  }
+
+  public function derive(string $tenant, string $entity, string $identity, string $profile, string $density, int $index = 0) {
+    $dimage = $this->im->get($tenant, $entity, $identity, $profile, $density, $index);
+    $content = $this->sm->content($dimage);
+    return IImage::make($content)->response($dimage->ext);
+  }
 }

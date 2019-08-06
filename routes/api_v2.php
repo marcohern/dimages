@@ -9,7 +9,6 @@ Route::group([
     Route::get   ('session'                                                    , 'DimageController@session'    )->middleware('api')->name('dim-session');
     Route::post  ('stage/{tenant}/{session}'                                   , 'DimageController@stage'      )->middleware('api')->name('dim-stage');
     Route::post  ('attach/{tenant}/{session}/{entity}/{identity}'              , 'DimageController@attach'     )->middleware('api')->name('dim-attach');
-    Route::post  ('{tenant}/move/{src_ent}/{src_idn}/to/{trg_ent}/{trg_idn}'   , 'DimageController@move'       )->middleware('api')->name('dim-move');
     Route::post  ('{tenant}/{entity}/{identity}/switch/{source}/with/{target}' , 'DimageController@switch'     )->middleware('api')->name('dim-switch');
     Route::post  ('{tenant}/{entity}/{identity}/normalize'                     , 'DimageController@normalize'  )->middleware('api')->name('dim-normalize');
     Route::get   ('{tenant}/{entity}/{identity}/dimages'                       , 'DimageController@index'      )->middleware('api')->name('dim-index');

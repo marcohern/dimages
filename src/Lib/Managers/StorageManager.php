@@ -10,6 +10,9 @@ use Marcohern\Dimages\Lib\DimageFolders;
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageSequencer;
 
+use Marcohern\Dimages\Exceptions\DimageNotFoundException;
+use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
+
 class StorageManager {
   protected $scope = 'dimages';
 
@@ -27,6 +30,10 @@ class StorageManager {
 
   public function content(DimageFile $dimage) : string {
     return Storage::disk($this->scope)->get($dimage->toFilePath());
+  }
+
+  public function put(DimageFile $dimage, string &$content) {
+    Storage::disk($this->scope)->put($dimage->toFilePath(), $content);
   }
 
   public function deleteSingle(DimageFile $dimage) : void {
@@ -107,6 +114,11 @@ class StorageManager {
     return Storage::disk($this->scope)->files($folder);
   }
 
+  public function indexes(string $tenant, string $entity, string $identity) : array {
+    $folder = DimageFolders::sources($tenant, $entity, $identity);
+    return Storage::disk($this->scope)->directories($folder);
+  }
+
   public function profiles(string $tenant, string $entity, string $identity, int $index) : array {
     $folder = DimageFolders::profiles($tenant, $entity, $identity, $index);
     $subfolders = Storage::disk($this->scope)->directories($folder);
@@ -116,5 +128,43 @@ class StorageManager {
   public function derivatives(string $tenant, string $entity, string $identity, int $index, string $profile) : array {
     $folder = DimageFolders::derivatives($tenant, $entity, $identity, $index, $profile);
     return Storage::disk($this->scope)->files($folder);
+  }
+
+  public function switchIndex(string $tenant, string $entity, string $identity, int $source, int $target) : void {
+    $disk = Storage::disk($this->scope);
+    $files = $this->sources($tenant, $entity, $identity);
+    $sourceDimage = null;
+    $sourceIndexFolder = null;
+    $targetDimage = null;
+    $targetIndexFolder = DimageFolders::profiles($tenant, $entity, $identity, $target);
+    foreach ($files as $file) {
+      $dimage = DimageFile::fromFilePath($file);
+      if ($dimage->index === $source) {
+        $sourceDimage = $dimage;
+        $sourceIndexFolder = DimageFolders::profiles($tenant, $entity, $identity, $source);
+      } else if ($dimage->index === $target) {
+        $targetDimage = $dimage;
+      }
+      if (!is_null($sourceDimage) && !is_null($targetDimage)) break;
+    }
+
+    if (is_null($sourceDimage)) throw new DimageNotFoundException("source file not found");
+    if (is_null($targetDimage)) {
+      $targetDimage = clone $sourceDimage;
+      $targetDimage->index = $target;
+      $this->move($sourceDimage, $targetDimage);
+      if ($disk->exists($targetIndexFolder)) $disk->move($sourceIndexFolder, $targetIndexFolder);
+    } else {
+      $tmpDimage = new DimageFile($entity, $identity, $source, 'tmpx', '', '', $tenant);
+      $tmpFolder = DimageFolder::profiles($tenant, $entity, $identity, $source + 1000);
+
+      $this->move($targetDimage, $tmpDimage);
+      $this->move($sourceDimage, $targetDimage);
+      $this->move($tmpDimage, $sourceDimage);
+
+      $disk->move($targetIndexFolder, $tmpFolder);
+      $disk->move($sourceIndexFolder, $targetIndexFolder);
+      $disk->move($tmpFolder, $sourceIndexFolder);
+    }
   }
 }
