@@ -102,4 +102,8 @@ class DimageController extends Controller {
   public function normalize(string $tenant, string $entity, string $identity) {
     $this->sm->normalize($tenant, $entity, $identity);
   }
+
+  public function update(UploadDimageRequest $request, string $tenant, string $entity, string $identity, int $index) {
+    $this->sm->updateIdentity($tenant, $entity, $identity, $index, $request->image);
+  }
 }

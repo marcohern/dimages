@@ -36,6 +36,12 @@ class StorageManager {
     Storage::disk($this->scope)->put($dimage->toFilePath(), $content);
   }
 
+  public function deleteIndex(string $tenant, string $entity, string $identity, int $index) {
+    $disk = Storage::disk($this->scope);
+    $folder = DimageFolders::profiles($tenant, $entity, $identity, $index);
+    if ($disk->exists($folder)) $disk->deleteDirectory($folder);
+  }
+
   public function deleteSingle(DimageFile $dimage) : void {
     Storage::disk($this->scope)->delete($dimage->toFilePath());
   }
@@ -69,6 +75,19 @@ class StorageManager {
       '', '', $tenant
     );
     $this->store($dimage, $upload);
+    return $dimage;
+  }
+
+  public function updateIdentity(string $tenant, string $entity, string $identity, int $index, UploadedFile $upload) {
+    $dimage = new DimageFile(
+      $entity, $identity,
+      $index,
+      $upload->getClientOriginalExtension(),
+      '', '', $tenant
+    );
+    if (!$this->exists($dimage)) throw new DimageNotFoundException("Image not found: $tenant/$entity/$identity/$index");
+    $this->store($dimage, $upload);
+    $this->deleteIndex($tenant, $entity, $identity, $index);
     return $dimage;
   }
 
