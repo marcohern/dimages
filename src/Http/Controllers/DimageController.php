@@ -98,4 +98,8 @@ class DimageController extends Controller {
     $content = $this->sm->content($dimage);
     return IImage::make($content)->response($dimage->ext);
   }
+
+  public function normalize(string $tenant, string $entity, string $identity) {
+    $this->sm->normalize($tenant, $entity, $identity);
+  }
 }

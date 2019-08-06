@@ -167,4 +167,16 @@ class StorageManager {
       $disk->move($tmpFolder, $sourceIndexFolder);
     }
   }
+
+  public function normalize(string $tenant, string $entity, string $identity) : void {
+    $files = $this->sources($tenant, $entity, $identity);
+    foreach ($files as $i => $file) {
+      $dimage = DimageFile::fromFilePath($file);
+      if ($dimage->index != $i)
+        $this->switchIndex($tenant, $entity, $identity, $dimage->index, $i);
+    }
+    
+    $sequencer = new DimageSequencer($tenant, $entity, $identity);
+    $sequencer->put(count($files));
+  }
 }
