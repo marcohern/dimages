@@ -153,10 +153,10 @@ class StorageManager {
       $targetDimage = clone $sourceDimage;
       $targetDimage->index = $target;
       $this->move($sourceDimage, $targetDimage);
-      if ($disk->exists($targetIndexFolder)) $disk->move($sourceIndexFolder, $targetIndexFolder);
+      if ($disk->exists($sourceIndexFolder)) $disk->move($sourceIndexFolder, $targetIndexFolder);
     } else {
       $tmpDimage = new DimageFile($entity, $identity, $source, 'tmpx', '', '', $tenant);
-      $tmpFolder = DimageFolder::profiles($tenant, $entity, $identity, $source + 1000);
+      $tmpFolder = DimageFolders::profiles($tenant, $entity, $identity, $source + 1000);
 
       $this->move($targetDimage, $tmpDimage);
       $this->move($sourceDimage, $targetDimage);
