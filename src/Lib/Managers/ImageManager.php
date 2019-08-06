@@ -14,6 +14,7 @@ use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 class ImageManager {
   protected $sm;
   protected $tenant = '_global';
+  protected $flock;
 
   public function __construct(StorageManager $sm) {
     $this->sm = $sm;
@@ -39,10 +40,10 @@ class ImageManager {
     throw new DimageNotFoundException("Source Image Not found: $tenant/$entity/$identity/$index", 0xd9745b9923);
   }
 
-  public function get(
+  protected function derivativeOrSource(
     string $tenant, string $entity, string $identity,
-    string $profile, string $density, int $index=0) : DimageFile
-  {
+    string $profile, string $density, int $index=0
+  ) : DimageFile {
     $files = $this->sm->derivatives($tenant, $entity, $identity, $index, $profile);
     foreach ($files as $file) {
       $target = DimageFile::fromFilePath($file);
@@ -50,26 +51,71 @@ class ImageManager {
         return $target;
       }
     }
-    
+
     $files = $this->sm->sources($tenant, $entity, $identity);
     foreach ($files as $file) {
       $source = DimageFile::fromFilePath($file);
       if ($source->index === $index) {
-        $sourceContent = $this->sm->content($source);
-        $target = clone $source;
-        $target->profile = $profile;
-        $target->density = $density;
-        $p = config("dimages.profiles.$profile");
-        $d = config("dimages.densities.$density");
-        if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
-        if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
-        $w = $p[0]*$d;
-        $h = $p[1]*$d;
-        $targetContent = (string) IImage::make($sourceContent)->fit($w, $h)->encode($target->ext);
-        $this->sm->put($target, $targetContent);
-        return $target;
+        return $source;
       }
     }
-    throw new DimageNotFoundException("Source Image Not found: $tenant/$entity/$identity/$index", 0xd9745b9923);
+
+    throw new DimageNotFoundException("Dimage Not found: $tenant/$entity/$identity/$index", 0xd9745b9923);
+  }
+
+  protected function generate(DimageFile $source, $profile, $density) {
+    if (!$this->sm->exists($source))
+      throw new DimageNotFoundException("Source Not found", 0xd9745b9923);
+    if (!$source->isSource())
+      throw new DimageOperationInvalidException("Image must be source", 0xd9745b9923);
+    
+    $sourceContent = $this->sm->content($source);
+    $target = clone $source;
+    $target->profile = $profile;
+    $target->density = $density;
+    $p = config("dimages.profiles.$profile");
+    $d = config("dimages.densities.$density");
+    if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
+    if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
+    $w = $p[0]*$d;
+    $h = $p[1]*$d;
+    $targetContent = (string) IImage::make($sourceContent)->fit($w, $h)->encode($target->ext);
+    $this->sm->put($target, $targetContent);
+    return $target;
+  }
+
+  public function get(
+    string $tenant, string $entity, string $identity,
+    string $profile, string $density, int $index=0) : DimageFile
+  {
+    
+    $derived = null;
+    $lockfile = md5("$tenant.$entity.$identity.$profile.$density.$index").".lock";
+    $filepath = storage_path($lockfile);
+    $fp = fopen($filepath, "a+");
+    if (flock($fp, LOCK_EX)) {
+      $dimage = $this->derivativeOrSource($tenant, $entity, $identity, $profile, $density, $index);
+      if ($dimage->isDerived()) $derived = $dimage;
+      else $derived = $this->generate($dimage, $profile, $density);
+      flock($fp, LOCK_UN);
+    }
+
+    fclose($fp);
+    unlink($filepath);
+    return $derived;
+  }
+
+  public function session() {
+    $template = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+    $tlen = strlen($template);
+    $string = '';
+    for($i=0;$i<128;$i++) {
+      $n = rand(0,$tlen-1);
+      $string .= $template[$n];
+    }
+    $date = date("Y-m-d H:i:s");
+    $number = rand(10000, 99999);
+    $md5 = md5("$date/$string/$number");
+    return substr($md5,0,16);
   }
 }
