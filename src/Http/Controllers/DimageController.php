@@ -68,7 +68,9 @@ class DimageController extends Controller {
   }
 
   public function source(string $tenant, string $entity, string $identity, int $index = 0) {
-    return $this->im->get($tenant, $entity, $identity, $index);
+    $dimage = $this->im->source($tenant, $entity, $identity, $index);
+    $content = $this->sm->content($dimage);
+    return IImage::make($content)->response($dimage->ext);
   }
 
   public function store(UploadDimageRequest $request, string $tenant, string $entity, string $identity) {
@@ -105,5 +107,13 @@ class DimageController extends Controller {
 
   public function update(UploadDimageRequest $request, string $tenant, string $entity, string $identity, int $index) {
     $this->sm->updateIdentity($tenant, $entity, $identity, $index, $request->image);
+  }
+
+  public function destroyIndex(string $tenant, string $entity, string $identity, int $index) {
+    $this->sm->deleteIndex($tenant, $entity, $identity, $index);
+  }
+
+  public function destroy(string $tenant, string $entity, string $identity) {
+    $this->sm->deleteIdentity($tenant, $entity, $identity);
   }
 }

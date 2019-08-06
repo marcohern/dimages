@@ -29,7 +29,7 @@ class ImageManager {
     return $dimages;
   }
 
-  public function source(string $tenant, string $entity, string $identity, int $index=0):string {
+  public function source(string $tenant, string $entity, string $identity, int $index=0):DimageFile {
     $files = $this->sm->sources($tenant, $entity, $identity);
     foreach ($files as $file) {
       $source = DimageFile::fromFilePath($file);

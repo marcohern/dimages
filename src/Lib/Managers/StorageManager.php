@@ -36,9 +36,24 @@ class StorageManager {
     Storage::disk($this->scope)->put($dimage->toFilePath(), $content);
   }
 
+  public function destroy(DimageFile $dimage) {
+    $disk = Storage::disk($this->scope);
+    if ($disk->exists($dimage->toFilePath())) $disk->delete($dimage->toFilePath());
+    else throw new DimageNotFoundException("Dimage not found");
+  }
+
   public function deleteIndex(string $tenant, string $entity, string $identity, int $index) {
     $disk = Storage::disk($this->scope);
     $folder = DimageFolders::profiles($tenant, $entity, $identity, $index);
+    $sourceFolder = DimageFolders::sources($tenant, $entity, $identity);
+    $files = $disk->files($sourceFolder);
+    foreach ($files as $file) {
+      $dimage = DimageFile::fromFilePath($file);
+      if ($dimage->index === $index) {
+        $this->destroy($dimage);
+        break;
+      }
+    }
     if ($disk->exists($folder)) $disk->deleteDirectory($folder);
   }
 
