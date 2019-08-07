@@ -20,6 +20,24 @@ class ImageManager {
     $this->sm = $sm;
   }
 
+  public function lopen(DimageFile $source) {
+    $lockfile = md5("{$source->tenant}.{$source->entity}.{$source->identity}.{$source->index}").".lock";
+    $filepath = storage_path($lockfile);
+    $this->flock = fopen($filepath, "a+");
+  }
+
+  public function lock() {
+    return flock($this->flock, LOCK_EX);
+  }
+
+  public function unlock() {
+    flock($this->flock, LOCK_UN);
+  }
+
+  public function lclose() {
+    fclose($this->flock);
+  }
+
   public function sources($tenant, $entity, $identity) {
     $files = $this->sm->sources($tenant, $entity, $identity);
     $dimages = [];
@@ -96,17 +114,14 @@ class ImageManager {
     $derived->profile = $profile;
     $derived->density = $density;
 
-    $lockfile = md5("$tenant.$entity.$identity.$index").".lock";
-    $filepath = storage_path($lockfile);
-    $fp = fopen($filepath, "a+");
-    if (flock($fp, LOCK_EX)) {
+    $this->lopen($source);
+    if ($this->lock()) {
       if ($this->sm->exists($derived)) return $derived;
       $this->generate($source, $profile, $density);
-      flock($fp, LOCK_UN);
+      $this->unlock();
     }
+    $this->lclose();
 
-    fclose($fp);
-    unlink($filepath);
     return $derived;
   }
 
