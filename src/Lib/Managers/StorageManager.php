@@ -9,12 +9,13 @@ use Marcohern\Dimages\Lib\Files\DimageFile;
 use Marcohern\Dimages\Lib\DimageFolders;
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageSequencer;
+use Marcohern\Dimages\Lib\DimageConstants;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class StorageManager {
-  protected $scope = 'dimages';
+  protected $scope = DimageConstants::FSSCOPE;
 
   public function setScope($scope) {
     $this->scope = $scope;
