@@ -28,7 +28,7 @@ trait Lockable {
 
   protected function openlock(DimageFile $dimage) {
     $md5 = md5("{$dimage->tenant}.{$dimage->entity}.{$dimage->identity}.{$dimage->index}");
-    $fname = "$md5.txt";
+    $fname = "$md5.lock";
     $this->lockfile = storage_path(self::$storage."/$fname");
     $this->lock = fopen($this->lockfile, "a+");
   }
