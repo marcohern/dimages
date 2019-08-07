@@ -178,6 +178,20 @@ class StorageManagerTest extends TestCase {
     $this->disk->assertExists ('giovanni.castellanos/games/death-stranding/001.png');
   }
 
+  public function test_stageIdentity() {
+    $upload1 = UploadedFile::fake()->image('test1.jpg');
+    $upload2 = UploadedFile::fake()->image('test2.jpeg');
+    $upload3 = UploadedFile::fake()->image('test3.png');
+
+    $this->sm->stageIdentity('marco','abcdefg', $upload1);
+    $this->sm->stageIdentity('marco','abcdefg', $upload2);
+    $this->sm->stageIdentity('marco','abcdefg', $upload3);
+
+    $this->disk->assertMissing('marco/_tmp/abcdef/000.jpg');
+    $this->disk->assertMissing('marco/_tmp/abcdef/001.jpeg');
+    $this->disk->assertMissing('marco/_tmp/abcdef/002.png');
+  }
+
   public function test_deleteIdentity() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
     $this->disk->put('marcohern@gmail.com/games/death-stranding/000/cover/mdpi.txt','HELLO DIMAGE');
@@ -193,6 +207,8 @@ class StorageManagerTest extends TestCase {
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/000/cover/mdpi.txt');
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/002/icon/ldpi.txt');
   }
+
+  
 
   public function test_deleteStaging() {
     $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
@@ -272,6 +288,19 @@ class StorageManagerTest extends TestCase {
     );
   }
 
+  public function test_indexes() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
+    $this->disk->put('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/002/icon/ldpi.txt','HELLO DIMAGE');
+
+    $this->assertSame(
+      [
+        'marcohern@gmail.com/games/death-stranding/002',
+        'marcohern@gmail.com/games/death-stranding/004',
+      ], $this->sm->indexes('marcohern@gmail.com','games','death-stranding')
+    );
+  }
+
   public function test_profiles() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/002/boxart/hdpi.txt','HELLO DIMAGE');
     $this->disk->put('marcohern@gmail.com/games/death-stranding/002/cover/mdpi.txt','HELLO DIMAGE');
@@ -296,5 +325,25 @@ class StorageManagerTest extends TestCase {
       ],
       $this->sm->derivatives('marcohern@gmail.com','games','death-stranding',2,'boxart')
     );
+  }
+
+  public function test_switchIndex() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO ONE!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/cover/hdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/boxart/mdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/icon/xxhdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/005.txt','HELLO FIVE!');
+
+    $this->sm->switchIndex('marcohern@gmail.com','games','death-stranding',3, 0);
+
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000/cover/hdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000/boxart/mdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000/icon/xxhdpi.txt');
+
+    $this->sm->switchIndex('marcohern@gmail.com','games','death-stranding',1, 5);
+    $this->assertEquals('HELLO FIVE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/001.txt'));
+    $this->assertEquals('HELLO ONE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/005.txt'));
   }
 }

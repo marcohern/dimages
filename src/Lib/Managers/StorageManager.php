@@ -199,9 +199,17 @@ class StorageManager {
       $this->move($sourceDimage, $targetDimage);
       $this->move($tmpDimage, $sourceDimage);
 
-      $disk->move($targetIndexFolder, $tmpFolder);
-      $disk->move($sourceIndexFolder, $targetIndexFolder);
-      $disk->move($tmpFolder, $sourceIndexFolder);
+      if ($disk->exists($sourceIndexFolder)) {
+        if ($disk->exists($targetIndexFolder)) {
+          $disk->move($targetIndexFolder, $tmpFolder);
+          $disk->move($sourceIndexFolder, $targetIndexFolder);
+          $disk->move($tmpFolder, $sourceIndexFolder);
+        } else {
+          $disk->move($sourceIndexFolder, $targetIndexFolder);
+        }
+      } else if ($disk->exists($targetIndexFolder)) {
+        $disk->move($targetIndexFolder, $sourceIndexFolder);
+      }
     }
   }
 
