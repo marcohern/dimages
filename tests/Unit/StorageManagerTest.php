@@ -54,6 +54,31 @@ class StorageManagerTest extends TestCase {
     $this->assertEquals('HELLO DIMAGE',$this->sm->content($dimage));
   }
 
+  public function test_destroy() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
+    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi', 'marcohern@gmail.com');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $this->sm->destroy($dimage);
+    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+  }
+
+  public function test_put() {
+    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi', 'marcohern@gmail.com');
+    $content = 'HELLO CONTENT!';
+    $this->sm->put($dimage,$content);
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $this->assertSame($this->disk->get('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt'), 'HELLO CONTENT!');
+  }
+
+  public function test_deleteIndex() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/004.txt','HELLO DIMAGE');
+    
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $this->sm->deleteIndex('marcohern@gmail.com','games','death-stranding',4);
+    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+  }
+
   public function test_deleteSingle() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
 
@@ -84,6 +109,41 @@ class StorageManagerTest extends TestCase {
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/000/cover/mdpi.txt');
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/002/icon/ldpi.txt');
+  }
+
+  public function test_move() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
+
+    $source = DimageFile::fromFilePath('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $target = DimageFile::fromFilePath('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
+
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $this->disk->assertMissing('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
+
+    $this->sm->move($source, $target);
+
+    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
+    $this->disk->assertExists('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
+  }
+
+  public function test_attach() {
+    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
+
+    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/002.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/000.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004.txt');
+
+    $this->sm->attach('marcohern@gmail.com','abcdefg','games','death-stranding');
+
+    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt');
+
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/002.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004.txt');
   }
 
   public function test_deleteIdentity() {
@@ -204,40 +264,5 @@ class StorageManagerTest extends TestCase {
       ],
       $this->sm->derivatives('marcohern@gmail.com','games','death-stranding',2,'boxart')
     );
-  }
-
-  public function test_move() {
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
-
-    $source = DimageFile::fromFilePath('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
-    $target = DimageFile::fromFilePath('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
-
-    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
-    $this->disk->assertMissing('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
-
-    $this->sm->move($source, $target);
-
-    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
-    $this->disk->assertExists('giovanni.castellanos/games/death-stranding/000/cover/mdpi.txt');
-  }
-
-  public function test_attach() {
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
-
-    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/002.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/000.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004.txt');
-
-    $this->sm->attach('marcohern@gmail.com','abcdefg','games','death-stranding');
-
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt');
-
-    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/002.txt');
-    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
-    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004.txt');
   }
 }
