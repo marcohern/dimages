@@ -146,6 +146,38 @@ class StorageManagerTest extends TestCase {
     $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004.txt');
   }
 
+  public function test_store() {
+    $dimage = DimageFile::fromFilePath('giovanni.castellanos/games/death-stranding/000.jpg');
+    $upload = UploadedFile::fake()->image('test1.jpg');
+
+    $this->sm->store($dimage, $upload);
+    $this->disk->assertExists('giovanni.castellanos/games/death-stranding/000.jpg');
+  }
+
+  public function test_storeIdentity() {
+    $upload1 = UploadedFile::fake()->image('test1.jpg');
+    $upload2 = UploadedFile::fake()->image('test1.jpeg');
+    $upload3 = UploadedFile::fake()->image('test1.png');
+    $this->sm->storeIdentity('giovanni.castellanos','games','death-stranding', $upload1);
+    $this->sm->storeIdentity('giovanni.castellanos','games','death-stranding', $upload2);
+    $this->sm->storeIdentity('giovanni.castellanos','games','death-stranding', $upload3);
+
+    $this->disk->assertExists('giovanni.castellanos/games/death-stranding/000.jpg');
+    $this->disk->assertExists('giovanni.castellanos/games/death-stranding/001.jpeg');
+    $this->disk->assertExists('giovanni.castellanos/games/death-stranding/002.png');
+  }
+
+  public function test_updateIdentity() {
+    $upload1 = UploadedFile::fake()->image('test1.jpg');
+    $upload2 = UploadedFile::fake()->image('test2.png');
+
+    $this->disk->putFileAs('giovanni.castellanos/games/death-stranding',$upload1, '001.jpg');
+    $this->sm->updateIdentity('giovanni.castellanos','games','death-stranding', 1, $upload2);
+
+    $this->disk->assertMissing('giovanni.castellanos/games/death-stranding/001.jpg');
+    $this->disk->assertExists ('giovanni.castellanos/games/death-stranding/001.png');
+  }
+
   public function test_deleteIdentity() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
     $this->disk->put('marcohern@gmail.com/games/death-stranding/000/cover/mdpi.txt','HELLO DIMAGE');

@@ -94,16 +94,19 @@ class StorageManager {
   }
 
   public function updateIdentity(string $tenant, string $entity, string $identity, int $index, UploadedFile $upload) {
-    $dimage = new DimageFile(
-      $entity, $identity,
-      $index,
-      $upload->getClientOriginalExtension(),
-      '', '', $tenant
-    );
-    if (!$this->exists($dimage)) throw new DimageNotFoundException("Image not found: $tenant/$entity/$identity/$index");
-    $this->store($dimage, $upload);
-    $this->deleteIndex($tenant, $entity, $identity, $index);
-    return $dimage;
+    $files = $this->sources($tenant, $entity, $identity);
+    foreach ($files as $file) {
+      $old = DimageFile::fromFilePath($file);
+      if ($old->index === $index) {
+        $new = clone $old;
+        $new->ext = $upload->getClientOriginalExtension();
+        if ($old->ext != $new->ext)
+          $this->deleteIndex($tenant, $entity, $identity, $index);
+        $this->store($new, $upload);
+        return $new;
+      }
+    }
+    throw new DimageNotFoundException("Image not found: $tenant/$entity/$identity/$index");
   }
 
   public function stageIdentity(string $tenant, string $session, UploadedFile $upload) {
