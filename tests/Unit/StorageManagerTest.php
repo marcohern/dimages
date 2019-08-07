@@ -33,13 +33,13 @@ class StorageManagerTest extends TestCase {
     $dimage = new DimageFile('games','death-stranding',123,'jpeg','cover','hdpi');
 
     $this->assertEquals(
-      '/storage/_global/games/death-stranding/123/cover/hdpi.jpeg',
+      '/storage/_anyone/games/death-stranding/123/cover/hdpi.jpeg',
       $this->sm->url($dimage)
     );
   }
 
   public function test_exists() {
-    $this->disk->put('_global/games/death-stranding/004/boxart/hdpi.txt','HELLO');
+    $this->disk->put('_anyone/games/death-stranding/004/boxart/hdpi.txt','HELLO');
 
     $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi');
 
