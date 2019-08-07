@@ -346,4 +346,22 @@ class StorageManagerTest extends TestCase {
     $this->assertEquals('HELLO FIVE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/001.txt'));
     $this->assertEquals('HELLO ONE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/005.txt'));
   }
+
+  public function test_normalize() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO ONE!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/cover/hdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/boxart/mdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/icon/xxhdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/005.txt','HELLO FIVE!');
+
+    $this->sm->normalize('marcohern@gmail.com','games','death-stranding');
+
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/001.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/001/cover/hdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/001/boxart/mdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/001/icon/xxhdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/002.txt');
+  }
 }
