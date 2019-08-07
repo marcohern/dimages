@@ -30,7 +30,7 @@ class StorageManagerTest extends TestCase {
   }
 
   public function test_url() {
-    $dimage = new DimageFile('games','death-stranding',123,'jpeg','cover','hdpi');
+    $dimage = new DimageFile('death-stranding',123,'jpeg','games','cover','hdpi');
 
     $this->assertEquals(
       '/storage/_anyone/games/death-stranding/123/cover/hdpi.jpeg',
@@ -41,7 +41,7 @@ class StorageManagerTest extends TestCase {
   public function test_exists() {
     $this->disk->put('_anyone/games/death-stranding/004/boxart/hdpi.txt','HELLO');
 
-    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi');
+    $dimage = new DimageFile('death-stranding',4,'txt','games','boxart','hdpi');
 
     $this->assertTrue($this->sm->exists($dimage));
   }
@@ -49,21 +49,21 @@ class StorageManagerTest extends TestCase {
   public function test_content() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
 
-    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi', 'marcohern@gmail.com');
+    $dimage = new DimageFile('death-stranding',4,'txt','games','boxart','hdpi', 'marcohern@gmail.com');
 
     $this->assertEquals('HELLO DIMAGE',$this->sm->content($dimage));
   }
 
   public function test_destroy() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
-    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi', 'marcohern@gmail.com');
+    $dimage = new DimageFile('death-stranding',4,'txt','games','boxart','hdpi', 'marcohern@gmail.com');
     $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
     $this->sm->destroy($dimage);
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
   }
 
   public function test_put() {
-    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi', 'marcohern@gmail.com');
+    $dimage = new DimageFile('death-stranding',4,'txt','games','boxart','hdpi', 'marcohern@gmail.com');
     $content = 'HELLO CONTENT!';
     $this->sm->put($dimage,$content);
     $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
@@ -82,7 +82,7 @@ class StorageManagerTest extends TestCase {
   public function test_deleteSingle() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
 
-    $dimage = new DimageFile('games','death-stranding',4,'txt','boxart','hdpi', 'marcohern@gmail.com');
+    $dimage = new DimageFile('death-stranding',4,'txt','games','boxart','hdpi', 'marcohern@gmail.com');
 
     $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
 

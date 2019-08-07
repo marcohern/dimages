@@ -27,10 +27,17 @@ class DimageFile {
     }
     $m = (object)$m;
     
-    return new DimageFile($m->entity, $m->identity, 0+$m->index, $m->ext, $m->profile, $m->density, $m->tenant);
+    return new DimageFile(
+      $m->identity, 0+$m->index, $m->ext,
+      $m->entity, $m->profile, $m->density, $m->tenant);
   }
 
-  public function __construct($entity, $identity, $index, $ext, $profile='', $density='', $tenant=DimageConstants::DFTENANT) {
+  public function __construct(
+    string $identity, int $index, string $ext,
+    string $entity = DimageConstants::DFENTITY,
+    string $profile='', string $density='',
+    string $tenant=DimageConstants::DFTENANT)
+  {
     $this->entity = $entity;
     $this->identity = $identity;
     $this->index = $index;
@@ -53,8 +60,8 @@ class DimageFile {
 
   public function source(): DimageFile {
     return new DimageFile(
-      $this->entity, $this->identity, $this->index,
-      $this->ext, '', '', $this->tenant);
+      $this->identity, $this->index, $this->ext,
+      $this->entity, '', '', $this->tenant);
   }
 
   public function toFilePath(): string {

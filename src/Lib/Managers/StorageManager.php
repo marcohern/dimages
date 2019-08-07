@@ -90,10 +90,9 @@ class StorageManager {
   public function storeIdentity(string $tenant, string $entity, string $identity, UploadedFile $upload) {
     $sequencer = new DimageSequencer($entity, $identity, $tenant);
     $dimage = new DimageFile(
-      $entity, $identity,
-      $sequencer->next(),
+      $identity, $sequencer->next(),
       $upload->getClientOriginalExtension(),
-      '', '', $tenant
+      $entity, '', '', $tenant
     );
     $this->store($dimage, $upload);
     return $dimage;
@@ -198,7 +197,7 @@ class StorageManager {
       $this->move($sourceDimage, $targetDimage);
       if ($disk->exists($sourceIndexFolder)) $disk->move($sourceIndexFolder, $targetIndexFolder);
     } else {
-      $tmpDimage = new DimageFile($entity, $identity, $source, 'tmpx', '', '', $tenant);
+      $tmpDimage = new DimageFile($identity, $source, 'tmpx', $entity, '', '', $tenant);
       $tmpFolder = $this->fs->indexFolder($tenant, $entity, $identity, $source + 1000);
 
       $this->move($targetDimage, $tmpDimage);
