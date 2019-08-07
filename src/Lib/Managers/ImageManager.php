@@ -15,15 +15,16 @@ class ImageManager {
   protected $sm;
   protected $tenant = '_global';
   protected $flock;
+  protected $lockfile;
 
   public function __construct(StorageManager $sm) {
     $this->sm = $sm;
   }
 
   public function lopen(DimageFile $source) {
-    $lockfile = md5("{$source->tenant}.{$source->entity}.{$source->identity}.{$source->index}").".lock";
-    $filepath = storage_path($lockfile);
-    $this->flock = fopen($filepath, "a+");
+    $fname = md5("{$source->tenant}.{$source->entity}.{$source->identity}.{$source->index}").".lock";
+    $this->lockfile = storage_path($fname);
+    $this->flock = fopen($this->lockfile, "a+");
   }
 
   public function lock() {
@@ -116,8 +117,8 @@ class ImageManager {
 
     $this->lopen($source);
     if ($this->lock()) {
-      if ($this->sm->exists($derived)) return $derived;
-      $this->generate($source, $profile, $density);
+      if (!$this->sm->exists($derived)) 
+        $this->generate($source, $profile, $density);
       $this->unlock();
     }
     $this->lclose();
