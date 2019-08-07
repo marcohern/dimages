@@ -15,7 +15,7 @@ class DimageSequencer {
   /**
    * Storage scope
    */
-  protected $scope;
+  protected $scope = DimageConstants::SCOPE;
 
   /*
    * File system access
@@ -34,7 +34,6 @@ class DimageSequencer {
    * @param $identity Identity
    */
   public function __construct(string $entity, string $identity, string $tenant='_global') {
-    $this->scope = DimageConstants::FSSCOPE;
     $this->fs = Fs::getInstance();
     $this->filepath = $this->fs->sequencePath($tenant, $entity, $identity);
   }

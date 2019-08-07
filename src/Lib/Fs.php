@@ -56,11 +56,11 @@ class Fs {
   }
 
   public function stagingFolder(string $tenant) {
-    return $this->root("$tenant/_tmp");
+    return $this->root("$tenant/".DimageConstants::STAGING);
   }
 
   public function stagingSessionFolder(string $tenant, string $session) {
-    return $this->root("$tenant/_tmp/$session");
+    return $this->root("$tenant/".DimageConstants::STAGING."/$session");
   }
 
   public function sourcePath(string $tenant, string $entity, string $identity, int $index, string $ext): string {

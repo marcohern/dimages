@@ -67,14 +67,14 @@ class FsTest extends TestCase {
 
   public function test_stagingFolder() {
     $this->assertEquals(
-      'keanu-reeves/_tmp',
+      'keanu-reeves/_staging',
       $this->fs->stagingFolder('keanu-reeves')
     );
   }
 
   public function test_stagingSessionFolder() {
     $this->assertEquals(
-      'keanu-reeves/_tmp/abcdefg',
+      'keanu-reeves/_staging/abcdefg',
       $this->fs->stagingSessionFolder('keanu-reeves','abcdefg')
     );
   }

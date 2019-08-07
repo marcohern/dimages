@@ -4,9 +4,9 @@ namespace Marcohern\Dimages\Lib;
 
 class DimageConstants {
 
-  public const PADINDEX = 3;
-  public const FSSCOPE = 'dimages';
-  public const DIMROUTE  = '/dimages';
+  public const PADINDEX  = 3;
+  public const SCOPE     = 'dimages';
+  public const STAGING   = '_staging';
 
   public static $dimage = [
     'tenant'   => '(?<tenant>%idf)',

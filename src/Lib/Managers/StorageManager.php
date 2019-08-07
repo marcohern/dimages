@@ -15,7 +15,7 @@ use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class StorageManager {
-  protected $scope = DimageConstants::FSSCOPE;
+  protected $scope = DimageConstants::SCOPE;
   protected $fs;
 
   public function __construct() {

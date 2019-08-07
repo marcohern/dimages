@@ -127,9 +127,9 @@ class StorageManagerTest extends TestCase {
   }
 
   public function test_attach() {
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/002.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/000.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/004.txt','HELLO DIMAGE');
 
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/002.txt');
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/000.txt');
@@ -137,9 +137,9 @@ class StorageManagerTest extends TestCase {
 
     $this->sm->attach('marcohern@gmail.com','abcdefg','games','death-stranding');
 
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/002.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/000.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/004.txt');
 
     $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/002.txt');
     $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
@@ -187,9 +187,9 @@ class StorageManagerTest extends TestCase {
     $this->sm->stageIdentity('marco','abcdefg', $upload2);
     $this->sm->stageIdentity('marco','abcdefg', $upload3);
 
-    $this->disk->assertMissing('marco/_tmp/abcdef/000.jpg');
-    $this->disk->assertMissing('marco/_tmp/abcdef/001.jpeg');
-    $this->disk->assertMissing('marco/_tmp/abcdef/002.png');
+    $this->disk->assertMissing('marco/_staging/abcdef/000.jpg');
+    $this->disk->assertMissing('marco/_staging/abcdef/001.jpeg');
+    $this->disk->assertMissing('marco/_staging/abcdef/002.png');
   }
 
   public function test_deleteIdentity() {
@@ -211,43 +211,43 @@ class StorageManagerTest extends TestCase {
   
 
   public function test_deleteStaging() {
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/004.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/000.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/002.txt','HELLO DIMAGE');
 
-    $this->disk->assertExists('marcohern@gmail.com/_tmp/abcdefg/004.txt');
-    $this->disk->assertExists('marcohern@gmail.com/_tmp/abcdefg/000.txt');
-    $this->disk->assertExists('marcohern@gmail.com/_tmp/abcdefg/002.txt');
+    $this->disk->assertExists('marcohern@gmail.com/_staging/abcdefg/004.txt');
+    $this->disk->assertExists('marcohern@gmail.com/_staging/abcdefg/000.txt');
+    $this->disk->assertExists('marcohern@gmail.com/_staging/abcdefg/002.txt');
 
     $this->sm->deleteStaging('marcohern@gmail.com','abcdefg');
 
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/004.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/000.txt');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/002.txt');
   }
 
   public function test_deleteStagingForTenants() {
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
-    $this->disk->put('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
-    $this->disk->put('giovanni.castellanos/_tmp/tuvwxyz/000.txt','HELLO DIMAGE');
-    $this->disk->put('giovanni.castellanos/_tmp/tuvwxyz/002.txt','HELLO DIMAGE');
-    $this->disk->put('giovanni.castellanos/_tmp/tuvwxyz/003.txt','HELLO DIMAGE');
-    $this->disk->put('marco/_tmp/hijklmn/000.txt','HELLO DIMAGE');
-    $this->disk->put('marco/_tmp/hijklmn/001.txt','HELLO DIMAGE');
-    $this->disk->put('marco/_tmp/hijklmn/002.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/004.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/002.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/_staging/abcdefg/000.txt','HELLO DIMAGE');
+    $this->disk->put('giovanni.castellanos/_staging/tuvwxyz/000.txt','HELLO DIMAGE');
+    $this->disk->put('giovanni.castellanos/_staging/tuvwxyz/002.txt','HELLO DIMAGE');
+    $this->disk->put('giovanni.castellanos/_staging/tuvwxyz/003.txt','HELLO DIMAGE');
+    $this->disk->put('marco/_staging/hijklmn/000.txt','HELLO DIMAGE');
+    $this->disk->put('marco/_staging/hijklmn/001.txt','HELLO DIMAGE');
+    $this->disk->put('marco/_staging/hijklmn/002.txt','HELLO DIMAGE');
 
     $this->sm->deleteStagingForTenants(['marcohern@gmail.com','marco']);
 
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/004.txt','HELLO DIMAGE');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/002.txt','HELLO DIMAGE');
-    $this->disk->assertMissing('marcohern@gmail.com/_tmp/abcdefg/000.txt','HELLO DIMAGE');
-    $this->disk->assertExists('giovanni.castellanos/_tmp/tuvwxyz/000.txt','HELLO DIMAGE');
-    $this->disk->assertExists('giovanni.castellanos/_tmp/tuvwxyz/002.txt','HELLO DIMAGE');
-    $this->disk->assertExists('giovanni.castellanos/_tmp/tuvwxyz/003.txt','HELLO DIMAGE');
-    $this->disk->assertMissing('marco/_tmp/hijklmn/000.txt','HELLO DIMAGE');
-    $this->disk->assertMissing('marco/_tmp/hijklmn/001.txt','HELLO DIMAGE');
-    $this->disk->assertMissing('marco/_tmp/hijklmn/002.txt','HELLO DIMAGE');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/004.txt','HELLO DIMAGE');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/002.txt','HELLO DIMAGE');
+    $this->disk->assertMissing('marcohern@gmail.com/_staging/abcdefg/000.txt','HELLO DIMAGE');
+    $this->disk->assertExists('giovanni.castellanos/_staging/tuvwxyz/000.txt','HELLO DIMAGE');
+    $this->disk->assertExists('giovanni.castellanos/_staging/tuvwxyz/002.txt','HELLO DIMAGE');
+    $this->disk->assertExists('giovanni.castellanos/_staging/tuvwxyz/003.txt','HELLO DIMAGE');
+    $this->disk->assertMissing('marco/_staging/hijklmn/000.txt','HELLO DIMAGE');
+    $this->disk->assertMissing('marco/_staging/hijklmn/001.txt','HELLO DIMAGE');
+    $this->disk->assertMissing('marco/_staging/hijklmn/002.txt','HELLO DIMAGE');
   }
 
   public function test_tenants() {
