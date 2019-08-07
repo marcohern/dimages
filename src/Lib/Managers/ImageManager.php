@@ -7,7 +7,6 @@ use Intervention\Image\ImageManagerStatic as IImage;
 
 use Marcohern\Dimages\Lib\Files\DimageFile;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
-use Marcohern\Dimages\Lib\DimageFolders;
 use Marcohern\Dimages\Lib\Lockable;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;

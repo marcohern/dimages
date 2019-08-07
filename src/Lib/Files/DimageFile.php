@@ -3,11 +3,13 @@
 namespace Marcohern\Dimages\Lib\Files;
 
 use Marcohern\Dimages\Lib\Dimage;
-use Marcohern\Dimages\Lib\DimageFolders;
 use Marcohern\Dimages\Exceptions\SourceInvalidException;
 
+use Marcohern\Dimages\Lib\Fs;
 class DimageFile {
   
+  protected $fs;
+
   public $tenant = '_global';
   public $entity;
   public $identity;
@@ -35,6 +37,8 @@ class DimageFile {
     $this->profile = $profile;
     $this->density = $density;
     $this->tenant = $tenant;
+
+    $this->fs = Fs::getInstance();
   }
 
   public function isSource(): bool {
@@ -54,26 +58,26 @@ class DimageFile {
 
   public function toFilePath(): string {
     if ($this->isSource())
-      return DimageFolders::sourceFile(
+      return $this->fs->sourcePath(
         $this->tenant, $this->entity, $this->identity,
         $this->index, $this->ext);
     else
-      return DimageFolders::derived(
+      return $this->fs->derivedPath(
         $this->tenant, $this->entity, $this->identity,
         $this->index, $this->profile, $this->density, $this->ext);
   }
 
   public function toFolder(): string {
     if ($this->isSource())
-      return DimageFolders::sources($this->tenant, $this->entity, $this->identity);
+      return $this->fs->identityFolder($this->tenant, $this->entity, $this->identity);
     else
-      return DimageFolders::densities($this->tenant, $this->entity, $this->identity, $this->index, $this->profile);
+      return $this->fs->profileFolder($this->tenant, $this->entity, $this->identity, $this->index, $this->profile);
   }
 
   public function toFileName(): string {
     if ($this->isSource())
-      return DimageFolders::sourceFileName($this->index, $this->ext);
+      return $this->fs->sourceFile($this->index, $this->ext);
     else
-      return DimageFolders::derivedFileName($this->density, $this->ext);
+      return $this->fs->derivedFile($this->density, $this->ext);
   }
 }

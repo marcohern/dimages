@@ -6,16 +6,21 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 use Marcohern\Dimages\Lib\Files\DimageFile;
-use Marcohern\Dimages\Lib\DimageFolders;
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageSequencer;
 use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\Fs;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class StorageManager {
   protected $scope = DimageConstants::FSSCOPE;
+  protected $fs;
+
+  public function __construct() {
+    $this->fs = Fs::getInstance();
+  }
 
   public function setScope($scope) {
     $this->scope = $scope;
@@ -45,8 +50,8 @@ class StorageManager {
 
   public function deleteIndex(string $tenant, string $entity, string $identity, int $index) {
     $disk = Storage::disk($this->scope);
-    $folder = DimageFolders::profiles($tenant, $entity, $identity, $index);
-    $sourceFolder = DimageFolders::sources($tenant, $entity, $identity);
+    $folder = $this->fs->indexFolder($tenant, $entity, $identity, $index);
+    $sourceFolder = $this->fs->identityFolder($tenant, $entity, $identity);
     $files = $disk->files($sourceFolder);
     foreach ($files as $file) {
       $dimage = DimageFile::fromFilePath($file);
@@ -72,8 +77,8 @@ class StorageManager {
   }
 
   public function attach($tenant, $session, $targetEntity, $targetIdentity):void {
-    $source = DimageFolders::staging($tenant, $session);
-    $target = DimageFolders::sources($tenant, $targetEntity, $targetIdentity);
+    $source = $this->fs->stagingSessionFolder($tenant, $session);
+    $target = $this->fs->identityFolder($tenant, $targetEntity, $targetIdentity);
     Storage::disk($this->scope)->move($source, $target);
   }
 
@@ -115,18 +120,18 @@ class StorageManager {
   }
 
   public function deleteIdentity(string $tenant,string $entity,string $identity):void {
-    $folder = DimageFolders::sources($tenant, $entity, $identity);
+    $folder = $this->fs->identityFolder($tenant, $entity, $identity);
     Storage::disk($this->scope)->deleteDirectory($folder);
   }
 
   public function deleteStaging(string $tenant, string $session) : void {
-    $folder = DimageFolders::staging($tenant, $session);
+    $folder = $this->fs->stagingSessionFolder($tenant, $session);
     Storage::disk($this->scope)->deleteDirectory($folder);
   }
 
   public function deleteStagingForTenants(array $tenants) : void {
     foreach ($tenants as $tenant) {
-      $folder = DimageFolders::stagingFolder($tenant);
+      $folder = $this->fs->stagingFolder($tenant);
       Storage::disk($this->scope)->deleteDirectory($folder);
     }
   }
@@ -136,35 +141,35 @@ class StorageManager {
   }
 
   public function entities(string $tenant) : array {
-    $folder = DimageFolders::entities($tenant);
+    $folder = $this->fs->tenantFolder($tenant);
     $subfolders = Storage::disk($this->scope)->directories($folder);
     return DimageFunctions::suffix($subfolders, strlen($folder)+1);
   }
 
   public function identities(string $tenant, string $entity) : array {
-    $folder = DimageFolders::identities($tenant, $entity);
+    $folder = $this->fs->entityFolder($tenant, $entity);
     $subfolders = Storage::disk($this->scope)->directories($folder);
     return DimageFunctions::suffix($subfolders, strlen($folder)+1);
   }
 
   public function sources(string $tenant, string $entity, string $identity) : array {
-    $folder = DimageFolders::sources($tenant, $entity, $identity);
+    $folder = $this->fs->identityFolder($tenant, $entity, $identity);
     return Storage::disk($this->scope)->files($folder);
   }
 
   public function indexes(string $tenant, string $entity, string $identity) : array {
-    $folder = DimageFolders::sources($tenant, $entity, $identity);
+    $folder = $this->fs->identityFolder($tenant, $entity, $identity);
     return Storage::disk($this->scope)->directories($folder);
   }
 
   public function profiles(string $tenant, string $entity, string $identity, int $index) : array {
-    $folder = DimageFolders::profiles($tenant, $entity, $identity, $index);
+    $folder = $this->fs->indexFolder($tenant, $entity, $identity, $index);
     $subfolders = Storage::disk($this->scope)->directories($folder);
     return DimageFunctions::suffix($subfolders, strlen($folder)+1);
   }
 
   public function derivatives(string $tenant, string $entity, string $identity, int $index, string $profile) : array {
-    $folder = DimageFolders::derivatives($tenant, $entity, $identity, $index, $profile);
+    $folder = $this->fs->profileFolder($tenant, $entity, $identity, $index, $profile);
     return Storage::disk($this->scope)->files($folder);
   }
 
@@ -174,12 +179,12 @@ class StorageManager {
     $sourceDimage = null;
     $sourceIndexFolder = null;
     $targetDimage = null;
-    $targetIndexFolder = DimageFolders::profiles($tenant, $entity, $identity, $target);
+    $targetIndexFolder = $this->fs->indexFolder($tenant, $entity, $identity, $target);
     foreach ($files as $file) {
       $dimage = DimageFile::fromFilePath($file);
       if ($dimage->index === $source) {
         $sourceDimage = $dimage;
-        $sourceIndexFolder = DimageFolders::profiles($tenant, $entity, $identity, $source);
+        $sourceIndexFolder = $this->fs->indexFolder($tenant, $entity, $identity, $source);
       } else if ($dimage->index === $target) {
         $targetDimage = $dimage;
       }
@@ -194,7 +199,7 @@ class StorageManager {
       if ($disk->exists($sourceIndexFolder)) $disk->move($sourceIndexFolder, $targetIndexFolder);
     } else {
       $tmpDimage = new DimageFile($entity, $identity, $source, 'tmpx', '', '', $tenant);
-      $tmpFolder = DimageFolders::profiles($tenant, $entity, $identity, $source + 1000);
+      $tmpFolder = $this->fs->indexFolder($tenant, $entity, $identity, $source + 1000);
 
       $this->move($targetDimage, $tmpDimage);
       $this->move($sourceDimage, $targetDimage);

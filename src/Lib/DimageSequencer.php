@@ -5,6 +5,7 @@ namespace Marcohern\Dimages\Lib;
 use Illuminate\Support\Facades\Storage;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\DimageFolders;
+use Marcohern\Dimages\Lib\Fs;
 
 /**
  * Generate an index sequence for images
@@ -15,6 +16,11 @@ class DimageSequencer {
    * Storage scope
    */
   protected $scope;
+
+  /*
+   * File system access
+   */
+  protected $fs;
 
   /**
    * Name and path to file sequence
@@ -29,7 +35,8 @@ class DimageSequencer {
    */
   public function __construct(string $entity, string $identity, string $tenant='_global') {
     $this->scope = DimageConstants::FSSCOPE;
-    $this->filepath = DimageFolders::sequenceFile($tenant, $entity, $identity);
+    $this->fs = Fs::getInstance();
+    $this->filepath = $this->fs->sequencePath($tenant, $entity, $identity);
   }
 
   /**
