@@ -33,8 +33,7 @@ class DimageControllerTest extends TestCase
       ->assertOk()
       ->assertJson([
       'success' => true,
-      'xFile' => true,
-      'xUrl' => true
+      'xFile' => true
     ]);
   }
 

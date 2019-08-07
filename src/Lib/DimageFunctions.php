@@ -141,41 +141,6 @@ class DimageFunctions {
   }
 
   /**
-   * Return the image root folder
-   * 
-   * @param string root folder
-   */
-  public static function rootFolder() : string {
-    return DimageConstants::IMAGESUBDIR;
-  }
-
-  /**
-   * Return the entity folder
-   * 
-   * @param $entity Entity
-   * @return string entity folder
-   */
-  public static function entityFolder($entity) : string {
-    $folder = DimageConstants::RFILE_SUPERPATH;
-    $folder = str_replace('%entity'  , $entity  , $folder);
-    return DimageConstants::IMAGESUBDIR.'/'.$folder;
-  }
-
-  /**
-   * Generate the propper identity folder
-   * 
-   * @param $entity Enitty
-   * @param $identity Identity
-   * @return string identity folder
-   */
-  public static function identityFolder($entity, $identity) : string {
-    $folder = DimageConstants::RFILE_PATH;
-    $folder = str_replace('%entity'  , $entity  , $folder);
-    $folder = str_replace('%identity', $identity, $folder);
-    return DimageConstants::IMAGESUBDIR.'/'.$folder;
-  }
-
-  /**
    * Convert a list of dimages to file paths
    * 
    * @param $dimages list of images

@@ -53,23 +53,6 @@ class DimageFunctionsTest extends TestCase
     $this->assertSame(DimageFunctions::padIndex(1234), '1234');
   }
 
-  public function test_imageFomder() {
-    $folder = DimageFunctions::rootFolder();
-    $this->assertSame($folder, 'img');
-  }
-
-  public function test_entityFolder() {
-    $folder = DimageFunctions::entityFolder('movies');
-    
-    $this->assertSame($folder, 'img/movies');
-  }
-
-  public function test_identityFolder() {
-    $folder = DimageFunctions::identityFolder('movies','terminator');
-    
-    $this->assertSame($folder, 'img/movies/terminator');
-  }
-
   public function test_findVariables() {
     $vars = DimageFunctions::findVariables('%var1/%var2/%var3');
     $this->assertSame($vars, ['var1','var2','var3']);

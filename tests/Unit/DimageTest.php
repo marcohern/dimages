@@ -20,13 +20,8 @@ class DimageTest extends TestCase
     parent::tearDown();
   }
 
-  public function testXFileName()
+  public function testXFile()
   {
-    $this->assertNotEmpty(Dimage::xFileName());
-  }
-
-  public function testXUrl()
-  {
-    $this->assertNotEmpty(Dimage::xUrl());
+    $this->assertNotEmpty(Dimage::xFile());
   }
 }

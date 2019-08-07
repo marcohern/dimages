@@ -29,8 +29,7 @@ class DimageController extends Controller {
   public function status() {
     return [
       'success' => true,
-      'xFile' => Dimage::xFile(),
-      'xUrl' => Dimage::xUrl()
+      'xFile' => Dimage::xFile()
     ];
   }
 
