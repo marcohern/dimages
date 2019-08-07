@@ -8,35 +8,19 @@ use Intervention\Image\ImageManagerStatic as IImage;
 use Marcohern\Dimages\Lib\Files\DimageFile;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
 use Marcohern\Dimages\Lib\DimageFolders;
+use Marcohern\Dimages\Lib\Lockable;
+
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class ImageManager {
+
+  use Lockable;
+
   protected $sm;
-  protected $tenant = '_global';
-  protected $flock;
-  protected $lockfile;
 
   public function __construct(StorageManager $sm) {
     $this->sm = $sm;
-  }
-
-  public function lopen(DimageFile $source) {
-    $fname = md5("{$source->tenant}.{$source->entity}.{$source->identity}.{$source->index}").".lock";
-    $this->lockfile = storage_path($fname);
-    $this->flock = fopen($this->lockfile, "a+");
-  }
-
-  public function lock() {
-    return flock($this->flock, LOCK_EX);
-  }
-
-  public function unlock() {
-    flock($this->flock, LOCK_UN);
-  }
-
-  public function lclose() {
-    fclose($this->flock);
   }
 
   public function sources($tenant, $entity, $identity) {
@@ -114,14 +98,14 @@ class ImageManager {
     $derived = clone $dimage;
     $derived->profile = $profile;
     $derived->density = $density;
-
-    $this->lopen($source);
+    
+    $this->createLocksFolderIfNotExists();
+    $this->openlock($source);
     if ($this->lock()) {
-      if (!$this->sm->exists($derived)) 
-        $this->generate($source, $profile, $density);
+      if (!$this->sm->exists($derived)) $this->generate($source, $profile, $density);
       $this->unlock();
     }
-    $this->lclose();
+    $this->closelock();
 
     return $derived;
   }

@@ -12,7 +12,6 @@ class Dimage {
 
   public static function boot() {
     self::$xFile = DimageFunctions::regex(DimageConstants::FEXP, DimageConstants::$dimage);
-    
   }
 
   public static function shutdown() {

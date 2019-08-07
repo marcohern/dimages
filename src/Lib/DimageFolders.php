@@ -76,10 +76,8 @@ class DimageFolders {
   }
 
   public static function derived(
-    string $tenant,
-    string $entity, string $identity,
-    int $index,
-    string $profile, string $density,
+    string $tenant, string $entity, string $identity,
+    int $index, string $profile, string $density,
     string $ext)
   {
     $pindex = DimageFunctions::padIndex($index);
