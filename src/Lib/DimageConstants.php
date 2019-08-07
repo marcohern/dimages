@@ -7,6 +7,10 @@ class DimageConstants {
   public const PADINDEX  = 3;
   public const SCOPE     = 'dimages';
   public const STAGING   = '_staging';
+  public const SEQUENCE  = '_sequence';
+  public const DFTENANT  = '_anyone';
+  public const DFENTITY  = '_anything';
+  public const SETTINGS  = 'settings.cfg';
 
   public static $dimage = [
     'tenant'   => '(?<tenant>%idf)',

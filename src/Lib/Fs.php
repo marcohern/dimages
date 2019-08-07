@@ -2,6 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
+use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\DimageFunctions;
 
 class Fs {
@@ -86,7 +87,7 @@ class Fs {
   }
 
   public function sequencePath(string $tenant, string $entity, string $identity): string {
-    return $this->root("$tenant/_seq/$entity.$identity.id");
+    return $this->root("$tenant/".DimageConstants::SEQUENCE."/$entity.$identity.id");
   }
 
   public function settingsPath(string $tenant): string {

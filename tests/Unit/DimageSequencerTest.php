@@ -24,8 +24,8 @@ class DimageSequencerTest extends TestCase
     parent::tearDown();
   }
   public function test_get() {
-    $this->disk->put('marco-hernandez/_seq/test.image.id', 5);
-    $this->disk->put('_global/_seq/test.image.id', 13);
+    $this->disk->put('marco-hernandez/_sequence/test.image.id', 5);
+    $this->disk->put('_global/_sequence/test.image.id', 13);
 
     $sequencer = new DimageSequencer('test','image');
     $this->assertEquals(13, $sequencer->get());
@@ -40,12 +40,12 @@ class DimageSequencerTest extends TestCase
   public function test_put() {
     $sequencer = new DimageSequencer('test','image');
     $sequencer->put(3);
-    $this->disk->assertExists('_global/_seq/test.image.id');
+    $this->disk->assertExists('_global/_sequence/test.image.id');
     $this->assertEquals($sequencer->get(), 3);
   }
 
   public function test_next() {
-    $this->disk->put('_global/_seq/othertest.image.id', 8);
+    $this->disk->put('_global/_sequence/othertest.image.id', 8);
 
     $sequencer = new DimageSequencer('test','image');
     
@@ -61,14 +61,14 @@ class DimageSequencerTest extends TestCase
 
   public function test_drop() {
     
-    $this->disk->put('_global/_seq/othertest.image.id', 3);
+    $this->disk->put('_global/_sequence/othertest.image.id', 3);
 
-    $this->disk->assertExists('_global/_seq/othertest.image.id');
+    $this->disk->assertExists('_global/_sequence/othertest.image.id');
 
-    $sequencer = new DimageSequencer('test','image');
+    $sequencer = new DimageSequencer('othertest','image');
     $sequencer->drop();
     
-    $this->disk->assertMissing('seqs/test.image.id');
+    $this->disk->assertMissing('_global/_sequence/othertest.image.id');
 
   }
 }

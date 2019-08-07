@@ -109,7 +109,7 @@ class FsTest extends TestCase {
 
   public function test_sequencePath() {
     $this->assertEquals(
-      'keanu-reeves/_seq/motorcicles.mary-jane.id',
+      'keanu-reeves/_sequence/motorcicles.mary-jane.id',
       $this->fs->sequencePath('keanu-reeves','motorcicles','mary-jane')
     );
   }
