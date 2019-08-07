@@ -96,8 +96,8 @@ class ImageManager {
     $d = config("dimages.densities.$density");
     if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
     if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
-    $w = $p[0]*$d;
-    $h = $p[1]*$d;
+    $w = intval($p[0]*$d);
+    $h = intval($p[1]*$d);
     $targetContent = (string) IImage::make($sourceContent)->fit($w, $h)->encode($target->ext);
     $this->sm->put($target, $targetContent);
     return $target;
