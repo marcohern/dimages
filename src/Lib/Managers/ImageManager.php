@@ -88,15 +88,15 @@ class ImageManager {
     string $tenant, string $entity, string $identity,
     string $profile, string $density, int $index=0) : DimageFile
   {
-    
+    $dimage = $this->derivativeOrSource($tenant, $entity, $identity, $profile, $density, $index);
+    if ($dimage->isDerived()) return $dimage;
+
     $derived = null;
-    $lockfile = md5("$tenant.$entity.$identity.$profile.$density.$index").".lock";
+    $lockfile = md5("$tenant.$entity.$identity.$index").".lock";
     $filepath = storage_path($lockfile);
     $fp = fopen($filepath, "a+");
     if (flock($fp, LOCK_EX)) {
-      $dimage = $this->derivativeOrSource($tenant, $entity, $identity, $profile, $density, $index);
-      if ($dimage->isDerived()) $derived = $dimage;
-      else $derived = $this->generate($dimage, $profile, $density);
+      $derived = $this->generate($dimage, $profile, $density);
       flock($fp, LOCK_UN);
     }
 
