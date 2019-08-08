@@ -91,6 +91,6 @@ class Fs {
   }
 
   public function settingsPath(string $tenant): string {
-    return $this->root("$tenant/settings.cfg");
+    return $this->root("$tenant/".DimageConstants::SETTINGS);
   }
 }
