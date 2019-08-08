@@ -14,7 +14,7 @@ class FsDemoTest extends TestCase {
   protected function setUp():void {
     parent::setUp();
     $this->fs = new Fs;
-    $this->fs->setRoot('demo');
+    $this->fs->setRoot('_demo');
   }
 
   protected function tearDown():void {
@@ -32,65 +32,65 @@ class FsDemoTest extends TestCase {
   }
 
   public function test_rootFolder() {
-    $this->assertEquals('demo',$this->fs->rootFolder());
+    $this->assertEquals('_demo',$this->fs->rootFolder());
   }
 
   public function test_tenantFolder() {
-    $this->assertEquals('demo/john-wick',$this->fs->tenantFolder('john-wick'));
+    $this->assertEquals('_demo/john-wick',$this->fs->tenantFolder('john-wick'));
   }
 
   public function test_entityFolder() {
     $this->assertEquals(
-      'demo/keanu-reeves/motorcicles',
+      '_demo/keanu-reeves/motorcicles',
       $this->fs->entityFolder('keanu-reeves','motorcicles')
     );
   }
 
   public function test_identityFolder() {
     $this->assertEquals(
-      'demo/keanu-reeves/motorcicles/mary-jane',
+      '_demo/keanu-reeves/motorcicles/mary-jane',
       $this->fs->identityFolder('keanu-reeves','motorcicles','mary-jane')
     );
   }
 
   public function test_indexFolder() {
     $this->assertEquals(
-      'demo/keanu-reeves/motorcicles/mary-jane/026',
+      '_demo/keanu-reeves/motorcicles/mary-jane/026',
       $this->fs->indexFolder('keanu-reeves','motorcicles','mary-jane',26)
     );
   }
 
   public function test_profileFolder() {
     $this->assertEquals(
-      'demo/keanu-reeves/motorcicles/mary-jane/026/cover-art',
+      '_demo/keanu-reeves/motorcicles/mary-jane/026/cover-art',
       $this->fs->profileFolder('keanu-reeves','motorcicles','mary-jane',26,'cover-art')
     );
   }
 
   public function test_stagingFolder() {
     $this->assertEquals(
-      'demo/keanu-reeves/_staging',
+      '_demo/keanu-reeves/_staging',
       $this->fs->stagingFolder('keanu-reeves')
     );
   }
 
   public function test_stagingSessionFolder() {
     $this->assertEquals(
-      'demo/keanu-reeves/_staging/abcdefg',
+      '_demo/keanu-reeves/_staging/abcdefg',
       $this->fs->stagingSessionFolder('keanu-reeves','abcdefg')
     );
   }
 
   public function test_sourcePath() {
     $this->assertEquals(
-      'demo/keanu-reeves/motorcicles/mary-jane/026.jpeg',
+      '_demo/keanu-reeves/motorcicles/mary-jane/026.jpeg',
       $this->fs->sourcePath('keanu-reeves','motorcicles','mary-jane',26,'jpeg')
     );
   }
 
   public function test_derivedPath() {
     $this->assertEquals(
-      'demo/keanu-reeves/motorcicles/mary-jane/026/cover-art/xhdpi.jpeg',
+      '_demo/keanu-reeves/motorcicles/mary-jane/026/cover-art/xhdpi.jpeg',
       $this->fs->derivedPath('keanu-reeves','motorcicles','mary-jane',26,'cover-art','xhdpi','jpeg')
     );
   }
@@ -111,14 +111,14 @@ class FsDemoTest extends TestCase {
 
   public function test_sequencePath() {
     $this->assertEquals(
-      'demo/keanu-reeves/_sequence/motorcicles.mary-jane.id',
+      '_demo/keanu-reeves/_sequence/motorcicles.mary-jane.id',
       $this->fs->sequencePath('keanu-reeves','motorcicles','mary-jane')
     );
   }
 
   public function test_settingsPath() {
     $this->assertEquals(
-      'demo/keanu-reeves/settings.cfg',
+      '_demo/keanu-reeves/settings.cfg',
       $this->fs->settingsPath('keanu-reeves')
     );
   }
