@@ -11,12 +11,12 @@ class DimageFile {
   
   protected $fs;
 
-  public $tenant = '_global';
+  public $tenant;
   public $entity;
   public $identity;
   public $index;
-  public $profile = '';
-  public $density = '';
+  public $profile;
+  public $density;
   public $ext;
 
   public static function fromFilePath($filepath):DimageFile {
