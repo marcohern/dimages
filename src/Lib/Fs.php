@@ -26,8 +26,12 @@ class Fs {
   }
 
   public function root(string $suffix): string {
-    if (empty($this->prefix)) return $suffix;
-    else return "{$this->prefix}/$suffix";
+    if (empty($this->prefix)) {
+      if (empty($suffix)) return '';
+      else return $suffix;
+    }
+    else if (empty($suffix)) return $this->prefix;
+    return "{$this->prefix}/$suffix";
   }
 
   public function rootFolder(): string {
