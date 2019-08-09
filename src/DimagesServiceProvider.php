@@ -6,13 +6,15 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\ImageManagerStatic as IImage;
 
+use Marcohern\Dimages\Lib\Fs;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Console\Commands\DeleteLocksCommand;
 
 class DimagesServiceProvider extends ServiceProvider {
 
     public function boot() {
-
+      
+        $this->app->instance(Fs::class, Fs::getInstance());
         //Adding a stupid comment just to change the version
         $basePath = dirname(__DIR__);
 
