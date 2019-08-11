@@ -4,7 +4,6 @@ namespace Marcohern\Dimages\Lib;
 
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\DimageFunctions;
-
 class Fs {
   static $instance = null;
 
@@ -97,4 +96,6 @@ class Fs {
   public function settingsPath(string $tenant): string {
     return $this->root("$tenant/".DimageConstants::SETTINGS);
   }
+
+
 }
