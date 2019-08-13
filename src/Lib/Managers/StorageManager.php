@@ -7,7 +7,6 @@ use Illuminate\Http\UploadedFile;
 
 use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\DimageFunctions;
-use Marcohern\Dimages\Lib\DimageSequencer;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\Fs;
 

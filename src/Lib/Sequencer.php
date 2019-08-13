@@ -10,7 +10,7 @@ use Marcohern\Dimages\Lib\Fs;
 /**
  * Generate an index sequence for images
  */
-class DimageSequencer {
+class Sequencer {
 
   /**
    * Storage scope

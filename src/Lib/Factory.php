@@ -4,10 +4,6 @@ namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\DimageFile;
-use Marcohern\Dimages\Lib\DimageConstants;
-use Marcohern\Dimages\Lib\Settings;
-
 class Factory {
   protected $fs;
   protected $scope = DimageConstants::SCOPE;
@@ -35,7 +31,7 @@ class Factory {
     string $entity = DimageConstants::DFENTITY,
     string $tenant = DimageConstants::DFTENANT
   ) {
-    return new DimageSequencer($this->fs, $identity, $entity, $tenant);
+    return new Sequencer($this->fs, $identity, $entity, $tenant);
   }
 
   public function settings(string $tenant) : Settings 

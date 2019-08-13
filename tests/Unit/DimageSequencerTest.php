@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\DimageSequencer;
+use Marcohern\Dimages\Lib\Sequencer;
 use Marcohern\Dimages\Lib\Fs;
 
 class DimageSequencerTest extends TestCase
@@ -31,18 +31,18 @@ class DimageSequencerTest extends TestCase
     $this->disk->put('marco-hernandez/_sequence/test.image.id', 5);
     $this->disk->put('_anyone/_sequence/test.image.id', 13);
 
-    $sequencer = new DimageSequencer($this->fs, 'image', 'test');
+    $sequencer = new Sequencer($this->fs, 'image', 'test');
     $this->assertEquals(13, $sequencer->get());
 
-    $sequencer = new DimageSequencer($this->fs, 'image','test','marco-hernandez');
+    $sequencer = new Sequencer($this->fs, 'image','test','marco-hernandez');
     $this->assertEquals(5, $sequencer->get());
 
-    $sequencer = new DimageSequencer($this->fs, 'image','othertest','marco-hernandez');
+    $sequencer = new Sequencer($this->fs, 'image','othertest','marco-hernandez');
     $this->assertEquals(0, $sequencer->get());
   }
 
   public function test_put() {
-    $sequencer = new DimageSequencer($this->fs, 'image', 'test');
+    $sequencer = new Sequencer($this->fs, 'image', 'test');
     $sequencer->put(3);
     $this->disk->assertExists('_anyone/_sequence/test.image.id');
     $this->assertEquals($sequencer->get(), 3);
@@ -51,13 +51,13 @@ class DimageSequencerTest extends TestCase
   public function test_next() {
     $this->disk->put('_anyone/_sequence/othertest.image.id', 8);
 
-    $sequencer = new DimageSequencer($this->fs, 'image', 'test');
+    $sequencer = new Sequencer($this->fs, 'image', 'test');
     
     $this->assertEquals($sequencer->next(), 0);
     $this->assertEquals($sequencer->next(), 1);
     $this->assertEquals($sequencer->next(), 2);
 
-    $sequencer = new DimageSequencer($this->fs, 'image', 'othertest');
+    $sequencer = new Sequencer($this->fs, 'image', 'othertest');
     $this->assertEquals($sequencer->next(), 8);
     $this->assertEquals($sequencer->next(), 9);
     $this->assertEquals($sequencer->next(), 10);
@@ -69,7 +69,7 @@ class DimageSequencerTest extends TestCase
 
     $this->disk->assertExists('_anyone/_sequence/othertest.image.id');
 
-    $sequencer = new DimageSequencer($this->fs, 'image', 'othertest');
+    $sequencer = new Sequencer($this->fs, 'image', 'othertest');
     $sequencer->drop();
     
     $this->disk->assertMissing('_anyone/_sequence/othertest.image.id');
