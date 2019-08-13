@@ -4,7 +4,7 @@ namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\Files\DimageFile;
+use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\Settings;
 

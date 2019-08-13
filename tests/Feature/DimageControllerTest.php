@@ -2,7 +2,7 @@
 
 namespace Marcohern\Dimages\Tests\Feature;
 
-use Marcohern\Dimages\Lib\Files\DimageFile;
+use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\Factory;
 
 use Tests\TestCase;

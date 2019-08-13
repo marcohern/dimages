@@ -4,7 +4,7 @@ namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\File;
 use Marcohern\Dimages\Lib\DimageFunctions;
-use Marcohern\Dimages\Lib\Files\DimageFile;
+use Marcohern\Dimages\Lib\DimageFile;
 
 trait Lockable {
 

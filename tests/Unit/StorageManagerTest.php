@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 
-use Marcohern\Dimages\Lib\Files\DimageFile;
+use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
 use Marcohern\Dimages\Lib\Fs;
 use Marcohern\Dimages\Lib\Factory;

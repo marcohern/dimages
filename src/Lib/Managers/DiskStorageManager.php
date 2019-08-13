@@ -5,7 +5,7 @@ namespace Marcohern\Dimages\Lib\Managers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
-use Marcohern\Dimages\Lib\Files\DimageFile;
+use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\Fs;
