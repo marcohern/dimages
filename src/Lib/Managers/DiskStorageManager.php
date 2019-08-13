@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 use Marcohern\Dimages\Lib\DimageFile;
-use Marcohern\Dimages\Lib\DimageFunctions;
+use Marcohern\Dimages\Lib\Functions;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\Fs;
 use Marcohern\Dimages\Lib\Factory;
@@ -70,7 +70,7 @@ class DiskStorageManager {
   }
 
   public function deleteMultiple(array $dimages) : void {
-    $files = DimageFunctions::toFilePaths($dimages);
+    $files = Functions::toFilePaths($dimages);
     Storage::disk($this->scope)->delete($files);
   }
 
@@ -113,13 +113,13 @@ class DiskStorageManager {
   public function entities(string $tenant) : array {
     $folder = $this->fs->tenantFolder($tenant);
     $subfolders = Storage::disk($this->scope)->directories($folder);
-    return DimageFunctions::suffix($subfolders, strlen($folder)+1);
+    return Functions::suffix($subfolders, strlen($folder)+1);
   }
 
   public function identities(string $tenant, string $entity) : array {
     $folder = $this->fs->entityFolder($tenant, $entity);
     $subfolders = Storage::disk($this->scope)->directories($folder);
-    return DimageFunctions::suffix($subfolders, strlen($folder)+1);
+    return Functions::suffix($subfolders, strlen($folder)+1);
   }
 
   public function sources(string $tenant, string $entity, string $identity) : array {
@@ -135,7 +135,7 @@ class DiskStorageManager {
   public function profiles(string $tenant, string $entity, string $identity, int $index) : array {
     $folder = $this->fs->indexFolder($tenant, $entity, $identity, $index);
     $subfolders = Storage::disk($this->scope)->directories($folder);
-    return DimageFunctions::suffix($subfolders, strlen($folder)+1);
+    return Functions::suffix($subfolders, strlen($folder)+1);
   }
 
   public function derivatives(string $tenant, string $entity, string $identity, int $index, string $profile) : array {

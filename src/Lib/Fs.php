@@ -3,7 +3,7 @@
 namespace Marcohern\Dimages\Lib;
 
 use Marcohern\Dimages\Lib\DimageConstants;
-use Marcohern\Dimages\Lib\DimageFunctions;
+use Marcohern\Dimages\Lib\Functions;
 class Fs {
 
   protected $prefix = '';
@@ -42,12 +42,12 @@ class Fs {
   }
 
   public function indexFolder(string $tenant, string $entity, string $identity, int $index): string {
-    $pindex = DimageFunctions::padIndex($index);
+    $pindex = Functions::padIndex($index);
     return $this->root("$tenant/$entity/$identity/$pindex");
   }
 
   public function profileFolder(string $tenant, string $entity, string $identity, int $index, string $profile): string {
-    $pindex = DimageFunctions::padIndex($index);
+    $pindex = Functions::padIndex($index);
     return $this->root("$tenant/$entity/$identity/$pindex/$profile");
   }
 
@@ -60,7 +60,7 @@ class Fs {
   }
 
   public function sourcePath(string $tenant, string $entity, string $identity, int $index, string $ext): string {
-    $pindex = DimageFunctions::padIndex($index);
+    $pindex = Functions::padIndex($index);
     return $this->root("$tenant/$entity/$identity/$pindex.$ext");
   }
 
@@ -68,12 +68,12 @@ class Fs {
     string $tenant, string $entity, string $identity,
     int $index, string $profile, string $density, string $ext): string 
   {
-    $pindex = DimageFunctions::padIndex($index);
+    $pindex = Functions::padIndex($index);
     return $this->root("$tenant/$entity/$identity/$pindex/$profile/$density.$ext");
   }
 
   public function sourceFile(int $index, string $ext): string {
-    $pindex = DimageFunctions::padIndex($index);
+    $pindex = Functions::padIndex($index);
     return "$pindex.$ext";
   }
 

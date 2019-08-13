@@ -4,7 +4,7 @@ namespace Marcohern\Dimages\Lib;
 
 use Marcohern\Dimages\Lib\DimageConstants;
 
-class DimageFunctions {
+class Functions {
 
   public static function findVariables($source) {
     $m = [];
