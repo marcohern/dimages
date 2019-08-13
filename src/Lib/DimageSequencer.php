@@ -33,8 +33,12 @@ class DimageSequencer {
    * @param $entity Entity
    * @param $identity Identity
    */
-  public function __construct(string $entity, string $identity, string $tenant='_global') {
-    $this->fs = Fs::getInstance();
+  public function __construct(
+    Fs $fs, string $identity,
+    string $entity = DimageConstants::DFENTITY,
+    string $tenant = DimageConstants::DFTENANT
+  ) {
+    $this->fs = $fs;
     $this->filepath = $this->fs->sequencePath($tenant, $entity, $identity);
   }
 

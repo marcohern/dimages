@@ -17,7 +17,7 @@ use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 class StorageManager extends DiskStorageManager {
 
   public function storeIdentity(string $tenant, string $entity, string $identity, UploadedFile $upload) {
-    $sequencer = new DimageSequencer($entity, $identity, $tenant);
+    $sequencer = $this->factory->sequencer($identity, $entity, $tenant);
     $dimage = $this->factory->dimageFile(
       $identity, $upload->getClientOriginalExtension(),
       $sequencer->next(), $entity, '', '', $tenant
@@ -54,7 +54,7 @@ class StorageManager extends DiskStorageManager {
         $this->switchIndex($tenant, $entity, $identity, $dimage->index, $i);
     }
     
-    $sequencer = new DimageSequencer($tenant, $entity, $identity);
+    $sequencer = $this->factory->sequencer($identity, $entity, $tenant);
     $sequencer->put(count($files));
   }
 }

@@ -25,4 +25,12 @@ class Factory {
   {
     return DimageFile::fromFilePath($this->fs, $filepath);
   }
+
+  public function sequencer(
+    string $identity, 
+    string $entity = DimageConstants::DFENTITY,
+    string $tenant = DimageConstants::DFTENANT
+  ) {
+    return new DimageSequencer($this->fs, $identity, $entity, $tenant);
+  }
 }
