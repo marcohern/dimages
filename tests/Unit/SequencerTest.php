@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Marcohern\Dimages\Lib\Sequencer;
 use Marcohern\Dimages\Lib\Fs;
 
-class DimageSequencerTest extends TestCase
+class SequencerTest extends TestCase
 {
   protected $disk = null;
   protected $fs;

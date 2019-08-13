@@ -10,7 +10,7 @@ use Marcohern\Dimages\Lib\Functions;
 use Marcohern\Dimages\Lib\DimageName;
 use Marcohern\Dimages\Lib\Dimage;
 
-class DimageFunctionsTest extends TestCase
+class FunctionsTest extends TestCase
 {
 
   protected function setUp() : void {
