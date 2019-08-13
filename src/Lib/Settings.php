@@ -27,6 +27,14 @@ class Settings {
       return $this->profiles[$profile];
     throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9922);
   }
+
+  public function setDensity(string $density, float $value): void {
+    $this->densities[$density] = $value;
+  }
+
+  public function setProfile(string $profile, int $width, int $height): void {
+    $this->profiles[$profile] = [$width, $height];
+  }
   
   public function __construct(Fs $fs, string $tenant, array $densities, array $profiles) {
     $this->fs = $fs;
