@@ -10,16 +10,19 @@ use Marcohern\Dimages\Lib\DimageFunctions;
 use Marcohern\Dimages\Lib\DimageSequencer;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\Fs;
+use Marcohern\Dimages\Lib\Factory;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class DiskStorageManager {
   protected $scope = DimageConstants::SCOPE;
+  protected $factory;
   protected $fs;
 
-  public function __construct() {
-    $this->fs = Fs::getInstance();
+  public function __construct(Factory $factory, Fs $fs) {
+    $this->fs = $fs;
+    $this->factory = $factory;
   }
 
   public function setScope($scope) {
@@ -54,7 +57,7 @@ class DiskStorageManager {
     $sourceFolder = $this->fs->identityFolder($tenant, $entity, $identity);
     $files = $disk->files($sourceFolder);
     foreach ($files as $file) {
-      $dimage = DimageFile::fromFilePath($file);
+      $dimage = $this->factory->dimageFileFromPath($file);
       if ($dimage->index === $index) {
         $this->destroy($dimage);
         break;
@@ -149,7 +152,7 @@ class DiskStorageManager {
     $targetDimage = null;
     $targetIndexFolder = $this->fs->indexFolder($tenant, $entity, $identity, $target);
     foreach ($files as $file) {
-      $dimage = DimageFile::fromFilePath($file);
+      $dimage = $this->factory->dimageFileFromPath($file);
       if ($dimage->index === $source) {
         $sourceDimage = $dimage;
         $sourceIndexFolder = $this->fs->indexFolder($tenant, $entity, $identity, $source);
@@ -166,7 +169,7 @@ class DiskStorageManager {
       $this->move($sourceDimage, $targetDimage);
       if ($disk->exists($sourceIndexFolder)) $disk->move($sourceIndexFolder, $targetIndexFolder);
     } else {
-      $tmpDimage = new DimageFile($identity, $source, 'tmpx', $entity, '', '', $tenant);
+      $tmpDimage = $this->factory->dimageFile($identity, 'tmpx', $source, $entity, '', '', $tenant);
       $tmpFolder = $this->fs->indexFolder($tenant, $entity, $identity, $source + 1000);
 
       $this->move($targetDimage, $tmpDimage);

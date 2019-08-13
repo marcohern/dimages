@@ -55,10 +55,11 @@ class DimageFile {
 
   /**
    * Create a DimageFile instance from the file path.
+   * @param Fs $fs File system access
    * @param string $filepath Image file path
    * @return Marcohern\Dimages\Lib\Files\DimageFile
    */
-  public static function fromFilePath(string $filepath):DimageFile {
+  public static function fromFilePath(Fs $fs, string $filepath):DimageFile {
     $m = null;
     $r = preg_match(Dimage::xFile(),$filepath, $m);
     if (!$r) {
@@ -67,7 +68,7 @@ class DimageFile {
     $m = (object)$m;
     
     return new DimageFile(
-      $m->identity, 0+$m->index, $m->ext,
+      $fs, $m->identity, $m->ext, 0+$m->index,
       $m->entity, $m->profile, $m->density, $m->tenant);
   }
 
@@ -82,7 +83,8 @@ class DimageFile {
    * @param string $tenant Tenant or User
    */
   public function __construct(
-    string $identity, int $index, string $ext,
+    Fs $fs,
+    string $identity, string $ext, int $index = 0, 
     string $entity = DimageConstants::DFENTITY,
     string $profile='', string $density='',
     string $tenant=DimageConstants::DFTENANT)
@@ -123,7 +125,7 @@ class DimageFile {
    * @return Marcohern\Dimages\Lib\Files\DimageFile The source image.
    */
   public function source(): DimageFile {
-    return new DimageFile(
+    return new DimageFile($this->fs,
       $this->identity, $this->index, $this->ext,
       $this->entity, '', '', $this->tenant);
   }

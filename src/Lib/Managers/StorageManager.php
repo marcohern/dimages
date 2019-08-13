@@ -18,10 +18,9 @@ class StorageManager extends DiskStorageManager {
 
   public function storeIdentity(string $tenant, string $entity, string $identity, UploadedFile $upload) {
     $sequencer = new DimageSequencer($entity, $identity, $tenant);
-    $dimage = new DimageFile(
-      $identity, $sequencer->next(),
-      $upload->getClientOriginalExtension(),
-      $entity, '', '', $tenant
+    $dimage = $this->factory->dimageFile(
+      $identity, $upload->getClientOriginalExtension(),
+      $sequencer->next(), $entity, '', '', $tenant
     );
     $this->store($dimage, $upload);
     return $dimage;
@@ -30,7 +29,7 @@ class StorageManager extends DiskStorageManager {
   public function updateIdentity(string $tenant, string $entity, string $identity, int $index, UploadedFile $upload) {
     $files = $this->sources($tenant, $entity, $identity);
     foreach ($files as $file) {
-      $old = DimageFile::fromFilePath($file);
+      $old = $this->factory->dimageFileFromPath($file);
       if ($old->index === $index) {
         $new = clone $old;
         $new->ext = $upload->getClientOriginalExtension();
@@ -50,7 +49,7 @@ class StorageManager extends DiskStorageManager {
   public function normalize(string $tenant, string $entity, string $identity) : void {
     $files = $this->sources($tenant, $entity, $identity);
     foreach ($files as $i => $file) {
-      $dimage = DimageFile::fromFilePath($file);
+      $dimage = $this->factory->dimageFileFromPath($file);
       if ($dimage->index != $i)
         $this->switchIndex($tenant, $entity, $identity, $dimage->index, $i);
     }

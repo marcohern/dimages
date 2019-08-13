@@ -8,6 +8,7 @@ use Intervention\Image\ImageManagerStatic as IImage;
 use Marcohern\Dimages\Lib\Files\DimageFile;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
 use Marcohern\Dimages\Lib\Lockable;
+use Marcohern\Dimages\Lib\Factory;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
@@ -17,16 +18,18 @@ class ImageManager {
   use Lockable;
 
   protected $sm;
+  protected $fs;
 
-  public function __construct(StorageManager $sm) {
+  public function __construct(StorageManager $sm, Factory $factory) {
     $this->sm = $sm;
+    $this->factory = $factory;
   }
 
   public function sources($tenant, $entity, $identity) {
     $files = $this->sm->sources($tenant, $entity, $identity);
     $dimages = [];
     foreach ($files as $file) {
-      $dimages[] = DimageFile::fromFilePath($file);
+      $dimages[] = $this->factory->dimageFileFromPath($file);
     }
     return $dimages;
   }
@@ -34,7 +37,7 @@ class ImageManager {
   public function source(string $tenant, string $entity, string $identity, int $index=0):DimageFile {
     $files = $this->sm->sources($tenant, $entity, $identity);
     foreach ($files as $file) {
-      $source = DimageFile::fromFilePath($file);
+      $source = $this->factory->dimageFileFromPath($file);
       if ($source->index === $index) {
         return $source;
       }
@@ -48,7 +51,7 @@ class ImageManager {
   ) : DimageFile {
     $files = $this->sm->derivatives($tenant, $entity, $identity, $index, $profile);
     foreach ($files as $file) {
-      $target = DimageFile::fromFilePath($file);
+      $target = $this->factory->dimageFileFromPath($file);
       if ($target->density === $density) {
         return $target;
       }
@@ -56,7 +59,7 @@ class ImageManager {
 
     $files = $this->sm->sources($tenant, $entity, $identity);
     foreach ($files as $file) {
-      $source = DimageFile::fromFilePath($file);
+      $source = $this->factory->dimageFileFromPath($file);
       if ($source->index === $index) {
         return $source;
       }
