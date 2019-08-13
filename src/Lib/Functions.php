@@ -2,8 +2,6 @@
 
 namespace Marcohern\Dimages\Lib;
 
-use Marcohern\Dimages\Lib\DimageConstants;
-
 class Functions {
 
   public static function findVariables($source) {
@@ -43,7 +41,7 @@ class Functions {
    * @return string Padded index
    */
   public static function padIndex($index) : string {
-    return self::pad($index, DimageConstants::PADINDEX);
+    return self::pad($index, Constants::PADINDEX);
   }
 
   /**

@@ -2,7 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
-class DimageConstants {
+class Constants {
 
   public const PADINDEX  = 3;
   public const SCOPE     = 'dimages';

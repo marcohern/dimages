@@ -3,9 +3,6 @@
 namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\Storage;
-use Marcohern\Dimages\Lib\DimageConstants;
-use Marcohern\Dimages\Lib\DimageFolders;
-use Marcohern\Dimages\Lib\Fs;
 
 /**
  * Generate an index sequence for images
@@ -15,7 +12,7 @@ class Sequencer {
   /**
    * Storage scope
    */
-  protected $scope = DimageConstants::SCOPE;
+  protected $scope = Constants::SCOPE;
 
   /*
    * File system access
@@ -35,8 +32,8 @@ class Sequencer {
    */
   public function __construct(
     Fs $fs, string $identity,
-    string $entity = DimageConstants::DFENTITY,
-    string $tenant = DimageConstants::DFTENANT
+    string $entity = Constants::DFENTITY,
+    string $tenant = Constants::DFTENANT
   ) {
     $this->fs = $fs;
     $this->filepath = $this->fs->sequencePath($tenant, $entity, $identity);

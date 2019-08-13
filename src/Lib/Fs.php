@@ -2,7 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
-use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\Constants;
 use Marcohern\Dimages\Lib\Functions;
 class Fs {
 
@@ -52,11 +52,11 @@ class Fs {
   }
 
   public function stagingFolder(string $tenant) {
-    return $this->root("$tenant/".DimageConstants::STAGING);
+    return $this->root("$tenant/".Constants::STAGING);
   }
 
   public function stagingSessionFolder(string $tenant, string $session) {
-    return $this->root("$tenant/".DimageConstants::STAGING."/$session");
+    return $this->root("$tenant/".Constants::STAGING."/$session");
   }
 
   public function sourcePath(string $tenant, string $entity, string $identity, int $index, string $ext): string {
@@ -82,11 +82,11 @@ class Fs {
   }
 
   public function sequencePath(string $tenant, string $entity, string $identity): string {
-    return $this->root("$tenant/".DimageConstants::SEQUENCE."/$entity.$identity.id");
+    return $this->root("$tenant/".Constants::SEQUENCE."/$entity.$identity.id");
   }
 
   public function settingsPath(string $tenant): string {
-    return $this->root("$tenant/".DimageConstants::SETTINGS);
+    return $this->root("$tenant/".Constants::SETTINGS);
   }
 
 

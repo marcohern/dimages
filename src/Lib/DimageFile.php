@@ -3,7 +3,7 @@
 namespace Marcohern\Dimages\Lib;
 
 use Marcohern\Dimages\Lib\Dimage;
-use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\Constants;
 use Marcohern\Dimages\Lib\Fs;
 
 use Marcohern\Dimages\Exceptions\SourceInvalidException;
@@ -85,9 +85,9 @@ class DimageFile {
   public function __construct(
     Fs $fs,
     string $identity, string $ext, int $index = 0, 
-    string $entity = DimageConstants::DFENTITY,
+    string $entity = Constants::DFENTITY,
     string $profile='', string $density='',
-    string $tenant=DimageConstants::DFTENANT)
+    string $tenant=Constants::DFTENANT)
   {
     $this->entity = $entity;
     $this->identity = $identity;

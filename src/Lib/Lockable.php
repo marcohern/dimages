@@ -3,12 +3,10 @@
 namespace Marcohern\Dimages\Lib;
 
 use Illuminate\Support\Facades\File;
-use Marcohern\Dimages\Lib\DimageConstants;
-use Marcohern\Dimages\Lib\DimageFile;
 
 trait Lockable {
 
-  protected static $storage = DimageConstants::LOCKS;
+  protected static $storage = Constants::LOCKS;
 
   protected $lock;
   protected $lockfile;

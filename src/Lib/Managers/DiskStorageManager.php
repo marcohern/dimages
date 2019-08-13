@@ -7,7 +7,7 @@ use Illuminate\Http\UploadedFile;
 
 use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\Functions;
-use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\Constants;
 use Marcohern\Dimages\Lib\Fs;
 use Marcohern\Dimages\Lib\Factory;
 
@@ -15,7 +15,7 @@ use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 
 class DiskStorageManager {
-  protected $scope = DimageConstants::SCOPE;
+  protected $scope = Constants::SCOPE;
   protected $factory;
   protected $fs;
 

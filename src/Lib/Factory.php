@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Factory {
   protected $fs;
-  protected $scope = DimageConstants::SCOPE;
+  protected $scope = Constants::SCOPE;
 
   public function __construct(Fs $fs) {
     $this->fs = $fs;
@@ -14,9 +14,9 @@ class Factory {
 
   public function dimageFile(
     string $identity, string $ext, int $index = 0,
-    string $entity = DimageConstants::DFENTITY,
+    string $entity = Constants::DFENTITY,
     string $profile = '', string $density = '',
-    string $tenant=DimageConstants::DFTENANT) : DimageFile 
+    string $tenant=Constants::DFTENANT) : DimageFile 
   {
     return new DimageFile($this->fs, $identity, $ext, $index, $entity, $profile, $density, $tenant);
   }
@@ -28,8 +28,8 @@ class Factory {
 
   public function sequencer(
     string $identity, 
-    string $entity = DimageConstants::DFENTITY,
-    string $tenant = DimageConstants::DFTENANT
+    string $entity = Constants::DFENTITY,
+    string $tenant = Constants::DFTENANT
   ) {
     return new Sequencer($this->fs, $identity, $entity, $tenant);
   }

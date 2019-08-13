@@ -2,7 +2,7 @@
 
 namespace Marcohern\Dimages\Lib;
 
-use Marcohern\Dimages\Lib\DimageConstants;
+use Marcohern\Dimages\Lib\Constants;
 use Marcohern\Dimages\Lib\Functions;
 
 class Dimage {
@@ -11,7 +11,7 @@ class Dimage {
   public static function xFile() : string { return self::$xFile; }
 
   public static function boot() {
-    self::$xFile = Functions::regex(DimageConstants::FEXP, DimageConstants::$dimage);
+    self::$xFile = Functions::regex(Constants::FEXP, Constants::$dimage);
   }
 
   public static function shutdown() {

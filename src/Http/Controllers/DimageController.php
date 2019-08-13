@@ -11,7 +11,6 @@ use Marcohern\Dimages\Exceptions\DimagesException;
 
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Lib\DimageManager;
-use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\Managers\ImageManager;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
 use Marcohern\Dimages\Http\Requests\UploadDimageRequest;
