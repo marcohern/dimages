@@ -5,16 +5,8 @@ namespace Marcohern\Dimages\Lib;
 use Marcohern\Dimages\Lib\DimageConstants;
 use Marcohern\Dimages\Lib\DimageFunctions;
 class Fs {
-  static $instance = null;
 
   protected $prefix = '';
-
-  public static function getInstance(): Fs {
-    if (is_null(self::$instance)) {
-      self::$instance = new Fs;
-    }
-    return self::$instance;
-  }
 
   public static function clearInstance() {
     unset(self::$instance);

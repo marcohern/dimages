@@ -97,7 +97,7 @@ class DimageFile {
     $this->density = $density;
     $this->tenant = $tenant;
 
-    $this->fs = Fs::getInstance();
+    $this->fs = $fs;
   }
 
   /**

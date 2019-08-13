@@ -13,8 +13,6 @@ use Marcohern\Dimages\Console\Commands\DeleteLocksCommand;
 class DimagesServiceProvider extends ServiceProvider {
 
     public function boot() {
-      
-        $this->app->instance(Fs::class, Fs::getInstance());
         //Adding a stupid comment just to change the version
         $basePath = dirname(__DIR__);
 
