@@ -11,6 +11,7 @@ class DimageConstants {
   public const DFTENANT  = '_anyone';
   public const DFENTITY  = '_anything';
   public const SETTINGS  = 'settings.cfg';
+  public const LOCKS     = 'app/dimagelocks';
 
   public static $dimage = [
     'tenant'   => '(?<tenant>%idf)',
