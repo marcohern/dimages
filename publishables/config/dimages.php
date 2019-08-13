@@ -9,11 +9,13 @@ return [
         'xxhdpi'  => 3.00,
         'xxxhdpi' => 4.00,
 
-        'single'  => 1.00,
-        'double'  => 2.00,
+        'uikit1'  => 1.00,
+        'uikit2'  => 2.00,
+        'uikit3'  => 3.00,
     ],
     'profiles' => [
-        'ref'                => [480, 320],
+        'landscape'          => [375, 818],
+        'portrait'           => [818, 375],
         'launcher-icons'     => [48, 48],
         'actionbar-icons'    => [24, 24],
         'small-icons'        => [16, 16],

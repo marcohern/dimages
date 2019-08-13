@@ -74,14 +74,13 @@ class ImageManager {
     if (!$source->isSource())
       throw new DimageOperationInvalidException("Image must be source", 0xd9745b9923);
     
+    $settings = $this->factory->loadSettings($source->tenant);
     $sourceContent = $this->sm->content($source);
     $target = clone $source;
     $target->profile = $profile;
     $target->density = $density;
-    $p = config("dimages.profiles.$profile");
-    $d = config("dimages.densities.$density");
-    if (!$p) throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9921);
-    if (!$d) throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9922);
+    $p = $settings->profile($profile);
+    $d = $settings->density($density);
     $w = intval($p[0]*$d);
     $h = intval($p[1]*$d);
     $targetContent = (string) IImage::make($sourceContent)->fit($w, $h)->encode($target->ext);
