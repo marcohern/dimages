@@ -9,6 +9,7 @@ use Intervention\Image\ImageManagerStatic as IImage;
 use Marcohern\Dimages\Lib\Fs;
 use Marcohern\Dimages\Lib\Dimage;
 use Marcohern\Dimages\Console\Commands\DeleteLocksCommand;
+use Marcohern\Dimages\Console\Commands\ClearDerivedCommand;
 
 class DimagesServiceProvider extends ServiceProvider {
 
@@ -35,7 +36,8 @@ class DimagesServiceProvider extends ServiceProvider {
     public function register() {
         $this->registerPublishables();
         $this->commands([
-          DeleteLocksCommand::class
+          DeleteLocksCommand::class,
+          ClearDerivedCommand::class
       ]);
     }
 
