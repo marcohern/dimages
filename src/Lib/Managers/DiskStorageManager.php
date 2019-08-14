@@ -13,38 +13,86 @@ use Marcohern\Dimages\Lib\Factory;
 
 use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
-
+/**
+ * Storage Managers for Disk.
+ */
 class DiskStorageManager {
+
+  /**
+   * Filesystem scope
+   */
   protected $scope = Constants::SCOPE;
+
+  /**
+   * Factory
+   */
   protected $factory;
+
+  /**
+   * Fs
+   */
   protected $fs;
 
+  /**
+   * Constructor
+   * @param Marcohern\Dimages\Lib\Factory $factory Factory
+   * @param Marcohern\Dimages\Lib\Fs $fs Fs
+   */
   public function __construct(Factory $factory, Fs $fs) {
     $this->fs = $fs;
     $this->factory = $factory;
   }
 
-  public function setScope($scope) {
+  /**
+   * set the filesystem scope
+   * @param string $scope Filesystem Scope
+   */
+  public function setScope(string $scope): void
+  {
     $this->scope = $scope;
   }
 
-  public function url(DimageFile $dimage) : string {
+  /**
+   * Generate the url for the provided DimageFile
+   * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File
+   * @return string Dimage Url
+   */
+  public function url(DimageFile $dimage): string {
     return Storage::disk($this->scope)->url($dimage->toFilePath());
   }
 
-  public function exists(DimageFile $dimage) : bool {
+  /**
+   * Determines whether the DimageFile exists
+   * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File
+   * @return bool true if the DimageFile exists on disk, false otherwise.
+   */
+  public function exists(DimageFile $dimage): bool {
     return Storage::disk($this->scope)->exists($dimage->toFilePath());
   }
 
-  public function content(DimageFile $dimage) : string {
+  /**
+   * Read DimageFile content
+   * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File
+   * @return DimageFile content
+   */
+  public function content(DimageFile $dimage): string {
     return Storage::disk($this->scope)->get($dimage->toFilePath());
   }
 
-  public function put(DimageFile $dimage, string &$content) {
+  /**
+   * Write content into a DimageFile.
+   * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File
+   * @param string &$content Content to write to the file
+   */
+  public function put(DimageFile $dimage, string &$content): void {
     Storage::disk($this->scope)->put($dimage->toFilePath(), $content);
   }
 
-  public function destroy(DimageFile $dimage) {
+  /**
+   * Delete an existint DimageFile
+   * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File to delete
+   */
+  public function destroy(DimageFile $dimage): void {
     $disk = Storage::disk($this->scope);
     if ($disk->exists($dimage->toFilePath())) $disk->delete($dimage->toFilePath());
     else throw new DimageNotFoundException("Dimage not found");
