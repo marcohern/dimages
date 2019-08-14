@@ -92,13 +92,22 @@ class DiskStorageManager {
    * Delete an existint DimageFile
    * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File to delete
    */
-  public function destroy(DimageFile $dimage): void {
+  public function destroy(DimageFile $dimage): void
+  {
     $disk = Storage::disk($this->scope);
     if ($disk->exists($dimage->toFilePath())) $disk->delete($dimage->toFilePath());
     else throw new DimageNotFoundException("Dimage not found");
   }
 
-  public function deleteIndex(string $tenant, string $entity, string $identity, int $index) {
+  /**
+   * Delete a source and derived images given the index.
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   * @param string $index index
+   */
+  public function deleteIndex(string $tenant, string $entity, string $identity, int $index): void
+  {
     $disk = Storage::disk($this->scope);
     $folder = $this->fs->indexFolder($tenant, $entity, $identity, $index);
     $sourceFolder = $this->fs->identityFolder($tenant, $entity, $identity);
