@@ -103,7 +103,8 @@ class ImageManager {
     $this->createLocksFolderIfNotExists();
     $this->openlock($source);
     if ($this->lock()) {
-      if (!$this->sm->exists($derived)) $this->generate($source, $profile, $density);
+      if (!$this->sm->exists($derived))
+        $this->generate($source, $profile, $density);
       $this->unlock();
     }
     $this->closelock();
