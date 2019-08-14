@@ -86,18 +86,6 @@ class StorageManagerTest extends TestCase {
     $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
   }
 
-  public function test_deleteSingle() {
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
-
-    $dimage = $this->factory->dimageFile('death-stranding','txt',4,'games','boxart','hdpi', 'marcohern@gmail.com');
-
-    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
-
-    $this->sm->deleteSingle($dimage);
-
-    $this->disk->assertMissing('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt');
-  }
-
   public function test_deleteMultiple() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
     $this->disk->put('marcohern@gmail.com/games/death-stranding/000/cover/mdpi.txt','HELLO DIMAGE');

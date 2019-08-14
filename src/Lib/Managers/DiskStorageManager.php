@@ -104,7 +104,7 @@ class DiskStorageManager {
    * @param string $tenant Tenant
    * @param string $entity Entity
    * @param string $identity Identity
-   * @param string $index index
+   * @param int $index index
    */
   public function deleteIndex(string $tenant, string $entity, string $identity, int $index): void
   {
@@ -122,22 +122,37 @@ class DiskStorageManager {
     if ($disk->exists($folder)) $disk->deleteDirectory($folder);
   }
 
-  public function deleteSingle(DimageFile $dimage) : void {
-    Storage::disk($this->scope)->delete($dimage->toFilePath());
-  }
-
-  public function deleteMultiple(array $dimages) : void {
+  /**
+   * Delete multiple dimages.
+   * @param array $dimages array of type DimageFile.
+   */
+  public function deleteMultiple(array $dimages): void
+  {
     $files = Functions::toFilePaths($dimages);
     Storage::disk($this->scope)->delete($files);
   }
 
-  public function move(DimageFile $source, DimageFile $target) : void {
+  /**
+   * Move a DimageFile from a source to a target
+   * @param Marcohern\Dimages\Lib\DimageFile $source Source Dimage File
+   * @param Marcohern\Dimages\Lib\DimageFile $target Target Dimage File
+   */
+  public function move(DimageFile $source, DimageFile $target): void
+  {
     Storage::disk($this->scope)->move($source->toFilePath(), $target->toFilePath());
   }
 
-  public function attach($tenant, $session, $targetEntity, $targetIdentity):void {
+  /**
+   * move a DimageFile from staging to a specific entity/identity.
+   * @param string $tenant Tenant
+   * @param string $session Staging session Id
+   * @param string $entity Entity
+   * @param string $identity Identity
+   */
+  public function attach(string $tenant, string $session, string $entity, string $identity): void
+  {
     $source = $this->fs->stagingSessionFolder($tenant, $session);
-    $target = $this->fs->identityFolder($tenant, $targetEntity, $targetIdentity);
+    $target = $this->fs->identityFolder($tenant, $entity, $identity);
     Storage::disk($this->scope)->move($source, $target);
   }
 
