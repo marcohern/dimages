@@ -40,9 +40,10 @@ class Sequencer {
   }
 
   /**
-   * The the current value of a sequence.
+   * Return the current value of a sequence.
+   * @return int current sequence value
    */
-  public function get() {
+  public function get(): int {
     $disk = Storage::disk($this->scope);
     if ($disk->exists($this->filepath)) {
       return 0 + $disk->get($this->filepath);
@@ -55,7 +56,7 @@ class Sequencer {
    * 
    * @param $n sequence value
    */
-  public function put($n) {
+  public function put($n): void {
     $disk = Storage::disk($this->scope);
     $disk->put($this->filepath, $n);
   }
@@ -65,7 +66,7 @@ class Sequencer {
    * 
    * @return int next value in sequence
    */
-  public function next() : int {
+  public function next(): int {
     $next = $this->get();
     $this->put($next+1);
     return $next;
@@ -74,7 +75,7 @@ class Sequencer {
   /**
    * Delete the sequence file
    */
-  public function drop() {
+  public function drop(): void {
     $disk = Storage::disk($this->scope);
     if ($disk->exists($this->filepath)) {
       $disk->delete($this->filepath);
