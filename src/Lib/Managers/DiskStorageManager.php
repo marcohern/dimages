@@ -143,7 +143,7 @@ class DiskStorageManager {
   }
 
   /**
-   * move a DimageFile from staging to a specific entity/identity.
+   * Move a DimageFile from staging to a specific entity/identity.
    * @param string $tenant Tenant
    * @param string $session Staging session Id
    * @param string $entity Entity
@@ -156,66 +156,140 @@ class DiskStorageManager {
     Storage::disk($this->scope)->move($source, $target);
   }
 
-  public function store(DimageFile $dimage, UploadedFile $upload) {
+  /**
+   * Save an uploaded file as a DimageFile
+   * @param Marcohern\Dimages\Lib\DimageFile $dimage Dimage File
+   * @param Illuminate\Http\UploadedFile $upload Uploaded File
+   */
+  public function store(DimageFile $dimage, UploadedFile $upload): void {
     Storage::disk($this->scope)
       ->putFileAs($dimage->toFolder(), $upload, $dimage->toFileName());
   }
 
-  public function deleteIdentity(string $tenant,string $entity,string $identity):void {
+  /**
+   * Delete all identity images.
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   */
+  public function deleteIdentity(string $tenant, string $entity, string $identity): void {
     $folder = $this->fs->identityFolder($tenant, $entity, $identity);
     Storage::disk($this->scope)->deleteDirectory($folder);
   }
 
-  public function deleteStaging(string $tenant, string $session) : void {
+  /**
+   * Delete all identity images.
+   * @param string $tenant Tenant
+   * @param string $session Session
+   */
+  public function deleteStaging(string $tenant, string $session): void {
     $folder = $this->fs->stagingSessionFolder($tenant, $session);
     Storage::disk($this->scope)->deleteDirectory($folder);
   }
 
-  public function deleteStagingForTenants(array $tenants) : void {
+  /**
+   * Delete staging folder for specified tenants
+   * @param array $tenants Tenants
+   */
+  public function deleteStagingForTenants(array $tenants): void {
     foreach ($tenants as $tenant) {
       $folder = $this->fs->stagingFolder($tenant);
       Storage::disk($this->scope)->deleteDirectory($folder);
     }
   }
 
-  public function tenants() : array {
+  /**
+   * Return a list of tenants.
+   * @return array Tenants
+   */
+  public function tenants(): array {
     return Storage::disk($this->scope)->directories("/");
   }
 
-  public function entities(string $tenant) : array {
+  /**
+   * List of entities
+   * @param string $tenant Tenant
+   * @return array Entities within tenant
+   */
+  public function entities(string $tenant): array {
     $folder = $this->fs->tenantFolder($tenant);
     $subfolders = Storage::disk($this->scope)->directories($folder);
     return Functions::suffix($subfolders, strlen($folder)+1);
   }
 
-  public function identities(string $tenant, string $entity) : array {
+  /**
+   * List of identities
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @return array List of identities within entity
+   */
+  public function identities(string $tenant, string $entity): array {
     $folder = $this->fs->entityFolder($tenant, $entity);
     $subfolders = Storage::disk($this->scope)->directories($folder);
     return Functions::suffix($subfolders, strlen($folder)+1);
   }
 
-  public function sources(string $tenant, string $entity, string $identity) : array {
+  /**
+   * List of source files
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   * @return array List of source image files
+   */
+  public function sources(string $tenant, string $entity, string $identity): array {
     $folder = $this->fs->identityFolder($tenant, $entity, $identity);
     return Storage::disk($this->scope)->files($folder);
   }
 
-  public function indexes(string $tenant, string $entity, string $identity) : array {
+  /**
+   * List of index directories
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   * @return array List of index directories
+   */
+  public function indexes(string $tenant, string $entity, string $identity): array {
     $folder = $this->fs->identityFolder($tenant, $entity, $identity);
     return Storage::disk($this->scope)->directories($folder);
   }
 
-  public function profiles(string $tenant, string $entity, string $identity, int $index) : array {
+  /**
+   * List of available profiles
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   * @param int $index Index
+   * @return array List of generated profiles
+   */
+  public function profiles(string $tenant, string $entity, string $identity, int $index): array {
     $folder = $this->fs->indexFolder($tenant, $entity, $identity, $index);
     $subfolders = Storage::disk($this->scope)->directories($folder);
     return Functions::suffix($subfolders, strlen($folder)+1);
   }
 
-  public function derivatives(string $tenant, string $entity, string $identity, int $index, string $profile) : array {
+  /**
+   * List of derivative images
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   * @param int $index Index
+   * @param string $profile Profile
+   * @return array List of derivative image files
+   */
+  public function derivatives(string $tenant, string $entity, string $identity, int $index, string $profile): array {
     $folder = $this->fs->profileFolder($tenant, $entity, $identity, $index, $profile);
     return Storage::disk($this->scope)->files($folder);
   }
 
-  public function switchIndex(string $tenant, string $entity, string $identity, int $source, int $target) : void {
+  /**
+   * Update image index, replace one with another and vice versa.
+   * @param string $tenant Tenant
+   * @param string $entity Entity
+   * @param string $identity Identity
+   * @param int $source Source index
+   * @param int $target Target index
+   */
+  public function switchIndex(string $tenant, string $entity, string $identity, int $source, int $target): void {
     $disk = Storage::disk($this->scope);
     $files = $this->sources($tenant, $entity, $identity);
     $sourceDimage = null;
