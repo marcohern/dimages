@@ -4,6 +4,7 @@ namespace Marcohern\Dimages\Lib\Managers;
 
 use Illuminate\Http\UploadedFile;
 
+use Marcohern\Dimages\Lib\Constants;
 use Marcohern\Dimages\Lib\DimageFile;
 use Marcohern\Dimages\Lib\Fs;
 
@@ -39,7 +40,7 @@ class StorageManager extends DiskStorageManager {
   }
 
   public function stageIdentity(string $tenant, string $session, UploadedFile $upload) {
-    return $this->storeIdentity($tenant, '_tmp', $session, $upload);
+    return $this->storeIdentity($tenant, Constants::STAGING, $session, $upload);
   }
 
   public function normalize(string $tenant, string $entity, string $identity) : void {
