@@ -9,9 +9,9 @@ use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
 class Settings {
 
   protected $fs;
-  protected $densities;
-  protected $profiles;
-  protected $tenant;
+  public $tenant;
+  public $densities;
+  public $profiles;
 
   public function getDensities() { return $this->densities; }
   public function getProfiles() { return $this->profiles; }
@@ -41,6 +41,21 @@ class Settings {
     $this->tenant = $tenant;
     $this->densities = $densities;
     $this->profiles = $profiles;
+  }
+
+  public function deleteDensity(string $density) {
+    if (array_key_exists($density, $this->densities)) {
+      unset($this->densities[$density]);
+    }
+    else throw new DimageOperationInvalidException("Density '$density' not found");
+  }
+
+  public function deleteProfile(string $profile) {
+    if (array_key_exists($profile, $this->profiles)) {
+      unset($this->profiles[$profile]);
+      
+    }
+    else throw new DimageOperationInvalidException("Profile '$profile' not found");
   }
 
   public function save() {
