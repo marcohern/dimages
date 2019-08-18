@@ -137,4 +137,28 @@ class DimageControllerTest extends TestCase
     $this->disk->assertMissing('user/games/death-stranding/002.png');
     $this->disk->assertExists('user/games/death-stranding/002.jpeg');
   }
+
+  public function test_destroyIndex() {
+    $image1 = UploadedFile::fake()->image('test1.jpg', 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png', 1920, 1080);
+    
+    $this->disk->putFileAs('user/games/death-stranding', $image1, '000.jpg');
+    $this->disk->putFileAs('user/games/death-stranding/000/landscape', $image2, 'ldpi.jpeg');
+    $this->disk->putFileAs('user/games/death-stranding/000/portrait', $image3, 'mdpi.png');
+
+    $this->disk->putFileAs('user/games/death-stranding', $image1, '002.jpg');
+    $this->disk->putFileAs('user/games/death-stranding/002/landscape', $image2, 'ldpi.jpeg');
+    $this->disk->putFileAs('user/games/death-stranding/002/portrait', $image3, 'mdpi.png');
+
+    $this->json('DELETE','/dimage/user/games/death-stranding/0')->assertOk();
+    $this->disk->assertMissing('user/games/death-stranding/000.jpg');
+    $this->disk->assertMissing('user/games/death-stranding/000/landscape/ldpi.jpeg');
+    $this->disk->assertMissing('user/games/death-stranding/000/portrait/mdpi.png');
+
+    $this->json('DELETE','/dimage/user/games/death-stranding/2')->assertOk();
+    $this->disk->assertMissing('user/games/death-stranding/002.jpg');
+    $this->disk->assertMissing('user/games/death-stranding/002/landscape/ldpi.jpeg');
+    $this->disk->assertMissing('user/games/death-stranding/002/portrait/mdpi.png');
+  }
 }
