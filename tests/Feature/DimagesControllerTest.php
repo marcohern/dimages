@@ -120,4 +120,25 @@ class DimagesControllerTest extends TestCase
     $this->assertEquals($this->disk->get('marcohern@gmail.com/games/death-stranding/002.txt'), 'HELLO DMIAGE 3!');
     $this->assertEquals($this->disk->get('marcohern@gmail.com/games/death-stranding/003.txt'), 'HELLO DMIAGE 4!');
   }
+
+  public function test_switch() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO ONE!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/cover/hdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/boxart/mdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/003/icon/xxhdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/005.txt','HELLO FIVE!');
+
+    $this->json('POST','/dimages/marcohern@gmail.com/games/death-stranding/switch/3/with/0')->assertOk();
+
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000/cover/hdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000/boxart/mdpi.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000/icon/xxhdpi.txt');
+
+    $this->json('POST','/dimages/marcohern@gmail.com/games/death-stranding/switch/1/with/5')->assertOk();
+
+    $this->assertEquals('HELLO FIVE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/001.txt'));
+    $this->assertEquals('HELLO ONE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/005.txt'));
+  }
 }
