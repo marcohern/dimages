@@ -140,5 +140,8 @@ class DimagesControllerTest extends TestCase
 
     $this->assertEquals('HELLO FIVE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/001.txt'));
     $this->assertEquals('HELLO ONE!',$this->disk->get('marcohern@gmail.com/games/death-stranding/005.txt'));
+
+    $this->json('POST','/dimages/marcohern@gmail.com/games/death-stranding/switch/123/with/342')
+      ->assertStatus(500);
   }
 }
