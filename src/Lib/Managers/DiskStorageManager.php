@@ -96,7 +96,7 @@ class DiskStorageManager {
   {
     $disk = Storage::disk($this->scope);
     if ($disk->exists($dimage->toFilePath())) $disk->delete($dimage->toFilePath());
-    else throw new DimageNotFoundException("Dimage not found");
+    else throw new DimageNotFoundException("Dimage not found", 0x3d090732a6);
   }
 
   /**
@@ -307,7 +307,7 @@ class DiskStorageManager {
       if (!is_null($sourceDimage) && !is_null($targetDimage)) break;
     }
 
-    if (is_null($sourceDimage)) throw new DimageNotFoundException("source file not found");
+    if (is_null($sourceDimage)) throw new DimageNotFoundException("source file not found",0x92e4ad2e7d);
     if (is_null($targetDimage)) {
       $targetDimage = clone $sourceDimage;
       $targetDimage->index = $target;

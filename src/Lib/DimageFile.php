@@ -63,7 +63,7 @@ class DimageFile {
     $m = null;
     $r = preg_match(Dimage::xFile(),$filepath, $m);
     if (!$r) {
-      throw new SourceInvalidException("source invalid: $haystack.", 0xa996a53d53);
+      throw new SourceInvalidException("source invalid: $haystack.", 0x2b8c04533b);
     }
     $m = (object)$m;
     

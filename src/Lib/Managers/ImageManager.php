@@ -71,7 +71,7 @@ class ImageManager {
         return $source;
       }
     }
-    throw new DimageNotFoundException("Source Image Not found: $tenant/$entity/$identity/$index", 0xd9745b9923);
+    throw new DimageNotFoundException("Source Image Not found: $tenant/$entity/$identity/$index", 0xb29ae80b64);
   }
 
   /**
@@ -105,7 +105,7 @@ class ImageManager {
       }
     }
 
-    throw new DimageNotFoundException("Dimage Not found: $tenant/$entity/$identity/$index", 0xd9745b9923);
+    throw new DimageNotFoundException("Dimage Not found: $tenant/$entity/$identity/$index", 0x7eb09be099);
   }
 
   /**
@@ -117,9 +117,9 @@ class ImageManager {
    */
   protected function generate(DimageFile $source, string $profile, string $density): DimageFile {
     if (!$this->sm->exists($source))
-      throw new DimageNotFoundException("Source Not found", 0xd9745b9923);
+      throw new DimageNotFoundException("Source Not found", 0x931da011d8);
     if (!$source->isSource())
-      throw new DimageOperationInvalidException("Image must be source", 0xd9745b9923);
+      throw new DimageOperationInvalidException("Image must be source", 0xe5326df84d);
     
     $settings = $this->factory->loadSettings($source->tenant);
     $sourceContent = $this->sm->content($source);

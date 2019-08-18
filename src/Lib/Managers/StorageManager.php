@@ -36,7 +36,7 @@ class StorageManager extends DiskStorageManager {
         return $new;
       }
     }
-    throw new DimageNotFoundException("Image not found: $tenant/$entity/$identity/$index");
+    throw new DimageNotFoundException("Image not found: $tenant/$entity/$identity/$index", 0x214cac679d);
   }
 
   public function stageIdentity(string $tenant, string $session, UploadedFile $upload) {

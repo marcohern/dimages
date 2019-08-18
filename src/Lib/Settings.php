@@ -19,13 +19,13 @@ class Settings {
   public function density(string $density): float {
     if (array_key_exists($density, $this->densities)) 
       return $this->densities[$density];
-    throw new DimageOperationInvalidException("Density $density invalid", 0xd9745b9921);
+    throw new DimageOperationInvalidException("Density $density invalid", 0xb734c4e511);
   }
 
   public function profile(string $profile): array {
     if (array_key_exists($profile, $this->profiles)) 
       return $this->profiles[$profile];
-    throw new DimageOperationInvalidException("Profile $profile invalid", 0xd9745b9922);
+    throw new DimageOperationInvalidException("Profile $profile invalid", 0xb52c7df5fa);
   }
 
   public function setDensity(string $density, float $value): void {
@@ -47,7 +47,7 @@ class Settings {
     if (array_key_exists($density, $this->densities)) {
       unset($this->densities[$density]);
     }
-    else throw new DimageOperationInvalidException("Density '$density' not found");
+    else throw new DimageOperationInvalidException("Density '$density' not found", 0x564ff6d361);
   }
 
   public function deleteProfile(string $profile) {
@@ -55,7 +55,7 @@ class Settings {
       unset($this->profiles[$profile]);
       
     }
-    else throw new DimageOperationInvalidException("Profile '$profile' not found");
+    else throw new DimageOperationInvalidException("Profile '$profile' not found", 0xb41859b059);
   }
 
   public function save() {
