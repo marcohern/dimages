@@ -116,5 +116,9 @@ class DimageControllerTest extends TestCase
 
     $this->json('GET','/dimage/user/games/death-stranding/landscape/hdpi/2')->assertOk();
     $this->disk->assertExists('user/games/death-stranding/002/landscape/hdpi.png');
+
+    $this->json('GET','/dimage/user/games/death-stranding/landscape/hdpi/5')->assertNotFound();
+    $this->json('GET','/dimage/user/games/death-stranding/fakeprofile/hdpi')->assertNotFound();
+    $this->json('GET','/dimage/user/games/death-stranding/landscape/fakedpi')->assertNotFound();
   }
 }

@@ -5,6 +5,7 @@ namespace Marcohern\Dimages\Lib;
 use Marcohern\Dimages\Lib\Fs;
 use Illuminate\Support\Facades\Storage;
 use Marcohern\Dimages\Exceptions\DimageOperationInvalidException;
+use Marcohern\Dimages\Exceptions\DimageNotFoundException;
 
 class Settings {
 
@@ -19,13 +20,13 @@ class Settings {
   public function density(string $density): float {
     if (array_key_exists($density, $this->densities)) 
       return $this->densities[$density];
-    throw new DimageOperationInvalidException("Density $density invalid", 0xb734c4e511);
+    throw new DimageNotFoundException("Density $density not found", 0xb734c4e511);
   }
 
   public function profile(string $profile): array {
     if (array_key_exists($profile, $this->profiles)) 
       return $this->profiles[$profile];
-    throw new DimageOperationInvalidException("Profile $profile invalid", 0xb52c7df5fa);
+    throw new DimageNotFoundException("Profile $profile not found", 0xb52c7df5fa);
   }
 
   public function setDensity(string $density, float $value): void {
