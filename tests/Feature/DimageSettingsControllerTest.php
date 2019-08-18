@@ -28,6 +28,7 @@ class DimageSettingsControllerTest extends TestCase
     $this->disk = Storage::disk('dimages');
     $this->fs = new Fs;
     $this->factory = new Factory($this->fs);
+    Passport::actingAs(factory(User::class)->create(), ['*']);
   }
 
   protected function tearDown():void {

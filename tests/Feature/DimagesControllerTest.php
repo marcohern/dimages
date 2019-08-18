@@ -23,6 +23,7 @@ class DimagesControllerTest extends TestCase
     parent::setUp();
     Storage::fake('dimages');
     $this->disk = Storage::disk('dimages');
+    Passport::actingAs(factory(User::class)->create(), ['*']);
   }
 
   protected function tearDown():void {
