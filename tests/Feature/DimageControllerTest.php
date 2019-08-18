@@ -29,95 +29,23 @@ class DimageControllerTest extends TestCase
     parent::tearDown();
   }
 
-  public function test_status() {
-    $this->get("/dimages/status")
-      ->assertOk()
-      ->assertJson([
-      'success' => true,
-      'xFile' => true
-    ]);
-  }
-
-  public function test_session() {
-    $this->get("/dimages/session")
-      ->assertOk()
-      ->assertJson([
-      'session' => true
-    ]);
-  }
-
-  public function test_tenants() {
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/000.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DMIAGE!');
-    $this->disk->put('giovanni/games/darksouls-3/000.txt','HELLO DMIAGE!');
-
-    $this->get("/dimages")
-      ->assertOk()
-      ->assertJson([
-        'giovanni',
-        'marcohern@gmail.com'
-      ]);
-  }
-
-  public function test_entities() {
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/000.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DMIAGE!');
-    $this->disk->put('giovanni/games/darksouls-3/000.txt','HELLO DMIAGE!');
-
-    $this->get("/dimages/marcohern@gmail.com")
-      ->assertOk()
-      ->assertJson([
-        'games'
-      ]);
-  }
-
-  public function test_identities() {
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/000.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DMIAGE!');
-    $this->disk->put('giovanni/games/darksouls-3/000.txt','HELLO DMIAGE!');
-
-    $this->get("/dimages/marcohern@gmail.com/games")
-      ->assertOk()
-      ->assertJson([
-        'death-stranding'
-      ]);
-  }
-
-  public function test_sources() {
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/000.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO DMIAGE!');
-    $this->disk->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DMIAGE!');
-    $this->disk->put('giovanni/games/darksouls-3/000.txt','HELLO DMIAGE!');
-
-    $this->get("/dimages/marcohern@gmail.com/games/death-stranding/sources")
-      ->assertOk()
-      ->assertJson([
-        ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>0],
-        ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>1],
-        ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>2]
-      ]);
-  }
-
   public function test_store() {
     $image1 = UploadedFile::fake()->image('test1.jpg');
     $image2 = UploadedFile::fake()->image('test2.jpeg');
     $image3 = UploadedFile::fake()->image('test3.png');
 
     $this
-      ->json('POST',"/dimages/user/test/image", ['image' => $image1])
+      ->json('POST',"/dimage/user/test/image", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"/dimages/user/test/image", ['image' => $image2])
+      ->json('POST',"/dimage/user/test/image", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"/dimages/user/test/image", ['image' => $image3])
+      ->json('POST',"/dimage/user/test/image", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
     
@@ -133,17 +61,17 @@ class DimageControllerTest extends TestCase
     $image3 = UploadedFile::fake()->image('test3.png');
 
     $this
-      ->json('POST',"/dimages/user/test/image", ['image' => $image1])
+      ->json('POST',"/dimage/user/test/image", ['image' => $image1])
       ->assertOk()
       ->assertExactJson(['index' => 0]);
     
     $this
-      ->json('POST',"/dimages/user/test/image", ['image' => $image2])
+      ->json('POST',"/dimage/user/test/image", ['image' => $image2])
       ->assertOk()
       ->assertExactJson(['index' => 1]);
     
     $this
-      ->json('POST',"/dimages/user/test/image", ['image' => $image3])
+      ->json('POST',"/dimage/user/test/image", ['image' => $image3])
       ->assertOk()
       ->assertExactJson(['index' => 2]);
     

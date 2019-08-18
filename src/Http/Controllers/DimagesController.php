@@ -4,6 +4,7 @@ namespace Marcohern\Dimages\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Marcohern\Dimages\Lib\Dimage;
 
 use Marcohern\Dimages\Lib\Managers\ImageManager;
 use Marcohern\Dimages\Lib\Managers\StorageManager;
