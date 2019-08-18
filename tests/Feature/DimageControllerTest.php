@@ -29,32 +29,6 @@ class DimageControllerTest extends TestCase
     parent::tearDown();
   }
 
-  public function test_store() {
-    $image1 = UploadedFile::fake()->image('test1.jpg');
-    $image2 = UploadedFile::fake()->image('test2.jpeg');
-    $image3 = UploadedFile::fake()->image('test3.png');
-
-    $this
-      ->json('POST',"/dimage/user/test/image", ['image' => $image1])
-      ->assertOk()
-      ->assertExactJson(['index' => 0]);
-    
-    $this
-      ->json('POST',"/dimage/user/test/image", ['image' => $image2])
-      ->assertOk()
-      ->assertExactJson(['index' => 1]);
-    
-    $this
-      ->json('POST',"/dimage/user/test/image", ['image' => $image3])
-      ->assertOk()
-      ->assertExactJson(['index' => 2]);
-    
-    $this->disk->assertExists('user/test/image/000.jpg');
-    $this->disk->assertExists('user/test/image/001.jpeg');
-    $this->disk->assertExists('user/test/image/002.png');
-
-  }
-
   public function test_stage() {
     $image1 = UploadedFile::fake()->image('test1.jpg', 1920, 1080);
     $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
@@ -176,5 +150,52 @@ class DimageControllerTest extends TestCase
 
     $this->json('GET','/dimage/user/games/death-stranding')->assertOk();
     $this->json('GET','/dimage/user/games/death-stranding/2')->assertOk();
+  }
+
+  public function test_store() {
+    $image1 = UploadedFile::fake()->image('test1.jpg');
+    $image2 = UploadedFile::fake()->image('test2.jpeg');
+    $image3 = UploadedFile::fake()->image('test3.png');
+
+    $this
+      ->json('POST',"/dimage/user/test/image", ['image' => $image1])
+      ->assertOk()
+      ->assertExactJson(['index' => 0]);
+    
+    $this
+      ->json('POST',"/dimage/user/test/image", ['image' => $image2])
+      ->assertOk()
+      ->assertExactJson(['index' => 1]);
+    
+    $this
+      ->json('POST',"/dimage/user/test/image", ['image' => $image3])
+      ->assertOk()
+      ->assertExactJson(['index' => 2]);
+    
+    $this->disk->assertExists('user/test/image/000.jpg');
+    $this->disk->assertExists('user/test/image/001.jpeg');
+    $this->disk->assertExists('user/test/image/002.png');
+  }
+
+  public function test_destroy() {
+    $image1 = UploadedFile::fake()->image('test1.jpg', 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png', 1920, 1080);
+    $this->disk->putFileAs('user/games/death-stranding', $image1, '000.jpg');
+    $this->disk->putFileAs('user/games/death-stranding/000/landscape', $image2, 'ldpi.jpeg');
+    $this->disk->putFileAs('user/games/death-stranding/000/portrait', $image3, 'mdpi.png');
+
+    $this->disk->putFileAs('user/games/death-stranding', $image1, '002.jpg');
+    $this->disk->putFileAs('user/games/death-stranding/002/landscape', $image2, 'ldpi.jpeg');
+    $this->disk->putFileAs('user/games/death-stranding/002/portrait', $image3, 'mdpi.png');
+
+    $this->json('DELETE','/dimage/user/games/death-stranding')->assertOk();
+
+    $this->disk->assertMissing('user/games/death-stranding/000.jpg');
+    $this->disk->assertMissing('user/games/death-stranding/000/landscape/ldpi.jpeg');
+    $this->disk->assertMissing('user/games/death-stranding/000/portrait/mdpi.png');
+    $this->disk->assertMissing('user/games/death-stranding/002.jpg');
+    $this->disk->assertMissing('user/games/death-stranding/002/landscape/ldpi.jpeg');
+    $this->disk->assertMissing('user/games/death-stranding/002/portrait/mdpi.png');
   }
 }
