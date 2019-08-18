@@ -93,12 +93,31 @@ class DimagesControllerTest extends TestCase
     $this->disk->put('marcohern@gmail.com/games/death-stranding/002.txt','HELLO DMIAGE!');
     $this->disk->put('giovanni/games/darksouls-3/000.txt','HELLO DMIAGE!');
 
-    $this->get("/dimages/marcohern@gmail.com/games/death-stranding/sources")
+    $this->json('GET','/dimages/marcohern@gmail.com/games/death-stranding/sources')
       ->assertOk()
       ->assertJson([
         ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>0],
         ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>1],
         ['tenant' => 'marcohern@gmail.com','entity'=>'games','identity'=>'death-stranding','index'=>2]
       ]);
+  }
+
+  public function test_normalize() {
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/001.txt','HELLO DMIAGE 1!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/005.txt','HELLO DMIAGE 2!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/007.txt','HELLO DMIAGE 3!');
+    $this->disk->put('marcohern@gmail.com/games/death-stranding/012.txt','HELLO DMIAGE 4!');
+
+    $this->json('post','/dimages/marcohern@gmail.com/games/death-stranding/normalize')->assertOk();
+
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/000.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/001.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/002.txt');
+    $this->disk->assertExists('marcohern@gmail.com/games/death-stranding/003.txt');
+
+    $this->assertEquals($this->disk->get('marcohern@gmail.com/games/death-stranding/000.txt'), 'HELLO DMIAGE 1!');
+    $this->assertEquals($this->disk->get('marcohern@gmail.com/games/death-stranding/001.txt'), 'HELLO DMIAGE 2!');
+    $this->assertEquals($this->disk->get('marcohern@gmail.com/games/death-stranding/002.txt'), 'HELLO DMIAGE 3!');
+    $this->assertEquals($this->disk->get('marcohern@gmail.com/games/death-stranding/003.txt'), 'HELLO DMIAGE 4!');
   }
 }
