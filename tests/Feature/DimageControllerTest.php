@@ -161,4 +161,20 @@ class DimageControllerTest extends TestCase
     $this->disk->assertMissing('user/games/death-stranding/002/landscape/ldpi.jpeg');
     $this->disk->assertMissing('user/games/death-stranding/002/portrait/mdpi.png');
   }
+
+  public function test_source() {
+    $image1 = UploadedFile::fake()->image('test1.jpg', 1920, 1080);
+    $image2 = UploadedFile::fake()->image('test2.jpeg', 1920, 1080);
+    $image3 = UploadedFile::fake()->image('test3.png', 1920, 1080);
+    $this->disk->putFileAs('user/games/death-stranding', $image1, '000.jpg');
+    $this->disk->putFileAs('user/games/death-stranding/000/landscape', $image2, 'ldpi.jpeg');
+    $this->disk->putFileAs('user/games/death-stranding/000/portrait', $image3, 'mdpi.png');
+
+    $this->disk->putFileAs('user/games/death-stranding', $image1, '002.jpg');
+    $this->disk->putFileAs('user/games/death-stranding/002/landscape', $image2, 'ldpi.jpeg');
+    $this->disk->putFileAs('user/games/death-stranding/002/portrait', $image3, 'mdpi.png');
+
+    $this->json('GET','/dimage/user/games/death-stranding')->assertOk();
+    $this->json('GET','/dimage/user/games/death-stranding/2')->assertOk();
+  }
 }
