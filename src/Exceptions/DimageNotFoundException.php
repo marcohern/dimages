@@ -4,4 +4,6 @@ namespace Marcohern\Dimages\Exceptions;
 
 use Marcohern\Dimages\Exceptions\DimagesException;
 
-class DimageNotFoundException extends DimagesException {}
+class DimageNotFoundException extends DimagesException {
+  protected $status = 404;
+}

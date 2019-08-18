@@ -4,4 +4,5 @@ namespace Marcohern\Dimages\Exceptions;
 
 use Marcohern\Dimages\Exceptions\DimagesException;
 
-class DimageOperationInvalidException extends DimagesException {}
+class DimageOperationInvalidException extends DimagesException {
+}
