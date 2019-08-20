@@ -5,28 +5,157 @@ dimages can resample images depending on what the image will be used for and the
 
 ## Installation
 
-Install dimages with composer:
+Download and install laravel.
+
+```bash
+$ laravel new app1
+$ cd app1
+```
+
+Dimages allows images to be downloaded by the public. However, uploading
+images can only be done through authentication, by way of the auth:api middleware.
+The easiest way to achieve api authentication is to use laravel/passport.
+Note: laravel/passport requires a database, so make sure you have one set up.
+
+So download, install, and configure laravel passport:
+
+```bash
+$ composer require laravel/passport
+```
+This will install passport and all it's dependencies.
+
+```bash
+$ php artisan passport:install
+```
+
+You will get an output similar to:
+
+```bash
+Encryption keys generated successfully.
+Personal access client created successfully.
+Client ID: 1
+Client secret: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Password grant client created successfully.
+Client ID: 2
+Client secret: YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+```
+
+This creates 2 grants for Signing in. The first one is a Personal access
+client, which we will ignore for now. The second one is a Password grand
+which is the one we will use to log in. So remember the second
+Client secret, we will use it as an API key of sorts to log into the api.
+Now, In the mean time, you need to create a user to log in with,
+lets create a seeder to add a user.
+
+```bash
+$ php artisan make:seeder UserSeeder
+Seeder created successfully.
+```
+
+This creates the seeder class in database/seeds folder, lets add the code:
+
+```php
+<?php
+
+use Illuminate\Database\Seeder;
+
+class UserSeeder extends Seeder
+{
+  protected $users = [
+    ['name' => 'Son Goku', 'email' => 'goku@dbz.com', 'password' => 'goku'],
+    ['name' => 'Bulma', 'email' => 'bulma@dbz.com', 'password' => 'bulma'],
+    ['name' => 'Master Roshi', 'email' => 'master.roshi@dbz.com', 'password' => 'masterroshi'],
+    ['name' => 'Yamcha', 'email' => 'yamcha@dbz.com', 'password' => 'yamcha'],
+    ['name' => 'Krillin', 'email' => 'krillin@dbz.com', 'password' => 'krillin'],
+    ['name' => 'Tien Shinhan', 'email' => 'tien.shinhan@dbz.com', 'password' => 'tienshinhan'],
+    ['name' => 'Picollo', 'email' => 'picollo@dbz.com', 'password' => 'picollo']
+  ];
+
+  public function run()
+  {
+    foreach ($this->users as $k => $u) {
+      $now = (new \Datetime("now"))->format('Y-m-d H:i:s');
+      $this->users[$k]['email_verified_at'] = $now;
+      $this->users[$k]['created_at'] = $now;
+      $this->users[$k]['updated_at'] = $now;
+      $this->users[$k]['password'] = bcrypt($u['password']);
+    }
+
+    DB::table('users')->insert($this->users);
+  }
+}
+```
+
+The code contains a bunch of users for testing, we can use any of those
+to log in. To run the seeder, run the following command:
+
+```bash
+$ php artisan db:seed --class=UserSeeder
+Database seeding completed successfully.
+```
+
+So now we have passport working, and users to log in with. 
+We can now use composer to install marcohern/dimages
 
 ```bash
 $ composer require marcohern/dimages
 ```
 
-Next, publish the **dimages.php** configuration. Type the following command:
+At this point, the library is installed. But you need to install the configuration file.
+
+Run the following command:
 
 ```bash
 $ php artisan vendor:publish
 ```
 
-You will be prompted to select a provider. Select **Marcohern\Dimages\DimagesServiceProvider** by
-typing the number, then press RETURN.
+A list of publishables appear, pick the one labeled config.
 
-A message will confirm that the dimages config has been copied to your config directory.
+At that moment you will see the following message output:
 
 ```bash
 Copied File [\vendor\marcohern\dimages\publishables\config\dimages.php] To [\config\dimages.php]
-Publishing complete.
 ```
-You are now all set to use the Image Management API.
+This means that the configuration has been deployed.
+Finally, by typing the following command:
+
+```bash
+$ php artisan route:list --columns=method,uri
+```
+
+A list of routes will appear. If routes with prefixes **dimage**, **dimaages** 
+and **dimagesettings** appear, then the library is working and installed.
+```bash
++----------+--------------------------------------------------------------------+
+| Method   | URI                                                                |
++----------+--------------------------------------------------------------------+
+| GET|HEAD | /                                                                  |
+| GET|HEAD | api/user                                                           |
+| POST     | dimage/attach/{tenant}/{session}/{entity}/{identity}               |
+| POST     | dimage/stage/{tenant}/{session}                                    |
+| POST     | dimage/{tenant}/{entity}/{identity}                                |
+| DELETE   | dimage/{tenant}/{entity}/{identity}                                |
+| GET|HEAD | dimage/{tenant}/{entity}/{identity}/{index?}                       |
+| DELETE   | dimage/{tenant}/{entity}/{identity}/{index}                        |
+| POST     | dimage/{tenant}/{entity}/{identity}/{index}                        |
+| GET|HEAD | dimage/{tenant}/{entity}/{identity}/{profile}/{density}/{index?}   |
+| GET|HEAD | dimages                                                            |
+| GET|HEAD | dimages/session                                                    |
+| GET|HEAD | dimages/status                                                     |
+| GET|HEAD | dimages/{tenant}                                                   |
+| GET|HEAD | dimages/{tenant}/{entity}                                          |
+| POST     | dimages/{tenant}/{entity}/{identity}/normalize                     |
+| GET|HEAD | dimages/{tenant}/{entity}/{identity}/sources                       |
+| POST     | dimages/{tenant}/{entity}/{identity}/switch/{source}/with/{target} |
+| GET|HEAD | dimagesettings/{tenant}                                            |
+| POST     | dimagesettings/{tenant}/density                                    |
+| DELETE   | dimagesettings/{tenant}/density/{density}                          |
+| POST     | dimagesettings/{tenant}/profile                                    |
+| DELETE   | dimagesettings/{tenant}/profile/{profile}                          |
+| POST     | dimagesettings/{tenant}/reset                                      |
++----------+--------------------------------------------------------------------+
+```
+You are now ready to use the library.
 
 ## Using dimages
 
@@ -38,13 +167,14 @@ To make sure to get a result in JSON format, make sure to add header **Accept: a
 ### Uploading one or more images
 
 ```bash
-POST /mh/dim/api/{entity}/{identity}
+POST /dimage/{tenant}/{entity}/{identity}
 ```
 #### Example
 ```bash
-POST /mh/dim/api/games/death-stranding
+POST /dimage/john-doe/games/death-stranding
 ```
 #### Parameters
+**tenant**: The user or tenant of the image, it can be a code, slug, or username. such as **mike** or **user1234**.
 
 **entity**: Entity of the image. such as **user**, **user-profile** or **albums**.
 
@@ -65,15 +195,16 @@ each image will return an index number, the first one being 0, then 1, and so on
 ### Downloading uploaded images
 
 ```bash
-GET /mh/dim/api/{entity}/{identity}/{index?}
+GET /dimage/{tenant}/{entity}/{identity}/{index?}
 ```
 #### Examples
 ```bash
-GET /mh/dim/api/games/death-stranding
-GET /mh/dim/api/games/death-stranding/0
-GET /mh/dim/api/games/death-stranding/2
+GET /dimage/john-doe/games/death-stranding
+GET /dimage/john-doe/games/death-stranding/0
+GET /dimage/john-doe/games/death-stranding/2
 ```
 #### Parameters
+**tenant**: The user or tenant of the image, it can be a code, slug, or username. such as **mike** or **user1234**.
 
 **entity**: Entity of the image. such as **user**, **user-profile** or **albums**.
 
@@ -88,15 +219,17 @@ Returns the source image, in it's original size, as it was uploaded.
 ### Downloading uploaded images in different sizes
 
 ```bash
-GET /mh/dim/api/{entity}/{identity}/{profile}/{density}/{index?}
+GET /dimage/{tenant}/{entity}/{identity}/{profile}/{density}/{index?}
 ```
 #### Examples
 ```bash
-GET /mh/dim/api/games/death-stranding/icons/ldpi
-GET /mh/dim/api/games/death-stranding/launcher-icons/mdpi/0
-GET /mh/dim/api/games/death-stranding/ref/hdpi/2
+GET /dimage/john-doe/games/death-stranding/icons/ldpi
+GET /dimage/john-doe/games/death-stranding/launcher-icons/mdpi/0
+GET /dimage/john-doe/games/death-stranding/ref/hdpi/2
 ```
 #### Parameters
+
+**tenant**: The user or tenant of the image, it can be a code, slug, or username. such as **mike** or **user1234**.
 
 **entity**: Entity of the image. such as **user**, **user-profile** or **albums**.
 
@@ -160,17 +293,19 @@ ref/xxhdpi ref     [480, 320]  xhdpi   3.00  [1440, 960]
 
 ### Deleting images
 ```bash
-DELETE /mh/dim/api/{entity}/{identity}/{index?}
+DELETE /dimage/{tenant}/{entity}/{identity}/{index?}
 ```
 #### Examples
 ```bash
 # Delete a single image
-DELETE /mh/dim/api/games/death-stranding/1
+DELETE /dimage/john-doe/games/death-stranding/1
 
 # Delete all images associated with identity
-DELETE /mh/dim/api/games/death-stranding
+DELETE /dimage/john-doe/games/death-stranding
 ```
 #### Parameters
+**tenant**: The user or tenant of the image.
+
 **entity**: Entity of the image.
 
 **identity**: Identity.
@@ -181,54 +316,28 @@ If not specified, all images associated with the identity will be deleted.
 ### Other endpoints available
 
 ```bash
-# get a list of entities
-GET    /mh/dim/api/
-
-# get a list of identities
-GET    /mh/dim/api/{entity}
-
-# add a new image
-POST   /mh/dim/api/{entity}/{identity}
-
-# get the source image
-GET    /mh/dim/api/{entity}/{identity}
-
-# get the specified source image
-GET    /mh/dim/api/{entity}/{identity}/{index?}
-
-# delete the specified image
-DELETE /mh/dim/api/{entity}/{identity}/{index?}
-
-# update an existing image
-POST   /mh/dim/api/{entity}/{identity}/{index}
-
-# get an resampled image of the source.
-GET    /mh/dim/api/{entity}/{identity}/{profile}/{identity}/{index?}
-
-# get a list of existing derivate images
-GET    /mh/dim/api/{entity}/{identity}/derivatives
-
-# get a list of existing source images
-GET    /mh/dim/api/{entity}/{identity}/sources
-
-# get a file list of all existing images
-GET    /mh/dim/api/{entity}/{identity}/images
-
-# get a tabulated list of all existing images
-GET    /mh/dim/api/{entity}/{identity}/dimages
-
-# make sure there is a default image (index 0)
-# and remove all gaps in indexes,
-POST   /mh/dim/api/{entity}/{identity}/normalize
-
-# switch an image index for another index
-POST   /mh/dim/api/{entity}/{identity}/switch/{source}/with/{target}
-
-# move files from one entity/identity to another
-POST   /mh/dim/api/move/{src_ent}/{src_idn}/to/{trg_ent}/{trg_idn}
-
-# get a status of the service. 200 means it is ok.
-GET    /mh/dim/api/status
+| POST     | dimage/attach/{tenant}/{session}/{entity}/{identity}               |
+| POST     | dimage/stage/{tenant}/{session}                                    |
+| POST     | dimage/{tenant}/{entity}/{identity}                                |
+| DELETE   | dimage/{tenant}/{entity}/{identity}                                |
+| GET|HEAD | dimage/{tenant}/{entity}/{identity}/{index?}                       |
+| DELETE   | dimage/{tenant}/{entity}/{identity}/{index}                        |
+| POST     | dimage/{tenant}/{entity}/{identity}/{index}                        |
+| GET|HEAD | dimage/{tenant}/{entity}/{identity}/{profile}/{density}/{index?}   |
+| GET|HEAD | dimages                                                            |
+| GET|HEAD | dimages/session                                                    |
+| GET|HEAD | dimages/status                                                     |
+| GET|HEAD | dimages/{tenant}                                                   |
+| GET|HEAD | dimages/{tenant}/{entity}                                          |
+| POST     | dimages/{tenant}/{entity}/{identity}/normalize                     |
+| GET|HEAD | dimages/{tenant}/{entity}/{identity}/sources                       |
+| POST     | dimages/{tenant}/{entity}/{identity}/switch/{source}/with/{target} |
+| GET|HEAD | dimagesettings/{tenant}                                            |
+| POST     | dimagesettings/{tenant}/density                                    |
+| DELETE   | dimagesettings/{tenant}/density/{density}                          |
+| POST     | dimagesettings/{tenant}/profile                                    |
+| DELETE   | dimagesettings/{tenant}/profile/{profile}                          |
+| POST     | dimagesettings/{tenant}/reset                                      |
 ```
 
 ## Installation fo Development Environment
