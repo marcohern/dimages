@@ -316,28 +316,80 @@ If not specified, all images associated with the identity will be deleted.
 ### Other endpoints available
 
 ```bash
-| POST     | dimage/attach/{tenant}/{session}/{entity}/{identity}               |
-| POST     | dimage/stage/{tenant}/{session}                                    |
-| POST     | dimage/{tenant}/{entity}/{identity}                                |
-| DELETE   | dimage/{tenant}/{entity}/{identity}                                |
-| GET|HEAD | dimage/{tenant}/{entity}/{identity}/{index?}                       |
-| DELETE   | dimage/{tenant}/{entity}/{identity}/{index}                        |
-| POST     | dimage/{tenant}/{entity}/{identity}/{index}                        |
-| GET|HEAD | dimage/{tenant}/{entity}/{identity}/{profile}/{density}/{index?}   |
-| GET|HEAD | dimages                                                            |
-| GET|HEAD | dimages/session                                                    |
-| GET|HEAD | dimages/status                                                     |
-| GET|HEAD | dimages/{tenant}                                                   |
-| GET|HEAD | dimages/{tenant}/{entity}                                          |
-| POST     | dimages/{tenant}/{entity}/{identity}/normalize                     |
-| GET|HEAD | dimages/{tenant}/{entity}/{identity}/sources                       |
-| POST     | dimages/{tenant}/{entity}/{identity}/switch/{source}/with/{target} |
-| GET|HEAD | dimagesettings/{tenant}                                            |
-| POST     | dimagesettings/{tenant}/density                                    |
-| DELETE   | dimagesettings/{tenant}/density/{density}                          |
-| POST     | dimagesettings/{tenant}/profile                                    |
-| DELETE   | dimagesettings/{tenant}/profile/{profile}                          |
-| POST     | dimagesettings/{tenant}/reset                                      |
+#Update an image
+POST dimage/attach/{tenant}/{session}/{entity}/{identity}
+
+#Upload an image into staging
+POST dimage/stage/{tenant}/{session}
+
+#Upload an image directly to an identity
+POST dimage/{tenant}/{entity}/{identity}
+
+#Delete all images associated to an identity
+DELETE dimage/{tenant}/{entity}/{identity}
+
+#Get a source image
+GET dimage/{tenant}/{entity}/{identity}/{index?}
+
+#Delete a single image and all its derivatives
+DELETE dimage/{tenant}/{entity}/{identity}/{index}
+
+#Update an existing image
+POST dimage/{tenant}/{entity}/{identity}/{index}
+
+#Get a derivative image
+GET dimage/{tenant}/{entity}/{identity}/{profile}/{density}/{index?}
+
+#Get list of tenants
+GET dimages
+
+#Get a usable session Id
+GET dimages/session
+
+#get status
+GET dimages/status
+
+#Get list of entities
+GET dimages/{tenant}
+
+#Get list of identities
+GET dimages/{tenant}/{entity}
+
+#Remove any index gaps if they exists
+POST dimages/{tenant}/{entity}/{identity}/normalize
+
+#Get list of existing source images
+GET dimages/{tenant}/{entity}/{identity}/sources
+
+#Switch an index to another. If target image allready exists, switch them.
+POST dimages/{tenant}/{entity}/{identity}/switch/{source}/with/{target}
+
+# Get tenant settings
+GET dimagesettings/{tenant}
+
+# Add or Update density entry
+POST dimagesettings/{tenant}/density
+{
+  "name": "the_density",
+  "value": 2.00
+}
+
+# Delete density entry
+DELETE dimagesettings/{tenant}/density/{density}
+
+# Add or Update profile entry
+| POST     | dimagesettings/{tenant}/profile
+{
+  "name": "the_profile",
+  "width": 300,
+  "height": 400
+}
+
+# Delete profile entry
+DELETE dimagesettings/{tenant}/profile/{profile}
+
+#Reset settings to default
+POST dimagesettings/{tenant}/reset
 ```
 
 ## Installation fo Development Environment
