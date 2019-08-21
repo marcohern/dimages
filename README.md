@@ -378,7 +378,7 @@ POST dimagesettings/{tenant}/density
 DELETE dimagesettings/{tenant}/density/{density}
 
 # Add or Update profile entry
-| POST     | dimagesettings/{tenant}/profile
+POST dimagesettings/{tenant}/profile
 {
   "name": "the_profile",
   "width": 300,
