@@ -187,6 +187,22 @@ class StorageManagerTest extends TestCase {
     $this->disk->assertMissing('marco/_staging/abcdef/002.png');
   }
 
+  public function test_deleteStagingIndex() {
+    $this->disk->put('marco/_staging/123456789/004/boxart/hdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marco/_staging/123456789/000/cover/mdpi.txt','HELLO DIMAGE');
+    $this->disk->put('marco/_staging/123456789/002/icon/ldpi.txt','HELLO DIMAGE');
+
+    $this->disk->assertExists('marco/_staging/123456789/004/boxart/hdpi.txt');
+    $this->disk->assertExists('marco/_staging/123456789/000/cover/mdpi.txt');
+    $this->disk->assertExists('marco/_staging/123456789/002/icon/ldpi.txt');
+
+    $this->sm->deleteStagingIndex('marco','123456789', 4);
+
+    $this->disk->assertMissing('marco/_staging/123456789/004/boxart/hdpi.txt');
+    $this->disk->assertExists('marco/_staging/123456789/000/cover/mdpi.txt');
+    $this->disk->assertExists('marco/_staging/123456789/002/icon/ldpi.txt');
+  }
+
   public function test_deleteIdentity() {
     $this->disk->put('marcohern@gmail.com/games/death-stranding/004/boxart/hdpi.txt','HELLO DIMAGE');
     $this->disk->put('marcohern@gmail.com/games/death-stranding/000/cover/mdpi.txt','HELLO DIMAGE');

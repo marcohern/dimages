@@ -43,6 +43,10 @@ class StorageManager extends DiskStorageManager {
     return $this->storeIdentity($tenant, Constants::STAGING, $session, $upload);
   }
 
+  public function deleteStagingIndex(string $tenant, string $session, int $index): void {
+    $this->deleteIndex($tenant, Constants::STAGING, $session, $index);
+  }
+
   public function normalize(string $tenant, string $entity, string $identity) : void {
     $files = $this->sources($tenant, $entity, $identity);
     foreach ($files as $i => $file) {
