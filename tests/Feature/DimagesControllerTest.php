@@ -17,13 +17,14 @@ use App\User;
 
 class DimagesControllerTest extends TestCase
 {
+  use RefreshDatabase;
   protected $disk;
 
   protected function setUp():void {
     parent::setUp();
     Storage::fake('dimages');
     $this->disk = Storage::disk('dimages');
-    Passport::actingAs(factory(User::class)->create(), ['*']);
+    Passport::actingAs(factory(User::class)->make(), ['*']);
   }
 
   protected function tearDown():void {

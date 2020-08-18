@@ -18,6 +18,8 @@ use App\User;
 
 class DimageSettingsControllerTest extends TestCase
 {
+  use RefreshDatabase;
+  
   protected $disk;
   protected $factory;
   protected $fs;

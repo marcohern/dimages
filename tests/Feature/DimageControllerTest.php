@@ -16,6 +16,7 @@ use App\User;
 
 class DimageControllerTest extends TestCase
 {
+  use RefreshDatabase;
   protected $disk;
 
   protected function setUp():void {
